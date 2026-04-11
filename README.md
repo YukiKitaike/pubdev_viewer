@@ -170,7 +170,7 @@ fvm dart format .
 
 ### MCP Marionette
 
-[Marionette](https://pub.dev/packages/marionette_flutter) により、Claude Code がデバッグモードの Flutter アプリのスクリーンショットを撮影できます。ログ確認・ホットリロードにも使用します。
+[Marionette](https://pub.dev/packages/marionette_flutter) により、Claude Code がデバッグモードの Flutter アプリを直接操作できます。UI 要素の検査・タップ・テキスト入力・スクリーンショット取得・ログ確認・ホットリロードが Claude Code から行えます。
 
 **セットアップ：**
 
