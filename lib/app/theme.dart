@@ -46,7 +46,7 @@ class AppCardTheme extends ThemeExtension<AppCardTheme> {
 
 /// デフォルトのカードテーマ。ThemeExtension が未設定の場合のフォールバック用。
 const AppCardTheme defaultCardTheme = AppCardTheme(
-  borderRadius: 8,
+  borderRadius: 12,
   padding: EdgeInsets.all(16),
   margin: EdgeInsets.symmetric(horizontal: 16),
 );
@@ -59,7 +59,7 @@ final ThemeData appDarkTheme = _buildTheme(Brightness.dark);
 
 ThemeData _buildTheme(Brightness brightness) {
   final colorScheme = ColorScheme.fromSeed(
-    seedColor: Colors.blue,
+    seedColor: const Color(0xFF0175C2),
     brightness: brightness,
   );
   final baseTextTheme = brightness == Brightness.light
@@ -70,9 +70,19 @@ ThemeData _buildTheme(Brightness brightness) {
     colorScheme: colorScheme,
     textTheme: baseTextTheme,
     useMaterial3: true,
+    cardTheme: CardThemeData(
+      elevation: 1,
+      surfaceTintColor: colorScheme.surfaceTint,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.zero,
+    ),
     appBarTheme: AppBarTheme(
       centerTitle: false,
       elevation: 0,
+      scrolledUnderElevation: 2,
       backgroundColor: colorScheme.surface,
       foregroundColor: colorScheme.onSurface,
     ),
@@ -85,6 +95,10 @@ ThemeData _buildTheme(Brightness brightness) {
           borderRadius: BorderRadius.circular(8),
         ),
       ),
+    ),
+    chipTheme: ChipThemeData(
+      labelStyle: baseTextTheme.labelSmall,
+      padding: const EdgeInsets.symmetric(horizontal: 6),
     ),
     extensions: const [defaultCardTheme],
   );

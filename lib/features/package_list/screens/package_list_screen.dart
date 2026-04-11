@@ -48,9 +48,35 @@ class PackageListScreen extends HookConsumerWidget {
       },
     );
 
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('pub.dev Viewer'),
+        title: RichText(
+          text: TextSpan(
+            style: theme.textTheme.titleLarge,
+            children: [
+              TextSpan(
+                text: 'pub',
+                style: TextStyle(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const TextSpan(
+                text: '.dev',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+              TextSpan(
+                text: ' Viewer',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: asyncState.when(
         loading: () => const LoadingView(),
@@ -63,13 +89,14 @@ class PackageListScreen extends HookConsumerWidget {
               ref.read(packageListNotifierProvider.notifier).refresh(),
           child: ListView.builder(
             controller: scrollController,
+            padding: const EdgeInsets.only(top: 8, bottom: 16),
             itemCount: state.packages.length + (state.isLoadingMore ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == state.packages.length) {
                 return const Padding(
                   padding: EdgeInsets.all(16),
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator.adaptive(),
                   ),
                 );
               }

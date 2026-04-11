@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/theme.dart';
@@ -25,47 +24,83 @@ class VersionsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sorted = _sortedVersions;
-
+    final theme = Theme.of(context);
     final cardTheme =
         Theme.of(context).extension<AppCardTheme>() ?? defaultCardTheme;
 
-    return Container(
-      width: double.infinity,
-      margin: cardTheme.margin,
-      padding: cardTheme.padding,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline,
-        ),
-        borderRadius: BorderRadius.circular(cardTheme.borderRadius),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Versions',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const Gap(8),
-          ...sorted.map(
-            (v) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    v.version,
-                    style: Theme.of(context).textTheme.titleSmall,
+    return Card(
+      margin: cardTheme.margin.copyWith(top: 16),
+      child: Padding(
+        padding: cardTheme.padding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.history,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'Versions',
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
                   ),
-                  Text(
-                    _formatDate(v.published),
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ],
+            const Divider(height: 20),
+            ...sorted.asMap().entries.map((entry) {
+              final isLatest = entry.key == 0;
+              final v = entry.value;
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Row(
+                  children: [
+                    Text(
+                      v.version,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                    if (isLatest) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Text(
+                          'LATEST',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onPrimary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 9,
+                          ),
+                        ),
+                      ),
+                    ],
+                    const Spacer(),
+                    Text(
+                      _formatDate(v.published),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+        ),
       ),
     );
   }

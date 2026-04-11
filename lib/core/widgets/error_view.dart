@@ -28,22 +28,25 @@ class ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.error_outline,
-              size: 48,
-              color: Theme.of(context).colorScheme.error,
+              Icons.cloud_off_rounded,
+              size: 64,
+              color: theme.colorScheme.onSurfaceVariant,
             ),
             const Gap(16),
             Text(
               _message,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
             const Gap(24),
             FilledButton.icon(
