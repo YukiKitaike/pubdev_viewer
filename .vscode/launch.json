@@ -1,22 +1,22 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "pubdev_viewer",
-      "request": "launch",
-      "type": "dart"
-    },
-    {
-      "name": "pubdev_viewer (profile mode)",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "profile"
-    },
-    {
-      "name": "pubdev_viewer (release mode)",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "release"
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "pubdev_viewer",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "pubdev_viewer (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "pubdev_viewer (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
 }
