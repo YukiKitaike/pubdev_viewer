@@ -12,6 +12,9 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   /// ライト ↔ ダークをトグルする。
   /// システムモードのときはダークに切り替える。
   void toggle() {
-    state = state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+    state = switch (state) {
+      .dark => .light,
+      _ => .dark,
+    };
   }
 }
