@@ -5,6 +5,7 @@ pub.dev のパッケージ情報を閲覧する Flutter アプリ。
 ## Tech Stack
 
 - Flutter 3.41.x / Dart SDK ^3.11.4
+- FVM でバージョン管理。`dart` / `flutter` コマンドは `fvm dart` / `fvm flutter` を使うこと。
 
 ## Architecture: Feature-First + Riverpod
 
@@ -48,3 +49,14 @@ lib/
 - **`Either<Failure, T>` パターンを使わない。** エラーは例外で表現し、try/catch で処理する。
 - **先回りして抽象化しない。** インターフェース、ヘルパー、ユーティリティは、2つ以上の箇所で実際に必要になってから作る。
 - **feature 固有のモデルを最初から `core/` に置かない。** 2つ以上の feature で共有される時点で昇格させる。
+
+## Git コミットルール
+
+- コードを変更したら、論理的なまとまりごとにコミットする。1つのコミットに無関係な変更を混ぜない。
+- Conventional Commits 形式を使う: `<type>: <簡潔な説明>`
+  - `feat`: 新機能
+  - `fix`: バグ修正
+  - `refactor`: リファクタリング
+  - `docs`: ドキュメント
+  - `chore`: 設定変更、依存更新など
+- コミットメッセージは日本語で書く。

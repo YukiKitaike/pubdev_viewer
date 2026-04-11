@@ -1,0 +1,39 @@
+{
+    "permissions": {
+        "allow": [
+            "Bash(find:*)",
+            "Bash(rg:*)",
+            "Bash(grep:*)",
+            "Bash(ls:*)",
+            "Bash(git diff:*)",
+            "WebFetch(domain:github.com)",
+            "Bash(git add *)",
+            "Bash(git commit *)",
+            "Bash(fvm dart analyze *)",
+            "Bash(fvm flutter test *)",
+            "Bash(fvm dart run build_runner *)",
+            "Bash(fvm dart pub *)",
+            "Bash(fvm dart *)",
+            "Bash(fvm flutter *)"
+        ],
+        "deny": [
+            "Bash(git push:*)",
+            "Bash(git reset:*)",
+            "Bash(git rebase:*)"
+        ]
+    },
+    "hooks": {
+        "PostToolUse": [
+            {
+                "matcher": "Edit|Write|MultiEdit",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "fvm dart format ."
+                    }
+                ]
+            }
+        ]
+    },
+    "defaultMode": "plan"
+}
