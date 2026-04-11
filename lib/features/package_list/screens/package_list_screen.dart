@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../app/theme_mode_notifier.dart';
+import '../../../core/design_system/design_system.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/skeleton_list_view.dart';
 import '../notifiers/package_list_notifier.dart';
@@ -109,14 +110,14 @@ class PackageListScreen extends HookConsumerWidget {
           child: ListView.builder(
             controller: scrollController,
             padding: EdgeInsets.only(
-              top: 8,
-              bottom: 16 + MediaQuery.paddingOf(context).bottom,
+              top: AppSpacing.sm,
+              bottom: AppSpacing.lg + MediaQuery.paddingOf(context).bottom,
             ),
             itemCount: state.packages.length + (state.isLoadingMore ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == state.packages.length) {
                 return const Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(AppSpacing.lg),
                   child: Center(
                     child: CircularProgressIndicator.adaptive(),
                   ),

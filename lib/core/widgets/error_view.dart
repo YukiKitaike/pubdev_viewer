@@ -52,14 +52,14 @@ class ErrorView extends StatelessWidget {
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-            const Gap(20),
+            const Gap(AppSpacing.xl),
             Text(
               _title,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const Gap(8),
+            const Gap(AppSpacing.sm),
             Text(
               _message,
               textAlign: TextAlign.center,
@@ -68,7 +68,7 @@ class ErrorView extends StatelessWidget {
                 height: 1.6,
               ),
             ),
-            const Gap(28),
+            const Gap(AppSpacing.xxl),
             FilledButton.icon(
               onPressed: () {
                 HapticFeedback.lightImpact();

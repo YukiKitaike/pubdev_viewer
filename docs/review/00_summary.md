@@ -58,21 +58,21 @@
 
 ### ハードコード数値（CLAUDE.md 違反）
 
-| 場所 | 値 | 推奨 |
-|------|-----|------|
-| `package_list_screen.dart:111` | `top: 8` | `AppSpacing.sm` |
-| `package_list_screen.dart:112` | `bottom: 16 + ...` | `AppSpacing.lg + ...` |
-| `package_list_screen.dart:118` | `EdgeInsets.all(16)` | `EdgeInsets.all(AppSpacing.lg)` |
-| `package_detail_screen.dart:141` | `Gap(8)` | `Gap(AppSpacing.sm)` |
-| `package_detail_screen.dart:151` | `Gap(12)` | `Gap(AppSpacing.md)` |
-| `package_detail_screen.dart:153` | `EdgeInsets.symmetric(horizontal: 10, vertical: 4)` | `AppSpacing` トークン組み合わせ |
-| `package_detail_screen.dart:166` | `SizedBox(width: 4)` | `Gap(AppSpacing.xs)` |
-| `package_detail_screen.dart:83` | `SizedBox(height: 16 + ...)` | `AppSpacing.lg + ...` |
-| `versions_section.dart:112` | `SizedBox(width: 10)` | `Gap(AppSpacing.sm)` または `Gap(AppSpacing.md)` |
-| `versions_section.dart` | `fontSize: 13/9/12` | TextTheme またはデザイントークン |
-| `error_view.dart:55,63,71` | `Gap(20)`, `Gap(8)`, `Gap(28)` | `AppSpacing.xl`, `AppSpacing.sm`, `AppSpacing.xxxl` |
-| `package_list_tile.dart` | `AppSpacing.sm - 2` | 専用定数の定義 |
-| `skeleton_list_view.dart` | `Colors.white` | Shimmer 仕様上必要だがコメントで意図を明示 |
+| 場所 | 値 | 推奨 | 状態 |
+|------|-----|------|------|
+| `package_list_screen.dart:111` | `top: 8` | `AppSpacing.sm` | ✅ 対応済み |
+| `package_list_screen.dart:112` | `bottom: 16 + ...` | `AppSpacing.lg + ...` | ✅ 対応済み |
+| `package_list_screen.dart:118` | `EdgeInsets.all(16)` | `EdgeInsets.all(AppSpacing.lg)` | ✅ 対応済み |
+| `package_detail_screen.dart:141` | `Gap(8)` | `Gap(AppSpacing.sm)` | ✅ 対応済み |
+| `package_detail_screen.dart:151` | `Gap(12)` | `Gap(AppSpacing.md)` | ✅ 対応済み |
+| `package_detail_screen.dart:153` | `EdgeInsets.symmetric(horizontal: 10, vertical: 4)` | `AppSpacing` トークン組み合わせ | ✅ 対応済み (sm/xs) |
+| `package_detail_screen.dart:166` | `SizedBox(width: 4)` | `Gap(AppSpacing.xs)` | ✅ 対応済み |
+| `package_detail_screen.dart:83` | `SizedBox(height: 16 + ...)` | `AppSpacing.lg + ...` | ✅ 対応済み |
+| `versions_section.dart:112` | `SizedBox(width: 10)` | `Gap(AppSpacing.sm)` | ✅ 対応済み |
+| `versions_section.dart` | `fontSize: 13/9/12` | TextTheme またはデザイントークン | 未対応 |
+| `error_view.dart:55,63,71` | `Gap(20)`, `Gap(8)`, `Gap(28)` | `AppSpacing.xl`, `AppSpacing.sm`, `AppSpacing.xxl` | ✅ 対応済み |
+| `package_list_tile.dart` | `AppSpacing.sm - 2` | 専用定数の定義 | 未対応 |
+| `skeleton_list_view.dart` | `Colors.white` | Shimmer 仕様上必要だがコメントで意図を明示 | 未対応 |
 
 ### その他
 

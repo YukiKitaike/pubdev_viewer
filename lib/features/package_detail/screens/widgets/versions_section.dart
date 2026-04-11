@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -98,7 +99,7 @@ class _VersionTimelineItem extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 10),
+          const Gap(AppSpacing.sm),
           // バージョン情報
           Expanded(
             child: Padding(

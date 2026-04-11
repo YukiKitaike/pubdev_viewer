@@ -82,7 +82,7 @@ class PackageDetailScreen extends ConsumerWidget {
                     ..sort((a, b) => b.published.compareTo(a.published)),
                 ),
                 SizedBox(
-                  height: 16 + MediaQuery.paddingOf(context).bottom,
+                  height: AppSpacing.lg + MediaQuery.paddingOf(context).bottom,
                 ),
               ],
             ),
@@ -139,7 +139,7 @@ class _PackageHeroHeader extends StatelessWidget {
               letterSpacing: -0.5,
             ),
           ),
-          const Gap(8),
+          const Gap(AppSpacing.sm),
           Text(
             detail.latest.version,
             style: GoogleFonts.jetBrainsMono(
@@ -149,12 +149,15 @@ class _PackageHeroHeader extends StatelessWidget {
             ),
           ),
           if (publisher.publisherId != null) ...[
-            const Gap(12),
+            const Gap(AppSpacing.md),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
+              ),
               decoration: BoxDecoration(
                 color: theme.colorScheme.secondaryContainer,
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(AppRadius.full),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -164,7 +167,7 @@ class _PackageHeroHeader extends StatelessWidget {
                     size: 13,
                     color: theme.colorScheme.onSecondaryContainer,
                   ),
-                  const SizedBox(width: 4),
+                  const Gap(AppSpacing.xs),
                   Text(
                     publisher.publisherId!,
                     style: theme.textTheme.labelSmall?.copyWith(
