@@ -68,8 +68,7 @@ void main() {
     });
 
     test('sets AsyncError when getPackageDetail throws', () async {
-      fakeRepository.onGetPackageDetail =
-          (_) => throw const NetworkException();
+      fakeRepository.onGetPackageDetail = (_) => throw const NetworkException();
       // ignore: cascade_invocations
       fakeRepository.onGetPackagePublisher = _publisherResponse;
 

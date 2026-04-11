@@ -35,8 +35,7 @@ void main() {
 
   group('PackageListNotifier', () {
     test('build fetches initial packages', () async {
-      fakeRepository.onGetPackages = ({String? pageUrl}) async =>
-          _firstPage();
+      fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
 
       final state = await container.read(
         packageListNotifierProvider.future,
@@ -59,26 +58,19 @@ void main() {
 
       await container.read(packageListNotifierProvider.future);
 
-      await container
-          .read(packageListNotifierProvider.notifier)
-          .loadMore();
+      await container.read(packageListNotifierProvider.notifier).loadMore();
 
-      final state = container
-          .read(packageListNotifierProvider)
-          .valueOrNull;
+      final state = container.read(packageListNotifierProvider).valueOrNull;
       expect(state?.packages, hasLength(2));
       expect(state?.nextUrl, isNull);
     });
 
     test('loadMore does nothing when nextUrl is null', () async {
-      fakeRepository.onGetPackages = ({String? pageUrl}) async =>
-          _lastPage();
+      fakeRepository.onGetPackages = ({String? pageUrl}) async => _lastPage();
 
       await container.read(packageListNotifierProvider.future);
 
-      await container
-          .read(packageListNotifierProvider.notifier)
-          .loadMore();
+      await container.read(packageListNotifierProvider.notifier).loadMore();
 
       // Only 1 call: the initial build
       expect(fakeRepository.getPackagesCallCount, 1);
@@ -110,13 +102,9 @@ void main() {
 
       await container.read(packageListNotifierProvider.future);
 
-      await container
-          .read(packageListNotifierProvider.notifier)
-          .loadMore();
+      await container.read(packageListNotifierProvider.notifier).loadMore();
 
-      final state = container
-          .read(packageListNotifierProvider)
-          .valueOrNull;
+      final state = container.read(packageListNotifierProvider).valueOrNull;
       expect(state, isNotNull);
       expect(state!.packages, hasLength(2));
       expect(state.isLoadingMore, isFalse);

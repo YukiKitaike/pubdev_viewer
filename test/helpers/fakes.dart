@@ -67,8 +67,7 @@ class FakePubDevApiClient extends Fake implements PubDevApiClient {
 ///
 /// [onGetPackages] で返却値やエラーを設定し、
 /// [getPackagesCallCount] で呼び出し回数を検証する。
-class FakePackageListRepository extends Fake
-    implements PackageListRepository {
+class FakePackageListRepository extends Fake implements PackageListRepository {
   Future<PackageListResponse> Function({String? pageUrl})? onGetPackages;
   Completer<PackageListResponse>? getPackagesCompleter;
   int getPackagesCallCount = 0;
@@ -89,8 +88,7 @@ class FakePackageListRepository extends Fake
 class FakePackageDetailRepository extends Fake
     implements PackageDetailRepository {
   Future<PackageDetailResponse> Function(String name)? onGetPackageDetail;
-  Future<PackagePublisherResponse> Function(String name)?
-      onGetPackagePublisher;
+  Future<PackagePublisherResponse> Function(String name)? onGetPackagePublisher;
   Completer<PackageDetailResponse>? getPackageDetailCompleter;
   int getPackageDetailCallCount = 0;
   int getPackagePublisherCallCount = 0;
