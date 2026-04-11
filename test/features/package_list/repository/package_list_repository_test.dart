@@ -16,8 +16,7 @@ void main() {
 
   group('PackageListRepository', () {
     test('getPackages returns parsed response', () async {
-      when(() => mockApiClient.getPackages())
-          .thenAnswer(
+      when(() => mockApiClient.getPackages()).thenAnswer(
         (_) async => Map<String, dynamic>.from(
           packageListResponseJson,
         ),
@@ -33,8 +32,7 @@ void main() {
     test(
       'getPackages passes pageUrl to api client',
       () async {
-        const url =
-            'https://pub.dev/api/packages?page=2';
+        const url = 'https://pub.dev/api/packages?page=2';
         when(
           () => mockApiClient.getPackages(pageUrl: url),
         ).thenAnswer(

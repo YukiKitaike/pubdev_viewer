@@ -17,8 +17,7 @@ void main() {
     mockRepository = MockPackageDetailRepository();
     container = ProviderContainer(
       overrides: [
-        packageDetailRepositoryProvider
-            .overrideWithValue(mockRepository),
+        packageDetailRepositoryProvider.overrideWithValue(mockRepository),
       ],
     );
   });
@@ -34,24 +33,21 @@ void main() {
         when(
           () => mockRepository.getPackageDetail('http'),
         ).thenAnswer(
-          (_) async =>
-              PackageDetailResponse.fromJson(
-                Map<String, dynamic>.from(
-                  packageDetailResponseJson,
-                ),
-              ),
+          (_) async => PackageDetailResponse.fromJson(
+            Map<String, dynamic>.from(
+              packageDetailResponseJson,
+            ),
+          ),
         );
 
         when(
-          () =>
-              mockRepository.getPackagePublisher('http'),
+          () => mockRepository.getPackagePublisher('http'),
         ).thenAnswer(
-          (_) async =>
-              PackagePublisherResponse.fromJson(
-                Map<String, dynamic>.from(
-                  packagePublisherResponseJson,
-                ),
-              ),
+          (_) async => PackagePublisherResponse.fromJson(
+            Map<String, dynamic>.from(
+              packagePublisherResponseJson,
+            ),
+          ),
         );
 
         final state = await container.read(
@@ -64,8 +60,7 @@ void main() {
           () => mockRepository.getPackageDetail('http'),
         ).called(1);
         verify(
-          () =>
-              mockRepository.getPackagePublisher('http'),
+          () => mockRepository.getPackagePublisher('http'),
         ).called(1);
       },
     );
@@ -76,24 +71,21 @@ void main() {
         when(
           () => mockRepository.getPackageDetail('http'),
         ).thenAnswer(
-          (_) async =>
-              PackageDetailResponse.fromJson(
-                Map<String, dynamic>.from(
-                  packageDetailResponseJson,
-                ),
-              ),
+          (_) async => PackageDetailResponse.fromJson(
+            Map<String, dynamic>.from(
+              packageDetailResponseJson,
+            ),
+          ),
         );
 
         when(
-          () =>
-              mockRepository.getPackagePublisher('http'),
+          () => mockRepository.getPackagePublisher('http'),
         ).thenAnswer(
-          (_) async =>
-              PackagePublisherResponse.fromJson(
-                Map<String, dynamic>.from(
-                  packagePublisherNullResponseJson,
-                ),
-              ),
+          (_) async => PackagePublisherResponse.fromJson(
+            Map<String, dynamic>.from(
+              packagePublisherNullResponseJson,
+            ),
+          ),
         );
 
         final state = await container.read(

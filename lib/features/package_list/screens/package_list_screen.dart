@@ -35,24 +35,20 @@ class PackageListScreen extends HookConsumerWidget {
               )
               .refresh(),
           child: ListView.builder(
-            itemCount: state.packages.length +
-                (state.nextUrl != null ? 1 : 0),
+            itemCount: state.packages.length + (state.nextUrl != null ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == state.packages.length) {
-                SchedulerBinding.instance
-                    .addPostFrameCallback((_) {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
                   ref
                       .read(
-                        packageListNotifierProvider
-                            .notifier,
+                        packageListNotifierProvider.notifier,
                       )
                       .loadMore();
                 });
                 return const Padding(
                   padding: EdgeInsets.all(16),
                   child: Center(
-                    child:
-                        CircularProgressIndicator(),
+                    child: CircularProgressIndicator(),
                   ),
                 );
               }

@@ -15,10 +15,9 @@ class VersionsSection extends StatelessWidget {
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
   List<PackageDetailVersion> get _sortedVersions {
-    return [...versions]
-      ..sort(
-        (a, b) => b.published.compareTo(a.published),
-      );
+    return [...versions]..sort(
+      (a, b) => b.published.compareTo(a.published),
+    );
   }
 
   @override
@@ -45,25 +44,19 @@ class VersionsSection extends StatelessWidget {
           const Gap(8),
           ...sorted.map(
             (v) => Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     v.version,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   Text(
                     _formatDate(v.published),
-                    style:
-                        Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),

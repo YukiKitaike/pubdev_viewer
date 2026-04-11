@@ -26,8 +26,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          packageListRepositoryProvider
-              .overrideWithValue(mockRepo),
+          packageListRepositoryProvider.overrideWithValue(mockRepo),
         ],
         child: const PubDevViewerApp(),
       ),

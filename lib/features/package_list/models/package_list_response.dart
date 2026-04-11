@@ -14,6 +14,5 @@ abstract class PackageListResponse with _$PackageListResponse {
 
   factory PackageListResponse.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$PackageListResponseFromJson(json);
+  ) => _$PackageListResponseFromJson(json);
 }

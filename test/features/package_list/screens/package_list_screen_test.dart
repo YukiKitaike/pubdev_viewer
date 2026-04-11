@@ -22,8 +22,7 @@ void main() {
   Widget createTestWidget() {
     return ProviderScope(
       overrides: [
-        packageListRepositoryProvider
-            .overrideWithValue(mockRepository),
+        packageListRepositoryProvider.overrideWithValue(mockRepository),
       ],
       child: const MaterialApp(
         home: PackageListScreen(),
@@ -35,8 +34,7 @@ void main() {
     testWidgets('shows loading indicator initially', (
       tester,
     ) async {
-      final completer =
-          Completer<PackageListResponse>();
+      final completer = Completer<PackageListResponse>();
       when(
         () => mockRepository.getPackages(
           pageUrl: any(named: 'pageUrl'),

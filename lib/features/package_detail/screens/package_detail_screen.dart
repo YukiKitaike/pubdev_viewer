@@ -48,13 +48,11 @@ class PackageDetailScreen extends HookConsumerWidget {
         data: (state) => RefreshIndicator(
           onRefresh: () => ref
               .read(
-                packageDetailNotifierProvider(packageName)
-                    .notifier,
+                packageDetailNotifierProvider(packageName).notifier,
               )
               .refresh(),
           child: SingleChildScrollView(
-            physics:
-                const AlwaysScrollableScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
                 OverviewSection(

@@ -11,13 +11,11 @@ abstract class PackageDetailVersion with _$PackageDetailVersion {
     required String version,
     required Pubspec pubspec,
     @JsonKey(name: 'archive_url') required String archiveUrl,
-    @JsonKey(name: 'archive_sha256')
-    required String archiveSha256,
+    @JsonKey(name: 'archive_sha256') required String archiveSha256,
     required String published,
   }) = _PackageDetailVersion;
 
   factory PackageDetailVersion.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$PackageDetailVersionFromJson(json);
+  ) => _$PackageDetailVersionFromJson(json);
 }

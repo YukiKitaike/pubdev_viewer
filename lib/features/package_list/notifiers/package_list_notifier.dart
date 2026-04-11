@@ -19,9 +19,7 @@ class PackageListNotifier extends _$PackageListNotifier {
 
   Future<void> loadMore() async {
     final current = state.valueOrNull;
-    if (current == null ||
-        current.isLoadingMore ||
-        current.nextUrl == null) {
+    if (current == null || current.isLoadingMore || current.nextUrl == null) {
       return;
     }
 

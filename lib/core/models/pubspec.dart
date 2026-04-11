@@ -15,8 +15,7 @@ abstract class Pubspec with _$Pubspec {
     List<String>? topics,
     Map<String, String>? environment,
     Map<String, dynamic>? dependencies,
-    @JsonKey(name: 'dev_dependencies')
-    Map<String, dynamic>? devDependencies,
+    @JsonKey(name: 'dev_dependencies') Map<String, dynamic>? devDependencies,
   }) = _Pubspec;
 
   factory Pubspec.fromJson(Map<String, dynamic> json) =>

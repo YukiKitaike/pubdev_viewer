@@ -20,7 +20,9 @@
       "Bash(flutter pub:*)",
       "Bash(ls -la /Users/kitaikeyuki/project/pubdev_viewer/*.yaml /Users/kitaikeyuki/project/pubdev_viewer/*.yml /Users/kitaikeyuki/project/pubdev_viewer/*.json /Users/kitaikeyuki/project/pubdev_viewer/Makefile /Users/kitaikeyuki/project/pubdev_viewer/.*)",
       "Bash(grep -E \"\\\\.\\(yaml|yml|json|md\\)$\")",
-      "Bash(awk -F/ '{for\\(i=1;i<NF;i++\\)printf \"  \"; print $NF}')"
+      "Bash(awk -F/ '{for\\(i=1;i<NF;i++\\)printf \"  \"; print $NF}')",
+      "Bash(dart analyze:*)",
+      "Bash(dart format:*)"
     ]
   }
 }

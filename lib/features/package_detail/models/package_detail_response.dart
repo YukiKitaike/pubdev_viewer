@@ -16,6 +16,5 @@ abstract class PackageDetailResponse with _$PackageDetailResponse {
 
   factory PackageDetailResponse.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$PackageDetailResponseFromJson(json);
+  ) => _$PackageDetailResponseFromJson(json);
 }

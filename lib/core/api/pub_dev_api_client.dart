@@ -40,8 +40,7 @@ class PubDevApiClient {
   Future<Map<String, dynamic>> _get(String url) async {
     _logger.info('GET $url');
     try {
-      final response =
-          await _dio.get<Map<String, dynamic>>(url);
+      final response = await _dio.get<Map<String, dynamic>>(url);
       _logger.info(
         'GET $url -> ${response.statusCode}',
       );

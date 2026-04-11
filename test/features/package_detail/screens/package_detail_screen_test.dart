@@ -23,8 +23,7 @@ void main() {
   Widget createTestWidget({String packageName = 'http'}) {
     return ProviderScope(
       overrides: [
-        packageDetailRepositoryProvider
-            .overrideWithValue(mockRepository),
+        packageDetailRepositoryProvider.overrideWithValue(mockRepository),
       ],
       child: MaterialApp(
         home: PackageDetailScreen(
@@ -59,8 +58,7 @@ void main() {
     testWidgets('shows loading indicator initially', (
       tester,
     ) async {
-      final detailCompleter =
-          Completer<PackageDetailResponse>();
+      final detailCompleter = Completer<PackageDetailResponse>();
       when(
         () => mockRepository.getPackageDetail('http'),
       ).thenAnswer((_) => detailCompleter.future);

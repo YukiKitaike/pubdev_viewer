@@ -8,17 +8,15 @@ import 'package:pubdev_viewer/features/package_list/repository/package_list_repo
 import '../../../helpers/fixtures.dart';
 import '../../../helpers/mocks.dart';
 
-PackageListResponse _firstPage() =>
-    PackageListResponse.fromJson(
-      Map<String, dynamic>.from(packageListResponseJson),
-    );
+PackageListResponse _firstPage() => PackageListResponse.fromJson(
+  Map<String, dynamic>.from(packageListResponseJson),
+);
 
-PackageListResponse _lastPage() =>
-    PackageListResponse.fromJson(
-      Map<String, dynamic>.from(
-        packageListResponseLastPageJson,
-      ),
-    );
+PackageListResponse _lastPage() => PackageListResponse.fromJson(
+  Map<String, dynamic>.from(
+    packageListResponseLastPageJson,
+  ),
+);
 
 void main() {
   late MockPackageListRepository mockRepository;
@@ -28,8 +26,7 @@ void main() {
     mockRepository = MockPackageListRepository();
     container = ProviderContainer(
       overrides: [
-        packageListRepositoryProvider
-            .overrideWithValue(mockRepository),
+        packageListRepositoryProvider.overrideWithValue(mockRepository),
       ],
     );
   });
@@ -75,9 +72,7 @@ void main() {
       );
 
       // Load more
-      await container
-          .read(packageListNotifierProvider.notifier)
-          .loadMore();
+      await container.read(packageListNotifierProvider.notifier).loadMore();
 
       final state = container.read(
         packageListNotifierProvider,
@@ -99,9 +94,7 @@ void main() {
           packageListNotifierProvider.future,
         );
 
-        await container
-            .read(packageListNotifierProvider.notifier)
-            .loadMore();
+        await container.read(packageListNotifierProvider.notifier).loadMore();
 
         // Only 1 call: the initial build
         verify(

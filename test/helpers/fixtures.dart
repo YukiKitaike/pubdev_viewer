@@ -10,11 +10,9 @@ const Map<String, dynamic> packageListResponseJson = {
           'version': '1.6.0',
           'description': 'A composable API for HTTP requests.',
         },
-        'archive_url':
-            'https://pub.dev/api/archives/http-1.6.0.tar.gz',
+        'archive_url': 'https://pub.dev/api/archives/http-1.6.0.tar.gz',
         'package_url': 'https://pub.dev/api/packages/http',
-        'url':
-            'https://pub.dev/api/packages/http/versions/1.6.0',
+        'url': 'https://pub.dev/api/packages/http/versions/1.6.0',
       },
     },
     {
@@ -26,11 +24,9 @@ const Map<String, dynamic> packageListResponseJson = {
           'version': '5.8.0',
           'description': 'A powerful HTTP client for Dart.',
         },
-        'archive_url':
-            'https://pub.dev/api/archives/dio-5.8.0.tar.gz',
+        'archive_url': 'https://pub.dev/api/archives/dio-5.8.0.tar.gz',
         'package_url': 'https://pub.dev/api/packages/dio',
-        'url':
-            'https://pub.dev/api/packages/dio/versions/5.8.0',
+        'url': 'https://pub.dev/api/packages/dio/versions/5.8.0',
       },
     },
   ],
@@ -52,8 +48,7 @@ const Map<String, dynamic> packageDetailResponseJson = {
       'homepage': 'https://example.com',
       'repository': 'https://github.com/dart-lang/http',
     },
-    'archive_url':
-        'https://pub.dev/api/archives/http-1.6.0.tar.gz',
+    'archive_url': 'https://pub.dev/api/archives/http-1.6.0.tar.gz',
     'archive_sha256': 'abc123',
     'published': '2025-11-10T18:27:56.434747Z',
   },
@@ -65,8 +60,7 @@ const Map<String, dynamic> packageDetailResponseJson = {
         'version': '1.6.0',
         'description': 'A composable API for HTTP requests.',
       },
-      'archive_url':
-          'https://pub.dev/api/archives/http-1.6.0.tar.gz',
+      'archive_url': 'https://pub.dev/api/archives/http-1.6.0.tar.gz',
       'archive_sha256': 'abc123',
       'published': '2025-11-10T18:27:56.434747Z',
     },
@@ -77,8 +71,7 @@ const Map<String, dynamic> packageDetailResponseJson = {
         'version': '1.5.0',
         'description': 'A composable API for HTTP requests.',
       },
-      'archive_url':
-          'https://pub.dev/api/archives/http-1.5.0.tar.gz',
+      'archive_url': 'https://pub.dev/api/archives/http-1.5.0.tar.gz',
       'archive_sha256': 'def456',
       'published': '2025-06-01T12:00:00.000000Z',
     },

@@ -17,6 +17,5 @@ abstract class PackageListVersion with _$PackageListVersion {
 
   factory PackageListVersion.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$PackageListVersionFromJson(json);
+  ) => _$PackageListVersionFromJson(json);
 }

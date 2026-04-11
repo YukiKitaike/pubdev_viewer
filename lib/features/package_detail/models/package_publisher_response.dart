@@ -4,14 +4,12 @@ part 'package_publisher_response.freezed.dart';
 part 'package_publisher_response.g.dart';
 
 @freezed
-abstract class PackagePublisherResponse
-    with _$PackagePublisherResponse {
+abstract class PackagePublisherResponse with _$PackagePublisherResponse {
   const factory PackagePublisherResponse({
     String? publisherId,
   }) = _PackagePublisherResponse;
 
   factory PackagePublisherResponse.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$PackagePublisherResponseFromJson(json);
+  ) => _$PackagePublisherResponseFromJson(json);
 }

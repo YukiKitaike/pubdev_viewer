@@ -41,14 +41,9 @@ class OverviewSection extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: Text(
                 publisher.publisherId!,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .primary,
-                    ),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             ),
           ],
