@@ -77,7 +77,7 @@
   // const も付与可能になる
   ```
 
-- [ ] **`_gradient` getter がビルドごとに hash 計算** — `lib/features/package_list/screens/widgets/package_list_tile.dart:25–28` —
+- [x] **`_gradient` getter がビルドごとに hash 計算** — `lib/features/package_list/screens/widgets/package_list_tile.dart:25–28` — **対応済み**: `initState` + `didUpdateWidget` で `late final _gradient` にキャッシュ。
   `codeUnits.fold` によるハッシュ計算はリスト再ビルドのたびに（スクロール時も含め）実行される。`package.name` は不変であるため、`State` の `initState` で `late final` フィールドに一度だけ計算するべきである。
   ```dart
   // 現状: ビルドごとに計算

@@ -21,10 +21,25 @@ class PackageListTile extends StatefulWidget {
 
 class _PackageListTileState extends State<PackageListTile> {
   bool _pressed = false;
+  late List<Color> _gradient;
 
-  List<Color> get _gradient {
-    final hash = widget.package.name.codeUnits.fold(0, (a, b) => a + b);
+  static List<Color> _computeGradient(String name) {
+    final hash = name.codeUnits.fold(0, (a, b) => a + b);
     return AppColors.avatarGradients[hash % AppColors.avatarGradients.length];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _gradient = _computeGradient(widget.package.name);
+  }
+
+  @override
+  void didUpdateWidget(PackageListTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.package.name != widget.package.name) {
+      _gradient = _computeGradient(widget.package.name);
+    }
   }
 
   @override

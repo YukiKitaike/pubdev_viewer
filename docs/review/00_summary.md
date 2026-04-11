@@ -42,8 +42,8 @@
 | ~~M4~~ | ~~`on Exception catch (e)` が `Error` サブクラス（`AssertionError`, `StateError` 等）を取り逃す~~ **✅ 対応済み（`on Object catch (e)` に変更）** | `lib/features/package_list/notifiers/package_list_notifier.dart:49` | Phase 3 |
 | ~~M5~~ | ~~`context.tokens` extension の `?? AppThemeTokens.light` フォールバックが登録忘れを隠す — `assert` 追加を推奨~~ **✅ 対応済み** | `lib/core/design_system/extensions/app_theme_tokens.dart:97` | Phase 1 |
 | ~~M6~~ | ~~`pubDevApiClientProvider` が `keepAlive: false` で状態を持たないのに毎回 `Dio` を再生成~~ **✅ 対応済み（`@Riverpod(keepAlive: true)` に変更）** | `lib/core/api/pub_dev_api_client.dart:79` | Phase 1 |
-| M7 | `_gradient` getter がビルドのたびに `codeUnits.fold` でハッシュ計算（スクロール中も毎回実行） — `StatefulWidget.State` の `initState` で `late final` に変更 | `lib/features/package_list/screens/widgets/package_list_tile.dart:25-28` | Phase 3, 8 |
-| M8 | `_sortedVersions` getter がビルドのたびにリストコピー＋ソートを実行 — `late final` または `sorted()` に変更 | `lib/features/package_detail/screens/widgets/versions_section.dart:19-22` | Phase 5, 8 |
+| ~~M7~~ | ~~`_gradient` getter がビルドのたびに `codeUnits.fold` でハッシュ計算~~ **✅ 対応済み（`late final` + `didUpdateWidget`）** | `lib/features/package_list/screens/widgets/package_list_tile.dart` | Phase 3, 8 |
+| ~~M8~~ | ~~`_sortedVersions` getter がビルドのたびにリストコピー＋ソートを実行~~ **✅ 対応済み（呼び出し元でソート済みリストを渡す方式に変更）** | `lib/features/package_detail/screens/widgets/versions_section.dart` | Phase 5, 8 |
 | M9 | `PackageDetailVersion.published` が `String` — `DateTime` へ型変更し `@JsonConverter` or `json_serializable` 自動生成を活用。`versions_section.dart` の `_formatDate` が Widget 内で `DateTime.tryParse` を呼んでいる（SoC 違反） | `lib/features/package_detail/models/package_detail_version.dart:16` | Phase 4 |
 | M10 | `http` スキーム許可の理由がコメントで未記載 — MITM リスクがあるため `https` 限定または意図コメントを追加 | `lib/features/package_detail/screens/package_detail_screen.dart:213` | Phase 8 |
 | M11 | `Uri.parse` が `_ShareButton` 内で使われており例外を投げる可能性 — `Uri.tryParse` に変更 | `lib/features/package_detail/screens/package_detail_screen.dart:194` | Phase 8 |

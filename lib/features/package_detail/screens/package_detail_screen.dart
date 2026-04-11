@@ -78,7 +78,8 @@ class PackageDetailScreen extends ConsumerWidget {
                   detail: state.detail,
                 ),
                 VersionsSection(
-                  versions: state.detail.versions,
+                  versions: [...state.detail.versions]
+                    ..sort((a, b) => b.published.compareTo(a.published)),
                 ),
                 SizedBox(
                   height: 16 + MediaQuery.paddingOf(context).bottom,

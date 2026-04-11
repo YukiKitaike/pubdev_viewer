@@ -17,15 +17,8 @@ class VersionsSection extends StatelessWidget {
 
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
-  List<PackageDetailVersion> get _sortedVersions {
-    return [...versions]..sort(
-      (a, b) => b.published.compareTo(a.published),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final sorted = _sortedVersions;
     final cardTheme =
         Theme.of(context).extension<AppCardTheme>() ?? defaultCardTheme;
 
@@ -38,12 +31,12 @@ class VersionsSection extends StatelessWidget {
           children: [
             const SectionHeader(label: 'Versions'),
             const Divider(height: 20),
-            ...sorted.indexed.map((entry) {
+            ...versions.indexed.map((entry) {
               final (index, v) = entry;
               return _VersionTimelineItem(
                 version: v,
                 isLatest: index == 0,
-                isLast: index == sorted.length - 1,
+                isLast: index == versions.length - 1,
                 dateFormat: _dateFormat,
               );
             }),

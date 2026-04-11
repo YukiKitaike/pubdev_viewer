@@ -59,7 +59,7 @@
   class PackageDetailScreen extends ConsumerWidget {
   ```
 
-- [ ] **`_sortedVersions` getter がビルドのたびにリストコピー＋ソートを実行する** — `lib/features/package_detail/screens/widgets/versions_section.dart:19–23`
+- [x] **`_sortedVersions` getter がビルドのたびにリストコピー＋ソートを実行する** — `lib/features/package_detail/screens/widgets/versions_section.dart:19–23` — **対応済み**: getter を削除し呼び出し元 (`package_detail_screen.dart`) でソート済みリストを渡す方式に変更。
   `StatelessWidget` の `build()` は頻繁に再呼び出しされるが、getter は毎回 `[...versions]..sort(...)` を実行する。バージョン数が多い場合にパフォーマンス劣化を招く。`versions` を受け取る際にソート済みリストを渡すか、`VersionsSection` の `build()` 内でローカル変数としてキャッシュするのみに止める（現状 `build` 内で `final sorted = _sortedVersions` としているのは正しいが、getter 自体をソートなし単純リターンにする方が明確）。
   ```dart
   // 推奨: 呼び出し元でソート済みを渡す
