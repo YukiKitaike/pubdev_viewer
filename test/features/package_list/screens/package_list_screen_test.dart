@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/app/theme.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:pubdev_viewer/core/widgets/skeleton_list_view.dart';
 import 'package:pubdev_viewer/features/package_list/models/package_list_response.dart';
 import 'package:pubdev_viewer/features/package_list/repository/package_list_repository.dart';
@@ -84,7 +85,7 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      expect(find.text('再試行'), findsOneWidget);
+      expect(find.text(AppStrings.labelRetry), findsOneWidget);
       expect(find.byIcon(Icons.cloud_off_rounded), findsOneWidget);
     });
 
@@ -103,7 +104,7 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('再試行'));
+      await tester.tap(find.text(AppStrings.labelRetry));
       await tester.pump();
       await tester.pump();
 
