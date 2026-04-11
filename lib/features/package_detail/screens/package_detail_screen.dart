@@ -102,14 +102,16 @@ class _ExternalLinkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (url == null || url!.isEmpty) {
+    final parsed = url != null && url!.isNotEmpty ? Uri.tryParse(url!) : null;
+    if (parsed == null ||
+        (parsed.scheme != 'https' && parsed.scheme != 'http')) {
       return const SizedBox.shrink();
     }
 
     return IconButton(
       icon: const Icon(Icons.open_in_new),
       tooltip: '外部サイトで開く',
-      onPressed: () => launchUrl(Uri.parse(url!)),
+      onPressed: () => launchUrl(parsed),
     );
   }
 }
