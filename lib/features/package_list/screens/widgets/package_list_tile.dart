@@ -139,7 +139,7 @@ class _PackageListTileState extends State<PackageListTile> {
                                 child: Text(
                                   'v${widget.package.latest.version}',
                                   style: GoogleFonts.jetBrainsMono(
-                                    fontSize: AppTextSize.mono11,
+                                    fontSize: AppTextSize.mono10,
                                     fontWeight: FontWeight.w600,
                                     color: theme.colorScheme.primary,
                                   ),

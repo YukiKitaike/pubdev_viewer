@@ -109,7 +109,7 @@ class _VersionTimelineItem extends StatelessWidget {
                   Text(
                     version.version,
                     style: GoogleFonts.jetBrainsMono(
-                      fontSize: AppTextSize.mono13,
+                      fontSize: AppTextSize.mono12,
                       fontWeight: isLatest ? FontWeight.w600 : FontWeight.w400,
                       color: isLatest
                           ? theme.colorScheme.onSurface
@@ -130,7 +130,7 @@ class _VersionTimelineItem extends StatelessWidget {
                       child: Text(
                         'LATEST',
                         style: GoogleFonts.jetBrainsMono(
-                          fontSize: AppTextSize.mono9,
+                          fontSize: AppTextSize.mono10,
                           fontWeight: FontWeight.w700,
                           color: primary,
                         ),
