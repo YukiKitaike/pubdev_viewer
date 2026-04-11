@@ -36,7 +36,7 @@ class PackageListScreen extends HookConsumerWidget {
 
     ref.listen(
       packageListNotifierProvider,
-      (previous, next) {
+      (_, next) {
         final error = next.valueOrNull?.loadMoreError;
         if (error != null) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -82,11 +82,15 @@ class PackageListScreen extends HookConsumerWidget {
         actions: [
           IconButton(
             icon: Icon(
-              themeMode == ThemeMode.dark
-                  ? Icons.light_mode_outlined
-                  : Icons.dark_mode_outlined,
+              switch (themeMode) {
+                .dark => Icons.light_mode_outlined,
+                _ => Icons.dark_mode_outlined,
+              },
             ),
-            tooltip: themeMode == ThemeMode.dark ? 'ライトモード' : 'ダークモード',
+            tooltip: switch (themeMode) {
+              .dark => 'ライトモード',
+              _ => 'ダークモード',
+            },
             onPressed: () =>
                 ref.read(themeModeNotifierProvider.notifier).toggle(),
           ),
