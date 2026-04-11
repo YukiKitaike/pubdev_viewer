@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../app/router.dart';
+import '../../../../core/design_system/design_system.dart';
 import '../../models/package_list_item.dart';
 
 /// パッケージ一覧の各行をカード形式で表示する Widget。
@@ -21,57 +22,40 @@ class PackageListTile extends StatefulWidget {
 class _PackageListTileState extends State<PackageListTile> {
   bool _pressed = false;
 
-  static const List<List<Color>> _avatarGradients = [
-    [Color(0xFF1565C0), Color(0xFF42A5F5)],
-    [Color(0xFF6A1B9A), Color(0xFFCE93D8)],
-    [Color(0xFF00695C), Color(0xFF4DB6AC)],
-    [Color(0xFFE65100), Color(0xFFFFB74D)],
-    [Color(0xFFC62828), Color(0xFFEF9A9A)],
-    [Color(0xFF283593), Color(0xFF7986CB)],
-    [Color(0xFF2E7D32), Color(0xFF81C784)],
-    [Color(0xFF4527A0), Color(0xFFB39DDB)],
-  ];
-
   List<Color> get _gradient {
     final hash = widget.package.name.codeUnits.fold(0, (a, b) => a + b);
-    return _avatarGradients[hash % _avatarGradients.length];
+    return AppColors.avatarGradients[hash % AppColors.avatarGradients.length];
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final tokens = context.tokens;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.sm - 2,
+      ),
       child: AnimatedScale(
         scale: _pressed ? 0.97 : 1.0,
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeOut,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: isLight ? Colors.white : const Color(0xFF1E293B),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isLight
-                  ? const Color(0xFFE2E8F0)
-                  : const Color(0xFF334155),
+            color: tokens.surface,
+            borderRadius: BorderRadius.circular(AppRadius.card),
+            border: Border.all(color: tokens.cardBorder),
+            boxShadow: cardElevatedShadow(
+              theme.colorScheme.primary,
+              isDark: theme.brightness == Brightness.dark,
             ),
-            boxShadow: isLight
-                ? [
-                    BoxShadow(
-                      color: const Color(0xFF0175C2).withValues(alpha: 0.07),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : null,
           ),
           child: Material(
             color: Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppRadius.card),
             child: InkWell(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppRadius.card),
               onTap: () {
                 HapticFeedback.lightImpact();
                 PackageDetailRoute(name: widget.package.name).go(context);
@@ -79,7 +63,7 @@ class _PackageListTileState extends State<PackageListTile> {
               onHighlightChanged: (highlighted) =>
                   setState(() => _pressed = highlighted),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -92,7 +76,7 @@ class _PackageListTileState extends State<PackageListTile> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
-                        borderRadius: BorderRadius.circular(11),
+                        borderRadius: BorderRadius.circular(AppRadius.avatar),
                       ),
                       child: Center(
                         child: Text(
@@ -104,7 +88,7 @@ class _PackageListTileState extends State<PackageListTile> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,10 +105,10 @@ class _PackageListTileState extends State<PackageListTile> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: AppSpacing.sm),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
+                                  horizontal: AppSpacing.sm,
                                   vertical: 3,
                                 ),
                                 decoration: BoxDecoration(
@@ -133,7 +117,9 @@ class _PackageListTileState extends State<PackageListTile> {
                                       alpha: 0.4,
                                     ),
                                   ),
-                                  borderRadius: BorderRadius.circular(100),
+                                  borderRadius: BorderRadius.circular(
+                                    AppRadius.full,
+                                  ),
                                 ),
                                 child: Text(
                                   'v${widget.package.latest.version}',
@@ -146,7 +132,7 @@ class _PackageListTileState extends State<PackageListTile> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: AppSpacing.sm - 2),
                           Text(
                             widget.package.latest.pubspec.description,
                             style: theme.textTheme.bodySmall?.copyWith(
@@ -159,7 +145,7 @@ class _PackageListTileState extends State<PackageListTile> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppSpacing.sm),
                     Icon(
                       Icons.chevron_right,
                       size: 16,

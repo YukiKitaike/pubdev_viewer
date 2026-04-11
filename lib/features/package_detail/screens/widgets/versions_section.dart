@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../app/theme.dart';
+import '../../../../core/design_system/design_system.dart';
 import '../../models/package_detail_version.dart';
 
 /// パッケージのバージョン一覧を公開日の降順でタイムライン形式で表示するセクション。
@@ -29,7 +29,7 @@ class VersionsSection extends StatelessWidget {
         Theme.of(context).extension<AppCardTheme>() ?? defaultCardTheme;
 
     return Card(
-      margin: cardTheme.margin.copyWith(top: 16),
+      margin: cardTheme.margin.copyWith(top: AppSpacing.lg),
       child: Padding(
         padding: cardTheme.padding,
         child: Column(
@@ -80,10 +80,7 @@ class _VersionTimelineItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primary = theme.colorScheme.primary;
-    final isLight = theme.brightness == Brightness.light;
-    final lineColor = isLight
-        ? const Color(0xFFE2E8F0)
-        : const Color(0xFF334155);
+    final lineColor = context.tokens.cardBorder;
 
     return IntrinsicHeight(
       child: Row(
@@ -119,7 +116,7 @@ class _VersionTimelineItem extends StatelessWidget {
           // バージョン情報
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
+              padding: EdgeInsets.only(bottom: isLast ? 0 : AppSpacing.md),
               child: Row(
                 children: [
                   Text(
@@ -133,7 +130,7 @@ class _VersionTimelineItem extends StatelessWidget {
                     ),
                   ),
                   if (isLatest) ...[
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppSpacing.sm),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 7,
@@ -141,7 +138,7 @@ class _VersionTimelineItem extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         border: Border.all(color: primary),
-                        borderRadius: BorderRadius.circular(100),
+                        borderRadius: BorderRadius.circular(AppRadius.full),
                       ),
                       child: Text(
                         'LATEST',
@@ -193,10 +190,10 @@ class _SectionHeader extends StatelessWidget {
           height: 18,
           decoration: BoxDecoration(
             color: primary,
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(AppRadius.sectionAccent),
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: AppSpacing.sm),
         Text(
           label,
           style: theme.textTheme.titleSmall?.copyWith(

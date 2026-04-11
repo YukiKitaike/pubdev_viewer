@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/design_system/design_system.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_view.dart';
 import '../models/package_detail_response.dart';
@@ -103,7 +104,7 @@ class _PackageHeroHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primary = theme.colorScheme.primary;
-    final isLight = theme.brightness == Brightness.light;
+    final tokens = context.tokens;
 
     return Container(
       width: double.infinity,
@@ -117,12 +118,15 @@ class _PackageHeroHeader extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         border: Border(
-          bottom: BorderSide(
-            color: isLight ? const Color(0xFFE2E8F0) : const Color(0xFF1E293B),
-          ),
+          bottom: BorderSide(color: tokens.border),
         ),
       ),
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xl,
+        AppSpacing.xxl,
+        AppSpacing.xl,
+        AppSpacing.xl,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

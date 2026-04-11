@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../design_system/design_system.dart';
+
 /// パッケージ一覧の初期ロード時に表示するスケルトン画面。
 ///
 /// PackageListTile と同じレイアウト構造のプレースホルダーを shimmer アニメーションで表示する。
@@ -9,14 +11,15 @@ class SkeletonListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
+    final tokens = context.tokens;
     return Shimmer.fromColors(
-      baseColor: isLight ? const Color(0xFFF1F5F9) : const Color(0xFF1E293B),
-      highlightColor: isLight
-          ? const Color(0xFFE2E8F0)
-          : const Color(0xFF334155),
+      baseColor: tokens.skeletonBase,
+      highlightColor: tokens.skeletonHighlight,
       child: ListView.builder(
-        padding: const EdgeInsets.only(top: 8, bottom: 16),
+        padding: const EdgeInsets.only(
+          top: AppSpacing.sm,
+          bottom: AppSpacing.lg,
+        ),
         itemCount: 10,
         itemBuilder: (context, index) => const _SkeletonTile(),
       ),
@@ -30,25 +33,28 @@ class _SkeletonTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.sm - 2,
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppRadius.card),
         ),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: 44,
+              height: 44,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppRadius.avatar),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,36 +66,37 @@ class _SkeletonTile extends StatelessWidget {
                           height: 14,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(
+                              AppRadius.skeleton,
+                            ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSpacing.sm),
                       Container(
                         width: 48,
                         height: 20,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(AppRadius.full),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSpacing.sm),
                   Container(
                     height: 12,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppRadius.skeleton),
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: AppSpacing.sm - 2),
                   Container(
                     height: 12,
-                    width: double.infinity * 0.7,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppRadius.skeleton),
                     ),
                   ),
                 ],

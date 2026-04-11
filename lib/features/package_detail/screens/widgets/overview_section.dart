@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme.dart';
+import '../../../../core/design_system/design_system.dart';
 import '../../models/package_detail_response.dart';
 
 /// パッケージの概要情報（説明文）を表示するセクション。
@@ -21,7 +21,7 @@ class OverviewSection extends StatelessWidget {
         Theme.of(context).extension<AppCardTheme>() ?? defaultCardTheme;
 
     return Card(
-      margin: cardTheme.margin.copyWith(top: 16, bottom: 0),
+      margin: cardTheme.margin.copyWith(top: AppSpacing.lg, bottom: 0),
       child: Padding(
         padding: cardTheme.padding,
         child: Column(
@@ -62,10 +62,10 @@ class _SectionHeader extends StatelessWidget {
           height: 18,
           decoration: BoxDecoration(
             color: primary,
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(AppRadius.sectionAccent),
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: AppSpacing.sm),
         Text(
           label,
           style: theme.textTheme.titleSmall?.copyWith(
