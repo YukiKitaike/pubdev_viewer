@@ -46,8 +46,8 @@ class AppCardTheme extends ThemeExtension<AppCardTheme> {
 
 /// デフォルトのカードテーマ。ThemeExtension が未設定の場合のフォールバック用。
 const AppCardTheme defaultCardTheme = AppCardTheme(
-  borderRadius: 12,
-  padding: EdgeInsets.all(16),
+  borderRadius: 16,
+  padding: EdgeInsets.all(20),
   margin: EdgeInsets.symmetric(horizontal: 16),
 );
 
@@ -58,11 +58,12 @@ final ThemeData appLightTheme = _buildTheme(Brightness.light);
 final ThemeData appDarkTheme = _buildTheme(Brightness.dark);
 
 ThemeData _buildTheme(Brightness brightness) {
+  final isLight = brightness == Brightness.light;
   final colorScheme = ColorScheme.fromSeed(
     seedColor: const Color(0xFF0175C2),
     brightness: brightness,
   );
-  final baseTextTheme = brightness == Brightness.light
+  final baseTextTheme = isLight
       ? GoogleFonts.notoSansJpTextTheme()
       : GoogleFonts.notoSansJpTextTheme(ThemeData.dark().textTheme);
 
@@ -70,21 +71,38 @@ ThemeData _buildTheme(Brightness brightness) {
     colorScheme: colorScheme,
     textTheme: baseTextTheme,
     useMaterial3: true,
+    scaffoldBackgroundColor: isLight
+        ? const Color(0xFFF8FAFC)
+        : const Color(0xFF0F172A),
     cardTheme: CardThemeData(
-      elevation: 1,
-      surfaceTintColor: colorScheme.surfaceTint,
+      elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: isLight ? const Color(0xFFE2E8F0) : const Color(0xFF1E293B),
+        ),
       ),
+      color: isLight ? Colors.white : const Color(0xFF1E293B),
+      shadowColor: isLight
+          ? const Color(0xFF0175C2).withValues(alpha: 0.07)
+          : Colors.transparent,
       clipBehavior: Clip.antiAlias,
       margin: EdgeInsets.zero,
     ),
     appBarTheme: AppBarTheme(
       centerTitle: false,
       elevation: 0,
-      scrolledUnderElevation: 2,
-      backgroundColor: colorScheme.surface,
+      scrolledUnderElevation: 1,
+      backgroundColor: isLight
+          ? const Color(0xFFF8FAFC)
+          : const Color(0xFF0F172A),
       foregroundColor: colorScheme.onSurface,
+      titleTextStyle: GoogleFonts.notoSansJp(
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: colorScheme.onSurface,
+      ),
+      surfaceTintColor: Colors.transparent,
     ),
     listTileTheme: const ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(horizontal: 16),
@@ -92,13 +110,17 @@ ThemeData _buildTheme(Brightness brightness) {
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
     ),
     chipTheme: ChipThemeData(
       labelStyle: baseTextTheme.labelSmall,
       padding: const EdgeInsets.symmetric(horizontal: 6),
+    ),
+    dividerTheme: DividerThemeData(
+      color: isLight ? const Color(0xFFE2E8F0) : const Color(0xFF1E293B),
+      thickness: 1,
     ),
     extensions: const [defaultCardTheme],
   );
