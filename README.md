@@ -170,7 +170,7 @@ fvm dart format .
 
 ### MCP Marionette
 
-[Marionette](https://pub.dev/packages/marionette_flutter) により、Claude Code がデバッグモードの Flutter アプリを直接操作できます。UI 要素の検査・タップ・テキスト入力・スクリーンショット取得・ログ確認・ホットリロードが Claude Code から行えます。
+[Marionette](https://pub.dev/packages/marionette_flutter) により、Claude Code がデバッグモードの Flutter アプリのスクリーンショットを撮影できます。ログ確認・ホットリロードにも使用します。
 
 **セットアップ：**
 
@@ -195,8 +195,8 @@ fvm dart format .
 
 `main.dart` でデバッグビルド時のみ `MarionetteBinding` を初期化しているため、リリースビルドへの影響はありません。
 
-> [!IMPORTANT]
-> **仕様適合の最終確認は MCP Marionette で行う。** 実装後は必ずアプリをデバッグモードで起動し、Claude Code から Marionette MCP 経由で実際の画面を操作して [docs/overview.md](docs/overview.md) の要件をすべて満たしていることを確認すること。ユニットテスト・静的解析だけでは UI の振る舞いは検証できない。
+> [!NOTE]
+> Marionette MCP は主にスクリーンショットの撮影に使用します。UI の動作確認は手動で行ってください。
 
 ### カスタムスキル
 
