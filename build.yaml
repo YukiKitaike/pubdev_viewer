@@ -1,0 +1,23 @@
+targets:
+  $default:
+    builders:
+      freezed:
+        generate_for:
+          include:
+            - lib/core/models/*.dart
+            - lib/features/**/models/*.dart
+      json_serializable:
+        generate_for:
+          include:
+            - lib/core/models/*.dart
+            - lib/features/**/models/*.dart
+      riverpod_generator:
+        generate_for:
+          include:
+            - lib/core/api/*.dart
+            - lib/features/**/notifiers/*.dart
+            - lib/features/**/repository/*.dart
+      go_router_builder:
+        generate_for:
+          include:
+            - lib/app/router.dart

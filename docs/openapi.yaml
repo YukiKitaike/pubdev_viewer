@@ -1,0 +1,261 @@
+openapi: 3.1.0
+info:
+  title: pub.dev API
+  description: |
+    pub.dev API のうち、pubdev_viewer App で使用するエンドポイントの仕様。
+    実際の API レスポンスに基づいて定義。
+  version: 1.0.0
+servers:
+  - url: https://pub.dev
+
+paths:
+  /api/packages:
+    get:
+      summary: パッケージ一覧を取得
+      description: |
+        最新のパッケージ一覧をページネーション付きで返す。
+        next_url を使用して次のページを取得できる。
+      parameters:
+        - name: page
+          in: query
+          description: ページ番号
+          schema:
+            type: integer
+          required: false
+      responses:
+        "200":
+          description: パッケージ一覧
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackageListResponse"
+
+  /api/packages/{name}:
+    get:
+      summary: パッケージ詳細を取得
+      description: |
+        指定したパッケージの詳細情報と全バージョン一覧を返す。
+        一覧 API とはバージョンオブジェクトの構造が異なる点に注意。
+      parameters:
+        - name: name
+          in: path
+          description: パッケージ名
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: パッケージ詳細
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackageDetailResponse"
+
+  /api/packages/{name}/publisher:
+    get:
+      summary: パッケージのパブリッシャーを取得
+      parameters:
+        - name: name
+          in: path
+          description: パッケージ名
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: パブリッシャー情報
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackagePublisherResponse"
+
+components:
+  schemas:
+    # ──────────────────────────────────────
+    # GET /api/packages
+    # ──────────────────────────────────────
+    PackageListResponse:
+      type: object
+      required:
+        - next_url
+        - packages
+      properties:
+        next_url:
+          type: string
+          description: 次ページの完全な URL。最終ページでは null。
+          example: "https://pub.dev/api/packages?page=2"
+          nullable: true
+        packages:
+          type: array
+          items:
+            $ref: "#/components/schemas/PackageListItem"
+
+    PackageListItem:
+      type: object
+      required:
+        - name
+        - latest
+      properties:
+        name:
+          type: string
+          example: "http"
+        latest:
+          $ref: "#/components/schemas/PackageListVersion"
+
+    PackageListVersion:
+      type: object
+      description: |
+        一覧 API で返されるバージョン情報。
+        詳細 API の PackageDetailVersion とはフィールドが異なる。
+      required:
+        - version
+        - pubspec
+        - archive_url
+        - package_url
+        - url
+      properties:
+        version:
+          type: string
+          example: "1.6.0"
+        pubspec:
+          $ref: "#/components/schemas/Pubspec"
+        archive_url:
+          type: string
+          example: "https://pub.dev/api/archives/http-1.6.0.tar.gz"
+        package_url:
+          type: string
+          description: パッケージ詳細 API の URL
+          example: "https://pub.dev/api/packages/http"
+        url:
+          type: string
+          description: このバージョンの API URL
+          example: "https://pub.dev/api/packages/http/versions/1.6.0"
+
+    # ──────────────────────────────────────
+    # GET /api/packages/{name}
+    # ──────────────────────────────────────
+    PackageDetailResponse:
+      type: object
+      required:
+        - name
+        - latest
+        - versions
+      properties:
+        name:
+          type: string
+          example: "http"
+        latest:
+          $ref: "#/components/schemas/PackageDetailVersion"
+        versions:
+          type: array
+          items:
+            $ref: "#/components/schemas/PackageDetailVersion"
+        advisoriesUpdated:
+          type: string
+          format: date-time
+          nullable: true
+          description: セキュリティアドバイザリの最終更新日時
+
+    PackageDetailVersion:
+      type: object
+      description: |
+        詳細 API で返されるバージョン情報。
+        一覧 API の PackageListVersion とはフィールドが異なる。
+      required:
+        - version
+        - pubspec
+        - archive_url
+        - archive_sha256
+        - published
+      properties:
+        version:
+          type: string
+          example: "1.6.0"
+        pubspec:
+          $ref: "#/components/schemas/Pubspec"
+        archive_url:
+          type: string
+          example: "https://pub.dev/api/archives/http-1.6.0.tar.gz"
+        archive_sha256:
+          type: string
+          description: アーカイブの SHA-256 ハッシュ（hex）
+          example: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
+        published:
+          type: string
+          format: date-time
+          description: 公開日時（ISO 8601）
+          example: "2025-11-10T18:27:56.434747Z"
+
+    # ──────────────────────────────────────
+    # 共通: Pubspec
+    # ──────────────────────────────────────
+    Pubspec:
+      type: object
+      required:
+        - name
+        - version
+        - description
+      properties:
+        name:
+          type: string
+          example: "http"
+        version:
+          type: string
+          example: "1.6.0"
+        description:
+          type: string
+          example: "A composable, multi-platform, Future-based API for HTTP requests."
+        homepage:
+          type: string
+          nullable: true
+          description: パッケージのホームページ URL。存在しない場合がある。
+          example: "https://codepush.flutterplaza.com"
+        repository:
+          type: string
+          nullable: true
+          description: リポジトリ URL。存在しない場合がある。
+          example: "https://github.com/dart-lang/http/tree/master/pkgs/http"
+        issue_tracker:
+          type: string
+          nullable: true
+          description: Issue tracker の URL。存在しない場合がある。
+          example: "https://github.com/dart-lang/http/issues"
+        topics:
+          type: array
+          nullable: true
+          description: パッケージのトピックタグ。存在しない場合がある。
+          items:
+            type: string
+          example: ["http", "network", "protocols"]
+        environment:
+          type: object
+          nullable: true
+          description: SDK 制約
+          additionalProperties:
+            type: string
+          example:
+            sdk: "^3.4.0"
+        dependencies:
+          type: object
+          nullable: true
+          description: パッケージの依存関係
+          additionalProperties: true
+        dev_dependencies:
+          type: object
+          nullable: true
+          description: 開発時の依存関係
+          additionalProperties: true
+
+    # ──────────────────────────────────────
+    # GET /api/packages/{name}/publisher
+    # ──────────────────────────────────────
+    PackagePublisherResponse:
+      type: object
+      required:
+        - publisherId
+      properties:
+        publisherId:
+          type: string
+          nullable: true
+          description: パブリッシャー ID。パブリッシャーがない場合は null。
+          example: "dart.dev"
