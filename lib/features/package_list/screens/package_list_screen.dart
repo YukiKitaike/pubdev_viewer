@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/widgets/error_view.dart';
-import '../../../core/widgets/loading_view.dart';
+import '../../../core/widgets/skeleton_list_view.dart';
 import '../notifiers/package_list_notifier.dart';
 import 'widgets/package_list_tile.dart';
 
@@ -79,7 +79,7 @@ class PackageListScreen extends HookConsumerWidget {
         ),
       ),
       body: asyncState.when(
-        loading: () => const LoadingView(),
+        loading: () => const SkeletonListView(),
         error: (error, _) => ErrorView(
           error: error,
           onRetry: () => ref.invalidate(packageListNotifierProvider),
