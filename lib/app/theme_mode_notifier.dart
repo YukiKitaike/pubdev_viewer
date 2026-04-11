@@ -13,8 +13,8 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   /// システムモードのときはダークに切り替える。
   void toggle() {
     state = switch (state) {
-      .dark => .light,
-      _ => .dark,
+      ThemeMode.dark => ThemeMode.light,
+      _ => ThemeMode.dark,
     };
   }
 }

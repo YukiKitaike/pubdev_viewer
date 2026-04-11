@@ -93,6 +93,12 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
 
 /// [BuildContext] から [AppThemeTokens] を簡単に取得する拡張。
 extension AppThemeTokensX on BuildContext {
-  AppThemeTokens get tokens =>
-      Theme.of(this).extension<AppThemeTokens>() ?? AppThemeTokens.light;
+  AppThemeTokens get tokens {
+    assert(
+      Theme.of(this).extension<AppThemeTokens>() != null,
+      'AppThemeTokens が ThemeData.extensions に登録されていません。'
+      'app/theme.dart の _buildTheme を確認してください。',
+    );
+    return Theme.of(this).extension<AppThemeTokens>() ?? AppThemeTokens.light;
+  }
 }

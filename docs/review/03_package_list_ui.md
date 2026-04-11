@@ -31,7 +31,7 @@
 
 ### Major（強く推奨）
 
-- [ ] **`on Exception` が `Error` サブクラスを取り逃す** — `lib/features/package_list/notifiers/package_list_notifier.dart:49` —
+- [x] **`on Exception` が `Error` サブクラスを取り逃す** — `lib/features/package_list/notifiers/package_list_notifier.dart:49` — **対応済み**: `on Object catch (e)` に変更。
   Dart の `Error` 系（`StateError`, `AssertionError`, `RangeError` 等）は `Exception` を実装しておらず、現在の catch 節では補足されない。補足されなかった `Error` は `AsyncError` に変換されず、`loadMore` 中のスタックが壊れたまま後続のビルドに影響する可能性がある。
   ```dart
   // 現状
@@ -107,7 +107,7 @@
 - [ ] **`AppColors.avatarGradients` へのインデックスアクセスで境界チェックなし** — `lib/features/package_list/screens/widgets/package_list_tile.dart:27` —
   `hash % AppColors.avatarGradients.length` は `length == 0` のとき `RangeError` になる。現実的には発生しないが、防御的に `assert` を追加しておくと安全。
 
-- [ ] **ウィジェットテストでテーマ未設定** — `test/features/package_list/screens/package_list_screen_test.dart:21–29` —
+- [x] **ウィジェットテストでテーマ未設定** — `test/features/package_list/screens/package_list_screen_test.dart:21–29` — **対応済み**: `MaterialApp(theme: appLightTheme, ...)` を追加。
   `createTestWidget()` が `MaterialApp` を使用しており `appLightTheme` を適用していない。`context.tokens` はフォールバック値（デフォルトのカラースキーム）に依存するため、golden テストとの見た目の差異が生じる可能性がある。
   ```dart
   // 推奨

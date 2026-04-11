@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pubdev_viewer/app/theme.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/core/widgets/skeleton_list_view.dart';
 import 'package:pubdev_viewer/features/package_list/models/package_list_response.dart';
@@ -24,8 +25,9 @@ void main() {
       overrides: [
         packageListRepositoryProvider.overrideWithValue(fakeRepository),
       ],
-      child: const MaterialApp(
-        home: PackageListScreen(),
+      child: MaterialApp(
+        theme: appLightTheme,
+        home: const PackageListScreen(),
       ),
     );
   }

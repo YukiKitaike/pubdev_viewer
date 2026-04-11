@@ -83,7 +83,7 @@ class PubDevApiClient {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 PubDevApiClient pubDevApiClient(Ref ref) {
   final dio = Dio(
     BaseOptions(

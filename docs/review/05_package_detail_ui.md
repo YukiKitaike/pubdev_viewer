@@ -13,7 +13,7 @@
 
 ### Critical（修正必須）
 
-- [ ] **`launchUrl` の `await` 欠落 → エラーが無視される** — `lib/features/package_detail/screens/package_detail_screen.dart:217`
+- [x] **`launchUrl` の `await` 欠落 → エラーが無視される** — `lib/features/package_detail/screens/package_detail_screen.dart:217` — **対応済み**: `async` 化・`await` 追加・失敗時 SnackBar 表示・`LaunchMode.externalApplication` 明示。
   `onPressed: () => launchUrl(parsed)` は `Future<bool>` を返すが `await` しておらず、起動失敗（`false`）もエラーも握り潰される。ユーザーへのフィードバックが一切ない。
   ```dart
   // 現状
@@ -33,7 +33,7 @@
   },
   ```
 
-- [ ] **仕様と実装の乖離: `publisherId` を Overview セクション内 右寄せで表示すべき** — `docs/overview.md:49` vs `lib/features/package_detail/screens/package_detail_screen.dart:150–176`
+- [x] **仕様と実装の乖離: `publisherId` を Overview セクション内 右寄せで表示すべき** — `docs/overview.md:49` vs `lib/features/package_detail/screens/package_detail_screen.dart:150–176` — **対応済み**: `docs/overview.md` にヒーローヘッダーへの意図的移設を記載。
   仕様書（`docs/overview.md`）は "description の下部に右寄せ（`end`）で表示" と明記しているが、実装では `_PackageHeroHeader` の Column 内に左寄せのバッジとして表示されており、`OverviewSection` には publisherId が存在しない。意図的な仕様変更であれば `docs/overview.md` を更新すること。
 
 ### Major（強く推奨）
@@ -50,7 +50,7 @@
   }
   ```
 
-- [ ] **`PackageDetailScreen` が `HookConsumerWidget` を継承しているが Flutter Hooks を一切使っていない** — `lib/features/package_detail/screens/package_detail_screen.dart:20`
+- [x] **`PackageDetailScreen` が `HookConsumerWidget` を継承しているが Flutter Hooks を一切使っていない** — `lib/features/package_detail/screens/package_detail_screen.dart:20` — **対応済み**: `ConsumerWidget` に変更、`hooks_riverpod` → `flutter_riverpod` インポート変更。
   `useXxx()` 系の Hook 呼び出しが皆無。`hooks_riverpod` パッケージへの不要な依存と `HookConsumerWidget` を使うことで生じる軽微なオーバーヘッドを避けるため `ConsumerWidget` に変更すること。
   ```dart
   // Before

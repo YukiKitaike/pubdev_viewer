@@ -24,6 +24,7 @@ void main() {
       ),
     );
 
-    expect(find.text('pub.dev Viewer'), findsOneWidget);
+    await tester.pump();
+    expect(find.text('pub.dev Viewer', findRichText: true), findsOneWidget);
   });
 }

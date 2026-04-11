@@ -26,7 +26,7 @@
 
 ### Critical（修正必須）
 
-- [ ] **`find.byIcon(Icons.error_outline)` がアイコンの実装と不一致** — `test/features/package_list/screens/package_list_screen_test.dart:85` — 実装 (`lib/core/widgets/error_view.dart:50`) では `Icons.cloud_off_rounded` を使用しているが、テストは `Icons.error_outline` を検索しているためテストが必ず失敗する。`find.byIcon(Icons.cloud_off_rounded)` に修正する。
+- [x] **`find.byIcon(Icons.error_outline)` がアイコンの実装と不一致** — `test/features/package_list/screens/package_list_screen_test.dart:85` — **対応済み**: `find.byIcon(Icons.cloud_off_rounded)` に修正。また `SkeletonListView` インポート追加・`find.byType(SkeletonListView)` への修正も同時実施。
 
   ```dart
   // 現在（バグ）
@@ -38,7 +38,7 @@
 
 ### Major（強く推奨）
 
-- [ ] **`package:checks` が `dev_dependencies` に宣言されているが全テストで未使用** — `pubspec.yaml:33` (`checks: ^0.3.1`) が存在するが、すべてのテストファイルで `package:checks` のインポートが一切なく、`expect/matcher` のみ使用されている。`package:checks` への移行を進めるか、使用しないなら `pubspec.yaml` から削除してdependencyの意図を明確にする。
+- [x] **`package:checks` が `dev_dependencies` に宣言されているが全テストで未使用** — `pubspec.yaml:33` (`checks: ^0.3.1`) — **対応済み**: `pubspec.yaml` から削除。`expect/matcher` スタイルのまま継続する方針に決定。
 
   移行する場合の例（`package_list_response_test.dart`）:
   ```dart
@@ -55,7 +55,7 @@
 
 - [ ] **`package_detail_screen_test.dart` でエラー状態テストに `byIcon` 検証がない** — `test/features/package_detail/screens/package_detail_screen_test.dart:114-124` の `'shows error view on failure'` テストが `find.text('再試行')` のみ確認しており、`find.byIcon(Icons.cloud_off_rounded)` の検証がない。`package_list_screen_test.dart` と対称性が取れていない（ただし `package_list_screen_test.dart` の Icon検索自体がバグのため、両方を修正した上で対称にする）。
 
-- [ ] **Widget テストに `MaterialApp(theme: appLightTheme)` が未設定** — `test/features/package_list/screens/package_list_screen_test.dart:22-30` および `test/features/package_detail/screens/package_detail_screen_test.dart:32-41` の `createTestWidget()` で `MaterialApp` にテーマが渡されていない。実装が `context.tokens`（`AppThemeTokens`）や `theme.colorScheme` を多用しているため、テスト環境でのフォールバック挙動に依存することになる。`MaterialApp(theme: appLightTheme, ...)` を設定することで、本番と同じテーマでのテストが可能になる。
+- [x] **Widget テストに `MaterialApp(theme: appLightTheme)` が未設定** — `test/features/package_list/screens/package_list_screen_test.dart:22-30` および `test/features/package_detail/screens/package_detail_screen_test.dart:32-41` — **対応済み**: 両テストの `createTestWidget()` に `theme: appLightTheme` を追加。実装が `context.tokens`（`AppThemeTokens`）や `theme.colorScheme` を多用しているため、テスト環境でのフォールバック挙動に依存することになる。`MaterialApp(theme: appLightTheme, ...)` を設定することで、本番と同じテーマでのテストが可能になる。
 
   ```dart
   // 修正例

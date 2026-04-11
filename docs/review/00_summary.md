@@ -24,11 +24,11 @@
 
 | # | 問題 | ファイル | 担当フェーズ |
 |---|------|---------|------------|
-| C1 | `find.byIcon(Icons.error_outline)` vs 実装 `Icons.cloud_off_rounded` — テストが常に失敗 | `test/features/package_list/screens/package_list_screen_test.dart:85` | Phase 3, 7 |
-| C2 | `launchUrl(parsed)` の `await` 欠落 — ブラウザ起動失敗がサイレント無視される | `lib/features/package_detail/screens/package_detail_screen.dart:217` | Phase 5, 8 |
-| C3 | `DioExceptionType.receiveTimeout` / `sendTimeout` / `badCertificate` / `cancel` が明示的に分岐されず意図が不明確 | `lib/core/api/pub_dev_api_client.dart:63-67` | Phase 1 |
-| C4 | `AppColors.lightBorderSubtle` が名前（薄いボーダー）と値（Slate-700: ダーク色）が不整合。`AppThemeTokens` から未参照でデッドコードの疑い | `lib/core/design_system/tokens/app_colors.dart:15` | Phase 1 |
-| C5 | 仕様書「publisherId を description 下部に右寄せで表示」vs 実装「ヒーローヘッダー内に左寄せバッジ」— 意図的変更なら `docs/overview.md` の更新が必要 | `lib/features/package_detail/screens/package_detail_screen.dart` / `docs/overview.md` | Phase 5 |
+| ~~C1~~ | ~~`find.byIcon(Icons.error_outline)` vs 実装 `Icons.cloud_off_rounded` — テストが常に失敗~~ **✅ 対応済み** | `test/features/package_list/screens/package_list_screen_test.dart:85` | Phase 3, 7 |
+| ~~C2~~ | ~~`launchUrl(parsed)` の `await` 欠落 — ブラウザ起動失敗がサイレント無視される~~ **✅ 対応済み** | `lib/features/package_detail/screens/package_detail_screen.dart:217` | Phase 5, 8 |
+| ~~C3~~ | ~~`DioExceptionType.receiveTimeout` / `sendTimeout` / `badCertificate` / `cancel` が明示的に分岐されず意図が不明確~~ **✅ 対応済み** | `lib/core/api/pub_dev_api_client.dart:63-67` | Phase 1 |
+| ~~C4~~ | ~~`AppColors.lightBorderSubtle` が名前（薄いボーダー）と値（Slate-700: ダーク色）が不整合。`AppThemeTokens` から未参照でデッドコードの疑い~~ **✅ 対応済み（削除）** | `lib/core/design_system/tokens/app_colors.dart:15` | Phase 1 |
+| ~~C5~~ | ~~仕様書「publisherId を description 下部に右寄せで表示」vs 実装「ヒーローヘッダー内に左寄せバッジ」— 意図的変更なら `docs/overview.md` の更新が必要~~ **✅ 対応済み** | `lib/features/package_detail/screens/package_detail_screen.dart` / `docs/overview.md` | Phase 5 |
 
 ---
 
@@ -36,18 +36,18 @@
 
 | # | 問題 | ファイル | 担当フェーズ |
 |---|------|---------|------------|
-| M1 | `package:checks` が `dev_dependencies` に宣言されているが全テストで未使用 — 移行するか削除するか方針決定が必要 | `pubspec.yaml:33` | Phase 2, 7 |
+| ~~M1~~ | ~~`package:checks` が `dev_dependencies` に宣言されているが全テストで未使用~~ **✅ 対応済み（削除）** | `pubspec.yaml:33` | Phase 2, 7 |
 | M2 | `_SectionHeader` が `overview_section.dart` と `versions_section.dart` に完全重複 — `package_detail/screens/widgets/section_header.dart` として抽出 | `lib/features/package_detail/screens/widgets/overview_section.dart` / `versions_section.dart` | Phase 5, 6 |
-| M3 | `PackageDetailScreen` が `HookConsumerWidget` を継承しているが Flutter Hooks を一切使っていない — `ConsumerWidget` に変更 | `lib/features/package_detail/screens/package_detail_screen.dart:20` | Phase 5 |
-| M4 | `on Exception catch (e)` が `Error` サブクラス（`AssertionError`, `StateError` 等）を取り逃す — `catch (e)` または `on AppException catch (e)` に変更 | `lib/features/package_list/notifiers/package_list_notifier.dart:49` | Phase 3 |
-| M5 | `context.tokens` extension の `?? AppThemeTokens.light` フォールバックが登録忘れを隠す — `assert` 追加を推奨 | `lib/core/design_system/extensions/app_theme_tokens.dart:97` | Phase 1 |
-| M6 | `pubDevApiClientProvider` が `keepAlive: false` で状態を持たないのに毎回 `Dio` を再生成 — `@Riverpod(keepAlive: true)` が適切 | `lib/core/api/pub_dev_api_client.dart:79` | Phase 1 |
+| ~~M3~~ | ~~`PackageDetailScreen` が `HookConsumerWidget` を継承しているが Flutter Hooks を一切使っていない — `ConsumerWidget` に変更~~ **✅ 対応済み** | `lib/features/package_detail/screens/package_detail_screen.dart:20` | Phase 5 |
+| ~~M4~~ | ~~`on Exception catch (e)` が `Error` サブクラス（`AssertionError`, `StateError` 等）を取り逃す~~ **✅ 対応済み（`on Object catch (e)` に変更）** | `lib/features/package_list/notifiers/package_list_notifier.dart:49` | Phase 3 |
+| ~~M5~~ | ~~`context.tokens` extension の `?? AppThemeTokens.light` フォールバックが登録忘れを隠す — `assert` 追加を推奨~~ **✅ 対応済み** | `lib/core/design_system/extensions/app_theme_tokens.dart:97` | Phase 1 |
+| ~~M6~~ | ~~`pubDevApiClientProvider` が `keepAlive: false` で状態を持たないのに毎回 `Dio` を再生成~~ **✅ 対応済み（`@Riverpod(keepAlive: true)` に変更）** | `lib/core/api/pub_dev_api_client.dart:79` | Phase 1 |
 | M7 | `_gradient` getter がビルドのたびに `codeUnits.fold` でハッシュ計算（スクロール中も毎回実行） — `StatefulWidget.State` の `initState` で `late final` に変更 | `lib/features/package_list/screens/widgets/package_list_tile.dart:25-28` | Phase 3, 8 |
 | M8 | `_sortedVersions` getter がビルドのたびにリストコピー＋ソートを実行 — `late final` または `sorted()` に変更 | `lib/features/package_detail/screens/widgets/versions_section.dart:19-22` | Phase 5, 8 |
 | M9 | `PackageDetailVersion.published` が `String` — `DateTime` へ型変更し `@JsonConverter` or `json_serializable` 自動生成を活用。`versions_section.dart` の `_formatDate` が Widget 内で `DateTime.tryParse` を呼んでいる（SoC 違反） | `lib/features/package_detail/models/package_detail_version.dart:16` | Phase 4 |
 | M10 | `http` スキーム許可の理由がコメントで未記載 — MITM リスクがあるため `https` 限定または意図コメントを追加 | `lib/features/package_detail/screens/package_detail_screen.dart:213` | Phase 8 |
 | M11 | `Uri.parse` が `_ShareButton` 内で使われており例外を投げる可能性 — `Uri.tryParse` に変更 | `lib/features/package_detail/screens/package_detail_screen.dart:194` | Phase 8 |
-| M12 | Widget テストで `MaterialApp` にテーマ（`appLightTheme`）が未設定 — `context.tokens` フォールバックに依存 | `test/features/package_list/screens/package_list_screen_test.dart` | Phase 7 |
+| ~~M12~~ | ~~Widget テストで `MaterialApp` にテーマ（`appLightTheme`）が未設定 — `context.tokens` フォールバックに依存~~ **✅ 対応済み** | `test/features/package_list/screens/package_list_screen_test.dart` | Phase 7 |
 | M13 | `pub_dev_api_client_test.dart` で `receiveTimeout` / `sendTimeout` 時の `NetworkException` テストが欠落 | `test/core/api/pub_dev_api_client_test.dart` | Phase 7 |
 | M14 | `PackageListState.loadMoreError: Object?` が型として広すぎる — `AppException?` に絞ることで Widget 側での exhaustive switch が可能に | `lib/features/package_list/models/package_list_state.dart` | Phase 2 |
 | M15 | `onRetry` が `ref.invalidate` 直呼び、Pull-to-refresh は `notifier.refresh()` と非対称 — パターン統一を推奨 | `lib/features/package_detail/screens/package_detail_screen.dart:52-55` | Phase 5 |

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pubdev_viewer/app/theme.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
@@ -35,6 +36,7 @@ void main() {
         packageDetailRepositoryProvider.overrideWithValue(fakeRepository),
       ],
       child: MaterialApp(
+        theme: appLightTheme,
         home: PackageDetailScreen(packageName: packageName),
       ),
     );
@@ -75,7 +77,7 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      expect(find.text('http'), findsOneWidget);
+      expect(find.text('http'), findsNWidgets(2)); // AppBar title + hero header
       expect(find.text('Overview'), findsOneWidget);
       expect(
         find.text('A composable API for HTTP requests.'),
@@ -83,7 +85,10 @@ void main() {
       );
       expect(find.text('dart.dev'), findsOneWidget);
       expect(find.text('Versions'), findsOneWidget);
-      expect(find.text('1.6.0'), findsOneWidget);
+      expect(
+        find.text('1.6.0'),
+        findsNWidgets(2),
+      ); // hero header + versions section
       expect(find.text('1.5.0'), findsOneWidget);
     });
 

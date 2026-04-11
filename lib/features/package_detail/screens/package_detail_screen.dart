@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,7 +17,7 @@ import 'widgets/versions_section.dart';
 /// パッケージ詳細画面。
 ///
 /// パッケージの概要、バージョン一覧、パブリッシャー情報を表示する。
-class PackageDetailScreen extends HookConsumerWidget {
+class PackageDetailScreen extends ConsumerWidget {
   const PackageDetailScreen({
     required this.packageName,
     super.key,
