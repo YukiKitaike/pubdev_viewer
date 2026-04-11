@@ -82,5 +82,19 @@ void main() {
       );
       expect(asyncValue.hasError, isTrue);
     });
+
+    test('refresh triggers rebuild', () async {
+      fakeRepository
+        ..onGetPackageDetail = _detailResponse
+        ..onGetPackagePublisher = _publisherResponse;
+
+      await container.read(packageDetailNotifierProvider('http').future);
+      expect(fakeRepository.getPackageDetailCallCount, 1);
+
+      await container
+          .read(packageDetailNotifierProvider('http').notifier)
+          .refresh();
+      expect(fakeRepository.getPackageDetailCallCount, 2);
+    });
   });
 }

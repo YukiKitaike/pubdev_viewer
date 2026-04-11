@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
@@ -109,6 +111,61 @@ void main() {
       expect(state!.packages, hasLength(2));
       expect(state.isLoadingMore, isFalse);
       expect(state.loadMoreError, isA<NetworkException>());
+    });
+
+    test('refresh triggers rebuild', () async {
+      fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
+
+      await container.read(packageListNotifierProvider.future);
+      expect(fakeRepository.getPackagesCallCount, 1);
+
+      await container.read(packageListNotifierProvider.notifier).refresh();
+      expect(fakeRepository.getPackagesCallCount, 2);
+    });
+
+    test('clearLoadMoreError resets loadMoreError to null', () async {
+      var callCount = 0;
+      fakeRepository.onGetPackages = ({String? pageUrl}) async {
+        callCount++;
+        if (callCount == 1) {
+          return _firstPage();
+        }
+        throw const NetworkException();
+      };
+
+      await container.read(packageListNotifierProvider.future);
+      await container.read(packageListNotifierProvider.notifier).loadMore();
+
+      final before = container.read(packageListNotifierProvider).valueOrNull;
+      expect(before, isNotNull);
+      expect(before!.loadMoreError, isA<NetworkException>());
+
+      container.read(packageListNotifierProvider.notifier).clearLoadMoreError();
+
+      final after = container.read(packageListNotifierProvider).valueOrNull;
+      expect(after!.loadMoreError, isNull);
+    });
+
+    test('loadMore is no-op while already loading more', () async {
+      fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
+      await container.read(packageListNotifierProvider.future);
+
+      // Suspend the second getPackages call via Completer
+      final completer = Completer<PackageListResponse>();
+      fakeRepository.getPackagesCompleter = completer;
+
+      // First loadMore starts but is suspended — isLoadingMore becomes true
+      unawaited(
+        container.read(packageListNotifierProvider.notifier).loadMore(),
+      );
+
+      // Second call must be a no-op because isLoadingMore is already true
+      await container.read(packageListNotifierProvider.notifier).loadMore();
+
+      // callCount: 1 (build) + 1 (first loadMore) = 2; second loadMore is no-op
+      expect(fakeRepository.getPackagesCallCount, 2);
+
+      completer.complete(_lastPage());
     });
   });
 }
