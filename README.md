@@ -14,13 +14,6 @@
 - **ライト / ダークテーマ** — アプリバーからトグル切り替え
 - **プラットフォーム対応 UX** — 触覚フィードバック、iOS バウンス、Android 予測的バック、セーフエリア対応
 
-## ドキュメント
-
-| ファイル | 内容 |
-|---|---|
-| [docs/overview.md](docs/overview.md) | 画面仕様（Home・Details の要件・Challenge 一覧） |
-| [docs/openapi.yaml](docs/openapi.yaml) | pub.dev API の OpenAPI スキーマ |
-
 ## スクリーンショット
 
 | パッケージ一覧 | パッケージ詳細 |
