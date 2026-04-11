@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_view.dart';
+import '../models/package_detail_response.dart';
+import '../models/package_publisher_response.dart';
 import '../notifiers/package_detail_notifier.dart';
 import 'widgets/overview_section.dart';
 import 'widgets/versions_section.dart';
@@ -59,9 +62,12 @@ class PackageDetailScreen extends HookConsumerWidget {
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
-                OverviewSection(
+                _PackageHeroHeader(
                   detail: state.detail,
                   publisher: state.publisher,
+                ),
+                OverviewSection(
+                  detail: state.detail,
                 ),
                 VersionsSection(
                   versions: state.detail.versions,
@@ -71,6 +77,92 @@ class PackageDetailScreen extends HookConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _PackageHeroHeader extends StatelessWidget {
+  const _PackageHeroHeader({
+    required this.detail,
+    required this.publisher,
+  });
+
+  final PackageDetailResponse detail;
+  final PackagePublisherResponse publisher;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+    final isLight = theme.brightness == Brightness.light;
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            primary.withValues(alpha: 0.08),
+            primary.withValues(alpha: 0),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        border: Border(
+          bottom: BorderSide(
+            color: isLight ? const Color(0xFFE2E8F0) : const Color(0xFF1E293B),
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            detail.name,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.5,
+            ),
+          ),
+          const Gap(8),
+          Text(
+            detail.latest.version,
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: primary,
+            ),
+          ),
+          if (publisher.publisherId != null) ...[
+            const Gap(12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.secondaryContainer,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.verified_outlined,
+                    size: 13,
+                    color: theme.colorScheme.onSecondaryContainer,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    publisher.publisherId!,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSecondaryContainer,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

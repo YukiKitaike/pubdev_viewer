@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/theme.dart';
 import '../../models/package_detail_version.dart';
 
-/// パッケージのバージョン一覧を公開日の降順で表示するセクション。
+/// パッケージのバージョン一覧を公開日の降順でタイムライン形式で表示するセクション。
 class VersionsSection extends StatelessWidget {
   const VersionsSection({
     required this.versions,
@@ -24,7 +25,6 @@ class VersionsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sorted = _sortedVersions;
-    final theme = Theme.of(context);
     final cardTheme =
         Theme.of(context).extension<AppCardTheme>() ?? defaultCardTheme;
 
@@ -35,68 +35,17 @@ class VersionsSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.history,
-                  size: 16,
-                  color: theme.colorScheme.primary,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  'Versions',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
+            const _SectionHeader(label: 'Versions', icon: Icons.history),
             const Divider(height: 20),
             ...sorted.asMap().entries.map((entry) {
               final isLatest = entry.key == 0;
+              final isLast = entry.key == sorted.length - 1;
               final v = entry.value;
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Row(
-                  children: [
-                    Text(
-                      v.version,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        fontFeatures: const [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                    if (isLatest) ...[
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primary,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Text(
-                          'LATEST',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: theme.colorScheme.onPrimary,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 9,
-                          ),
-                        ),
-                      ),
-                    ],
-                    const Spacer(),
-                    Text(
-                      _formatDate(v.published),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
+              return _VersionTimelineItem(
+                version: v,
+                isLatest: isLatest,
+                isLast: isLast,
+                dateFormat: _dateFormat,
               );
             }),
           ],
@@ -104,12 +53,158 @@ class VersionsSection extends StatelessWidget {
       ),
     );
   }
+}
+
+class _VersionTimelineItem extends StatelessWidget {
+  const _VersionTimelineItem({
+    required this.version,
+    required this.isLatest,
+    required this.isLast,
+    required this.dateFormat,
+  });
+
+  final PackageDetailVersion version;
+  final bool isLatest;
+  final bool isLast;
+  final DateFormat dateFormat;
 
   String _formatDate(String published) {
     final date = DateTime.tryParse(published);
     if (date == null) {
       return published;
     }
-    return _dateFormat.format(date);
+    return dateFormat.format(date);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+    final isLight = theme.brightness == Brightness.light;
+    final lineColor = isLight
+        ? const Color(0xFFE2E8F0)
+        : const Color(0xFF334155);
+
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // タイムラインのドット & ライン
+          SizedBox(
+            width: 20,
+            child: Column(
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.only(top: 5),
+                  decoration: BoxDecoration(
+                    color: isLatest ? primary : lineColor,
+                    shape: BoxShape.circle,
+                    border: isLatest ? null : Border.all(color: lineColor),
+                  ),
+                ),
+                if (!isLast)
+                  Expanded(
+                    child: Container(
+                      width: 1,
+                      color: lineColor,
+                      margin: const EdgeInsets.symmetric(vertical: 2),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          // バージョン情報
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
+              child: Row(
+                children: [
+                  Text(
+                    version.version,
+                    style: GoogleFonts.jetBrainsMono(
+                      fontSize: 13,
+                      fontWeight: isLatest ? FontWeight.w600 : FontWeight.w400,
+                      color: isLatest
+                          ? theme.colorScheme.onSurface
+                          : theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  if (isLatest) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 7,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: primary),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Text(
+                        'LATEST',
+                        style: GoogleFonts.jetBrainsMono(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                          color: primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                  const Spacer(),
+                  Text(
+                    _formatDate(version.published),
+                    style: GoogleFonts.jetBrainsMono(
+                      fontSize: 12,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// セクション共通ヘッダー（左ボーダーアクセント + ラベル）。
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({
+    required this.label,
+    required this.icon,
+  });
+
+  final String label;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+
+    return Row(
+      children: [
+        Container(
+          width: 3,
+          height: 18,
+          decoration: BoxDecoration(
+            color: primary,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.2,
+          ),
+        ),
+      ],
+    );
   }
 }

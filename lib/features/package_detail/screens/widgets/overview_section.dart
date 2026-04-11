@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme.dart';
 import '../../models/package_detail_response.dart';
-import '../../models/package_publisher_response.dart';
 
-/// パッケージの概要情報（説明文・パブリッシャー）を表示するセクション。
+/// パッケージの概要情報（説明文）を表示するセクション。
+///
+/// パブリッシャー情報はヒーローヘッダーに表示するためここでは省略。
 class OverviewSection extends StatelessWidget {
   const OverviewSection({
     required this.detail,
-    required this.publisher,
     super.key,
   });
 
   final PackageDetailResponse detail;
-  final PackagePublisherResponse publisher;
 
   @override
   Widget build(BuildContext context) {
@@ -28,65 +27,53 @@ class OverviewSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  size: 16,
-                  color: theme.colorScheme.primary,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  'Overview',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
+            const _SectionHeader(label: 'Overview', icon: Icons.info_outline),
             const Divider(height: 20),
             Text(
               detail.latest.pubspec.description,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
             ),
-            if (publisher.publisherId != null) ...[
-              const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.verified_outlined,
-                        size: 12,
-                        color: theme.colorScheme.onSecondaryContainer,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        publisher.publisherId!,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSecondaryContainer,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
           ],
         ),
       ),
+    );
+  }
+}
+
+/// セクション共通ヘッダー（左ボーダーアクセント + ラベル）。
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({
+    required this.label,
+    required this.icon,
+  });
+
+  final String label;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+
+    return Row(
+      children: [
+        Container(
+          width: 3,
+          height: 18,
+          decoration: BoxDecoration(
+            color: primary,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.2,
+          ),
+        ),
+      ],
     );
   }
 }
