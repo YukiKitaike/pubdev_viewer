@@ -23,6 +23,12 @@ abstract final class AppColors {
   static const Color darkSkeletonBase = Color(0xFF1E293B);
   static const Color darkSkeletonHighlight = Color(0xFF334155);
 
+  // ── Shimmer ───────────────────────────────────────────
+  /// Shimmer パッケージの子ウィジェット用プレースホルダーカラー。
+  /// Shimmer の baseColor/highlightColor によって描画時に上書きされるため
+  /// 純白で問題ない。コンポーネントから Colors.white を直接参照しない。
+  static const Color shimmerPlaceholder = Color(0xFFFFFFFF);
+
   // ── Avatar gradients ──────────────────────────────────
   static const List<List<Color>> avatarGradients = [
     [Color(0xFF1565C0), Color(0xFF42A5F5)],

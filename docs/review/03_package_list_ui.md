@@ -127,8 +127,8 @@
 - [ ] **Notifier テストに `on Exception` 範囲外エラーのケースがない** — `test/features/package_list/notifiers/package_list_notifier_test.dart` —
   `StateError` など `Exception` でないエラーが `loadMore` 中に投げられた場合の挙動テストが存在しない。Major の `on Exception → catch` 修正と対で追加すべき。
 
-- [ ] **`AppSpacing.sm - 2` という魔法の計算** — `lib/features/package_list/screens/widgets/package_list_tile.dart:39` / `135` —
-  `AppSpacing.sm - 2`（= 6dp）は 4dp グリッド外の値である。`AppSpacing.xs`（4dp）か `AppSpacing.sm`（8dp）への統一、もしくは中間値 `6dp` をデザイントークンに追加する（例: `AppSpacing.smNarrow = 6`）ことを検討する。
+- [x] **`AppSpacing.sm - 2` という魔法の計算** — `lib/features/package_list/screens/widgets/package_list_tile.dart:39` / `135` —
+  `AppSpacing.sm - 2`（= 6dp）は 4dp グリッド外の値だったため `AppSpacing.xs`（4dp）に統一済み。`skeleton_list_view.dart` の同パターン 2 箇所も同様に修正。
 
 - [ ] **`Colors.white` のハードコード** — `lib/features/package_list/screens/widgets/package_list_tile.dart:87` —
   アバター文字色が `Colors.white` で固定されている。グラデーション色によっては白が読みにくい場合があり、`colorScheme.onPrimary` または輝度に基づく動的色を使用するほうが堅牢。

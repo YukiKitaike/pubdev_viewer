@@ -52,11 +52,11 @@
 
 ### Minor（改善提案）
 
-- [ ] **`versions_section.dart` の複数の直書き `fontSize`** — `GoogleFonts.jetBrainsMono` に渡す `fontSize` が 3 箇所で直書きされている。feature 内定数または `AppTextStyles` トークン化を検討。
-  - `fontSize: 13` — `lib/features/package_detail/screens/widgets/versions_section.dart:122`
-  - `fontSize: 9` — `lib/features/package_detail/screens/widgets/versions_section.dart:143`
-  - `fontSize: 12` — `lib/features/package_detail/screens/widgets/versions_section.dart:154`
-  - 推奨修正: `static const _versionFontSize = 13.0;` 等をクラスレベルに定義
+- [x] **`versions_section.dart` の複数の直書き `fontSize`** — `GoogleFonts.jetBrainsMono` に渡す `fontSize` が 3 箇所で直書きされていた。
+  - `fontSize: 13` → `AppTextSize.mono13`
+  - `fontSize: 9` → `AppTextSize.mono9`
+  - `fontSize: 12` → `AppTextSize.mono12`
+  - 修正: `lib/core/design_system/tokens/app_text_size.dart` に `AppTextSize` クラスを新設し全 JetBrainsMono fontSize をトークン化
 
 - [ ] **`versions_section.dart` の `SizedBox(width: 10)` ハードコード** — `AppSpacing` トークンに対応する値がない（`sm = 8`, `md = 12`）。
   - `lib/features/package_detail/screens/widgets/versions_section.dart:112`
@@ -71,15 +71,13 @@
   - `const Gap(28)` → `const Gap(AppSpacing.xxl + 4)` は半端なため `AppSpacing.xxxl = 32` へ丸めるかトークン追加を検討 — `lib/core/widgets/error_view.dart:71`
   - 推奨修正: `AppSpacing.xl`, `AppSpacing.sm` に変更。28dp は `AppSpacing` への追加（`xl = 20` と `xxl = 24` の間は現在空白）も検討
 
-- [ ] **`package_list_tile.dart` の `fontSize: 11` ハードコード** — バージョンバッジのテキストサイズが直書きされている。
-  - `lib/features/package_list/screens/widgets/package_list_tile.dart:127`
-  - 推奨修正: feature 内定数 `static const _badgeFontSize = 11.0;` として定義
+- [x] **`package_list_tile.dart` の `fontSize: 11` ハードコード** — バージョンバッジのテキストサイズが直書きされていた。
+  - 修正: `AppTextSize.mono11` に置換
 
-- [ ] **`package_list_tile.dart` の `AppSpacing.sm - 2` の算術演算** — 2 箇所でトークン演算が行われている。
-  - `lib/features/package_list/screens/widgets/package_list_tile.dart:39`（`vertical: AppSpacing.sm - 2`）
-  - `lib/features/package_list/screens/widgets/package_list_tile.dart:135`（`height: AppSpacing.sm - 2`）
-  - `skeleton_list_view.dart:38`, `skeleton_list_view.dart:94` でも同様のパターン
-  - 推奨修正: `AppSpacing.xs = 4, sm = 8` の中間値として `AppSpacing` に `smm = 6` 追加を検討するか、`_verticalGap = 6.0` として定数化
+- [x] **`package_list_tile.dart` の `AppSpacing.sm - 2` の算術演算** — 2 箇所でトークン演算が行われていた。
+  - `vertical: AppSpacing.sm - 2` → `vertical: AppSpacing.xs`
+  - `height: AppSpacing.sm - 2` → `height: AppSpacing.xs`
+  - `skeleton_list_view.dart` の 2 箇所も同様に修正
 
 - [ ] **`Pubspec` モデルの `core/` 昇格タイミング** — `lib/core/models/pubspec.dart` は `package_list_version.dart` と `package_detail_version.dart` の両方から参照されているため、"2 feature で共有されてから core/ に昇格" ルールを形式上は満たしている。ただし、`package_list_version` と `package_detail_version` はそれぞれ異なる API フィールドを持ち（前者は `archive_url/package_url/url`、後者は `archive_sha256/published`）、`Pubspec` の共有は合理的。現状の判断は妥当。
 

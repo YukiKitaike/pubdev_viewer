@@ -69,10 +69,10 @@
 | `package_detail_screen.dart:166` | `SizedBox(width: 4)` | `Gap(AppSpacing.xs)` | ✅ 対応済み |
 | `package_detail_screen.dart:83` | `SizedBox(height: 16 + ...)` | `AppSpacing.lg + ...` | ✅ 対応済み |
 | `versions_section.dart:112` | `SizedBox(width: 10)` | `Gap(AppSpacing.sm)` | ✅ 対応済み |
-| `versions_section.dart` | `fontSize: 13/9/12` | TextTheme またはデザイントークン | 未対応 |
+| `versions_section.dart` | `fontSize: 13/9/12` | TextTheme またはデザイントークン | ✅ 対応済み (`AppTextSize`) |
 | `error_view.dart:55,63,71` | `Gap(20)`, `Gap(8)`, `Gap(28)` | `AppSpacing.xl`, `AppSpacing.sm`, `AppSpacing.xxl` | ✅ 対応済み |
-| `package_list_tile.dart` | `AppSpacing.sm - 2` | 専用定数の定義 | 未対応 |
-| `skeleton_list_view.dart` | `Colors.white` | Shimmer 仕様上必要だがコメントで意図を明示 | 未対応 |
+| `package_list_tile.dart` | `AppSpacing.sm - 2` | `AppSpacing.xs` に統一 | ✅ 対応済み |
+| `skeleton_list_view.dart` | `Colors.white` | `AppColors.shimmerPlaceholder` をデザインシステムに追加 | ✅ 対応済み |
 
 ### その他
 

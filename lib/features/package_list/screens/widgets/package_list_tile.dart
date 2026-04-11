@@ -50,7 +50,7 @@ class _PackageListTileState extends State<PackageListTile> {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: AppSpacing.sm - 2,
+        vertical: AppSpacing.xs,
       ),
       child: AnimatedScale(
         scale: _pressed ? 0.97 : 1.0,
@@ -139,7 +139,7 @@ class _PackageListTileState extends State<PackageListTile> {
                                 child: Text(
                                   'v${widget.package.latest.version}',
                                   style: GoogleFonts.jetBrainsMono(
-                                    fontSize: 11,
+                                    fontSize: AppTextSize.mono11,
                                     fontWeight: FontWeight.w600,
                                     color: theme.colorScheme.primary,
                                   ),
@@ -147,7 +147,7 @@ class _PackageListTileState extends State<PackageListTile> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: AppSpacing.sm - 2),
+                          const SizedBox(height: AppSpacing.xs),
                           Text(
                             widget.package.latest.pubspec.description,
                             style: theme.textTheme.bodySmall?.copyWith(

@@ -143,7 +143,7 @@ class _PackageHeroHeader extends StatelessWidget {
           Text(
             detail.latest.version,
             style: GoogleFonts.jetBrainsMono(
-              fontSize: 14,
+              fontSize: AppTextSize.mono14,
               fontWeight: FontWeight.w500,
               color: primary,
             ),

@@ -129,9 +129,9 @@
   });
   ```
 
-- [ ] **`versions_section.dart` に `fontSize: 13` / `fontSize: 9` / `fontSize: 12` の直書き** — `lib/features/package_detail/screens/widgets/versions_section.dart:121,143,153`
+- [x] **`versions_section.dart` に `fontSize: 13` / `fontSize: 9` / `fontSize: 12` の直書き** — `lib/features/package_detail/screens/widgets/versions_section.dart`
 
-  CLAUDE.md の Critical Rules「No hardcoded colors/spacing」に抵触。`GoogleFonts.jetBrainsMono(fontSize: 13, ...)` のような直書きはデザインシステムに収録すべき。ただしこのファイルは今回のレビュー対象（Models & Repository）の直接スコープ外のため Minor として記録。
+  `AppTextSize.mono13` / `AppTextSize.mono9` / `AppTextSize.mono12` に置換済み。`AppTextSize` クラスを `lib/core/design_system/tokens/app_text_size.dart` に新設し、全 JetBrainsMono サイズをトークン化した。
 
 ---
 

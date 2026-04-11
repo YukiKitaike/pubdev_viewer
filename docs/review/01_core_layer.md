@@ -46,13 +46,9 @@ on DioException catch (e) {
 
 ### Major（強く推奨）
 
-- [x] **`SkeletonListView` の `Colors.white` ハードコード（意図コメントなし）** — `lib/core/widgets/skeleton_list_view.dart:42,52,68,77,96,98` — Shimmer パッケージは `baseColor`/`highlightColor` の上に子ウィジェットの色を `ColorFilter` でブレンドする仕様であり、子の色は描画に実質影響しない。そのため `Colors.white` は技術的に許容されうるが、コードレビュアーが「CLAUDE.md 違反の hardcoded color」と誤認するリスクが高い。コメントが一切なく意図が読み取れない。また `AppSpacing.sm - 2`（行 38, 94）は 4dp グリッドを破る `6dp` の値になっており、トークン設計と矛盾する。
-  - **推奨修正 (Colors.white)**: 以下のコメントを `_SkeletonTile.build` 冒頭に追加する。
-  ```dart
-  // Shimmer の仕様上、子ウィジェットの色は baseColor/highlightColor で上書きされるため
-  // Colors.white でよい（デザイントークンを使う必要はない）。
-  ```
-  - **推奨修正 (AppSpacing.sm - 2)**: `AppSpacing.xs`（4dp）または `AppSpacing.sm`（8dp）に揃えるか、`AppSpacing` に `AppSpacing.smCompact = 6` を追加する。
+- [x] **`SkeletonListView` の `Colors.white` ハードコード（意図コメントなし）** — `lib/core/widgets/skeleton_list_view.dart:42,52,68,77,96,98` — Shimmer パッケージは `baseColor`/`highlightColor` の上に子ウィジェットの色を `ColorFilter` でブレンドする仕様であり、子の色は描画に実質影響しない。そのため `Colors.white` は技術的に許容されうるが、CLAUDE.md の hardcoded color ポリシー違反となる。
+  - **対応済み (Colors.white)**: `AppColors.shimmerPlaceholder`（= `Color(0xFFFFFFFF)`）を `app_colors.dart` に追加し、`SkeletonListView` 内の全 6 箇所を置換。コメントで Shimmer の仕様上の意図を明示。
+  - **対応済み (AppSpacing.sm - 2)**: 2 箇所を `AppSpacing.xs`（4dp）に統一。
 
 - [x] **`context.tokens` extension の `?? AppThemeTokens.light` フォールバックが失敗を隠す** — `lib/core/design_system/extensions/app_theme_tokens.dart:97` — `Theme.of(this).extension<AppThemeTokens>()` が `null` を返す（= テーマへの登録忘れ）場合、例外をスローせず静かにライトテーマで動く。ダークモードを設定しているのにライト色で描画される、という見つけにくいバグが発生しうる。
   - **推奨修正**: `!` で即時クラッシュさせて開発中に気づけるようにするか、`assert` を組み合わせる。

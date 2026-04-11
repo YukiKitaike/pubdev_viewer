@@ -35,11 +35,11 @@ class _SkeletonTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: AppSpacing.sm - 2,
+        vertical: AppSpacing.xs,
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.shimmerPlaceholder,
           borderRadius: BorderRadius.circular(AppRadius.card),
         ),
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -50,7 +50,7 @@ class _SkeletonTile extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.shimmerPlaceholder,
                 borderRadius: BorderRadius.circular(AppRadius.avatar),
               ),
             ),
@@ -65,7 +65,7 @@ class _SkeletonTile extends StatelessWidget {
                         child: Container(
                           height: 14,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AppColors.shimmerPlaceholder,
                             borderRadius: BorderRadius.circular(
                               AppRadius.skeleton,
                             ),
@@ -77,7 +77,7 @@ class _SkeletonTile extends StatelessWidget {
                         width: 48,
                         height: 20,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.shimmerPlaceholder,
                           borderRadius: BorderRadius.circular(AppRadius.full),
                         ),
                       ),
@@ -87,15 +87,15 @@ class _SkeletonTile extends StatelessWidget {
                   Container(
                     height: 12,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.shimmerPlaceholder,
                       borderRadius: BorderRadius.circular(AppRadius.skeleton),
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.sm - 2),
+                  const SizedBox(height: AppSpacing.xs),
                   Container(
                     height: 12,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.shimmerPlaceholder,
                       borderRadius: BorderRadius.circular(AppRadius.skeleton),
                     ),
                   ),
