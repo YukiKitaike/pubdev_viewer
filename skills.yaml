@@ -63,3 +63,5 @@ global:
     - mobile-android-design
     - mobile-ios-design
     - responsive-design
+  sleekdotdesign/agent-skills:
+    - sleek-design-mobile-apps
