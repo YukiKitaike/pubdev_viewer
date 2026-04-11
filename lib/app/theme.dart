@@ -92,7 +92,7 @@ ThemeData _buildTheme(Brightness brightness) {
     appBarTheme: AppBarTheme(
       centerTitle: false,
       elevation: 0,
-      scrolledUnderElevation: 1,
+      scrolledUnderElevation: 3,
       backgroundColor: isLight
           ? const Color(0xFFF8FAFC)
           : const Color(0xFF0F172A),
