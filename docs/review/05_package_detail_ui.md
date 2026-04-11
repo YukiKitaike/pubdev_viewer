@@ -71,7 +71,7 @@
   // VersionsSection 内では getter を廃止して直接 versions を使う
   ```
 
-- [ ] **`onRetry` で `ref.invalidate` を直接呼んでいる — `refresh()` との非対称** — `lib/features/package_detail/screens/package_detail_screen.dart:52–55`
+- [x] **`onRetry` で `ref.invalidate` を直接呼んでいる — `refresh()` との非対称** — `lib/features/package_detail/screens/package_detail_screen.dart:52–55` — **対応済み**: `notifier.refresh()` に統一（`package_list_screen.dart` も同様に修正）。
   Pull-to-refresh では `notifier.refresh()`（= `invalidateSelf()` + `await future`）を呼んでいるが、エラー時の「再試行」ボタンでは `ref.invalidate(...)` を直接呼んでいる。後者は `await future` を待たないため RefreshIndicator のスピナーが完了まで表示されない（エラー時は RefreshIndicator がないため実害は薄いが）、パターンの統一のために `notifier.refresh()` に揃えることを推奨。
 
 ### Minor（改善提案）

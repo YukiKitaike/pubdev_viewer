@@ -49,9 +49,9 @@ class PackageDetailScreen extends ConsumerWidget {
         loading: () => const LoadingView(),
         error: (error, _) => ErrorView(
           error: error,
-          onRetry: () => ref.invalidate(
-            packageDetailNotifierProvider(packageName),
-          ),
+          onRetry: () => ref
+              .read(packageDetailNotifierProvider(packageName).notifier)
+              .refresh(),
         ),
         data: (state) => RefreshIndicator(
           onRefresh: () => ref

@@ -50,7 +50,7 @@
 | ~~M12~~ | ~~Widget テストで `MaterialApp` にテーマ（`appLightTheme`）が未設定 — `context.tokens` フォールバックに依存~~ **✅ 対応済み** | `test/features/package_list/screens/package_list_screen_test.dart` | Phase 7 |
 | ~~M13~~ | ~~`pub_dev_api_client_test.dart` で `receiveTimeout` / `sendTimeout` テストが欠落~~ **✅ 対応済み（2テスト追加）** | `test/core/api/pub_dev_api_client_test.dart` | Phase 7 |
 | ~~M14~~ | ~~`PackageListState.loadMoreError: Object?` が型として広すぎる~~ **✅ 対応済み（`AppException?` に変更。非AppException は `NetworkException` にラップ）** | `lib/features/package_list/models/package_list_state.dart` | Phase 2 |
-| M15 | `onRetry` が `ref.invalidate` 直呼び、Pull-to-refresh は `notifier.refresh()` と非対称 — パターン統一を推奨 | `lib/features/package_detail/screens/package_detail_screen.dart:52-55` | Phase 5 |
+| ~~M15~~ | ~~`onRetry` が `ref.invalidate` 直呼び、Pull-to-refresh は `notifier.refresh()` と非対称~~ **✅ 対応済み（両画面で `notifier.refresh()` に統一）** | `lib/features/package_detail/screens/` / `package_list/screens/` | Phase 5 |
 
 ---
 

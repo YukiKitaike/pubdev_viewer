@@ -100,7 +100,8 @@ class PackageListScreen extends HookConsumerWidget {
         loading: () => const SkeletonListView(),
         error: (error, _) => ErrorView(
           error: error,
-          onRetry: () => ref.invalidate(packageListNotifierProvider),
+          onRetry: () =>
+              ref.read(packageListNotifierProvider.notifier).refresh(),
         ),
         data: (state) => RefreshIndicator(
           onRefresh: () =>
