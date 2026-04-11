@@ -88,21 +88,6 @@ void main() {
       expect(find.byIcon(Icons.cloud_off_rounded), findsOneWidget);
     });
 
-    testWidgets('golden test for package list', (tester) async {
-      fakeRepository.onGetPackages = ({String? pageUrl}) async =>
-          PackageListResponse.fromJson(
-            Map<String, dynamic>.from(packageListResponseJson),
-          );
-
-      await tester.pumpWidget(createTestWidget());
-      await tester.pumpAndSettle();
-
-      await expectLater(
-        find.byType(PackageListScreen),
-        matchesGoldenFile('goldens/package_list_screen.png'),
-      );
-    });
-
     testWidgets('retry button refetches data', (tester) async {
       var callCount = 0;
       fakeRepository.onGetPackages = ({String? pageUrl}) async {

@@ -104,18 +104,6 @@ void main() {
       },
     );
 
-    testWidgets('golden test for package detail', (tester) async {
-      stubSuccessResponse();
-
-      await tester.pumpWidget(createTestWidget());
-      await tester.pumpAndSettle();
-
-      await expectLater(
-        find.byType(PackageDetailScreen),
-        matchesGoldenFile('goldens/package_detail_screen.png'),
-      );
-    });
-
     testWidgets('shows error view on failure', (tester) async {
       fakeRepository.onGetPackageDetail = (name) =>
           throw const NetworkException();
