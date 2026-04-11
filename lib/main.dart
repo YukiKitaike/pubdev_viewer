@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:marionette_flutter/marionette_flutter.dart';
+import 'package:marionette_logging/marionette_logging.dart';
 
 import 'app/router.dart';
 import 'app/theme.dart';
@@ -10,7 +11,9 @@ import 'app/theme_mode_notifier.dart';
 
 void main() {
   if (kDebugMode) {
-    MarionetteBinding.ensureInitialized();
+    MarionetteBinding.ensureInitialized(
+      MarionetteConfiguration(logCollector: LoggingLogCollector()),
+    );
   } else {
     WidgetsFlutterBinding.ensureInitialized();
   }
