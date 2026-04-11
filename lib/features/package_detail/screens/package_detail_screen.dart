@@ -60,13 +60,14 @@ class PackageDetailScreen extends HookConsumerWidget {
               )
               .refresh(),
           child: SingleChildScrollView(
-            physics: Theme.of(context).platform == TargetPlatform.iOS
-                ? const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
-                  )
-                : const ClampingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
-                  ),
+            physics: switch (Theme.of(context).platform) {
+              .iOS => const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              _ => const ClampingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+            },
             child: Column(
               children: [
                 _PackageHeroHeader(
@@ -206,16 +207,17 @@ class _ExternalLinkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsed = url != null && url!.isNotEmpty ? Uri.tryParse(url!) : null;
-    if (parsed == null ||
-        (parsed.scheme != 'https' && parsed.scheme != 'http')) {
-      return const SizedBox.shrink();
+    if (url case final String u when u.isNotEmpty) {
+      final parsed = Uri.tryParse(u);
+      if (parsed != null &&
+          (parsed.scheme == 'https' || parsed.scheme == 'http')) {
+        return IconButton(
+          icon: const Icon(Icons.open_in_new),
+          tooltip: '外部サイトで開く',
+          onPressed: () => launchUrl(parsed),
+        );
+      }
     }
-
-    return IconButton(
-      icon: const Icon(Icons.open_in_new),
-      tooltip: '外部サイトで開く',
-      onPressed: () => launchUrl(parsed),
-    );
+    return const SizedBox.shrink();
   }
 }
