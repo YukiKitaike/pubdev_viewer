@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/error/app_exception.dart';
 import '../models/package_list_state.dart';
 import '../repository/package_list_repository.dart';
 
@@ -48,8 +49,9 @@ class PackageListNotifier extends _$PackageListNotifier {
       );
     } on Object catch (e) {
       // Exception でない Error（StateError 等）も含めてキャッチする
+      final error = e is AppException ? e : NetworkException(e.toString());
       state = AsyncData(
-        current.copyWith(isLoadingMore: false, loadMoreError: e),
+        current.copyWith(isLoadingMore: false, loadMoreError: error),
       );
     }
   }

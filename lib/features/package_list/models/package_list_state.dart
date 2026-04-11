@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../core/error/app_exception.dart';
 import 'package_list_item.dart';
 
 part 'package_list_state.freezed.dart';
@@ -11,6 +12,6 @@ abstract class PackageListState with _$PackageListState {
     @Default([]) List<PackageListItem> packages,
     String? nextUrl,
     @Default(false) bool isLoadingMore,
-    Object? loadMoreError,
+    AppException? loadMoreError,
   }) = _PackageListState;
 }

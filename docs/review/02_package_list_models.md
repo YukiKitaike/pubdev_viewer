@@ -12,7 +12,7 @@
 
 ### Critical（修正必須）
 
-- [ ] **`loadMoreError` の型が `Object?` と広すぎる** — `lib/features/package_list/models/package_list_state.dart:14` — `AppException?` に絞り込むべき。`PackageListNotifier.loadMore()` は `on Exception catch (e)` でキャッチしているが、`AppException` は `Exception` を実装しているため絞り込み可能。`Object?` のままでは `loadMoreError` を受け取る Widget 側で型スイッチが書けず、`sealed class AppException` のパターンマッチが活かせない。
+- [x] **`loadMoreError` の型が `Object?` と広すぎる** — `lib/features/package_list/models/package_list_state.dart:14` — **対応済み**: `AppException?` に変更。非 `AppException` は `NetworkException(e.toString())` にラップ。`PackageListNotifier.loadMore()` は `on Exception catch (e)` でキャッチしているが、`AppException` は `Exception` を実装しているため絞り込み可能。`Object?` のままでは `loadMoreError` を受け取る Widget 側で型スイッチが書けず、`sealed class AppException` のパターンマッチが活かせない。
 
   ```dart
   // Before

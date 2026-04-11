@@ -7,7 +7,7 @@ part of 'package_list_notifier.dart';
 // **************************************************************************
 
 String _$packageListNotifierHash() =>
-    r'167cdd76fd8a5f168d5963715b19839ad22b481e';
+    r'6868ee03a7df427d7e13f2c999f2c30339eb1fb1';
 
 /// パッケージ一覧の状態管理を担当する Notifier。
 ///
