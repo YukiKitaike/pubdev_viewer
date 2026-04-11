@@ -66,12 +66,23 @@ lib/
     └── package_detail/# 詳細画面 — 情報・バージョン・パブリッシャー
 ```
 
-各 feature は `models/`、`repository/`、`notifiers/`、`screens/` で独立しています。feature 間の直接依存は禁止で、共通処理は `core/` に置きます。
+各 feature は `models/`、`repository/`、`notifiers/`、`screens/` で独立しています。feature 間の直接依存は禁止で、共通処理は `core/` に置きます。feature 間を直接参照すると変更の影響範囲が広がり循環依存のリスクも生じるため、共有が必要になった時点で `core/` に昇格させます。
 
 **feature 内の依存方向：**
 ```
 screens → notifiers → repository → models
 ```
+
+### 設計方針
+
+| ルール | 理由 |
+|---|---|
+| **Repository はインターフェースなし**（具象クラスのみ） | 抽象インターフェースは多態性が必要な場合にのみ意味を持つ。テストは `Fake implements XxxRepository` で代替できるため不要な間接層を避ける |
+| **UseCase なし**（Notifier が Repository を直接呼ぶ） | このスケールのアプリでは UseCase は呼び出しをそのまま委譲するだけの空洞になりやすく、追跡コストが増えるだけ |
+| **Either / Result なし**（エラーは例外で表現） | Dart の例外機構はイディオマティックで、Result 型は全コールサイトに型変換のボイラープレートを強制する |
+| **モデルは1クラスで完結**（Entity 分割なし） | API 形状と UI が実際に異なる場合のみ変換クラスを作る。形状が同じなのに DTO/Entity を分けるのは重複を生むだけ |
+| **feature 固有モデルは 2 feature で共有されてから `core/` に昇格** | 早期の `core/` 昇格は「いつか使うかも」という推測に基づく抽象化になりやすい。実際に共有されるまで feature 内に留める |
+| **色・余白の直書き禁止** | ライト / ダークテーマ対応と UI の一貫性維持のため、すべてデザイントークン経由にする |
 
 ## 技術スタック
 
@@ -125,9 +136,9 @@ test/
 
 ### テスト方針
 
-- **Mock 禁止** — `Fake implements XxxRepository` パターンを使用。`@GenerateMocks` は使わない
-- **フィクスチャ** — テスト内にインライン JSON を書かず `test/helpers/fixtures.dart` を共有
-- **ProviderContainer** — Notifier テストに使用。`tearDown` で必ず `container.dispose()`
+- **Mock 禁止** — `Fake implements XxxRepository` パターンを使用。`@GenerateMocks` は使わない。Repository に抽象インターフェースがなく、Mockito の Mock より Fake の方がコールバックプロパティで挙動を明示できてシンプルなため
+- **フィクスチャ共有** — テスト内にインライン JSON を書かず `test/helpers/fixtures.dart` を使う。モデルの変更時に修正箇所を1箇所に集約するため
+- **ProviderContainer** — Notifier テストに使用。`tearDown` で必ず `container.dispose()` する。dispose 漏れはメモリリークを引き起こすため
 - **Completer** — ローディング中の状態を検証するために future を保留して使用
 
 ## コード品質
