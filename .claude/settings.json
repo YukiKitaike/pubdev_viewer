@@ -37,6 +37,10 @@
       "Bash(git rebase:*)"
     ]
   },
+  "enabledMcpjsonServers": [
+    "marionette"
+  ],
+  "enableAllProjectMcpServers": true,
   "hooks": {
     "PostToolUse": [
       {
