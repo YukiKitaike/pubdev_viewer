@@ -38,7 +38,7 @@
 
 ### Major（強く推奨）
 
-- [ ] **`_SectionHeader` の完全重複** — `lib/features/package_detail/screens/widgets/overview_section.dart:44–79` と `lib/features/package_detail/screens/widgets/versions_section.dart:169–204`
+- [x] **`_SectionHeader` の完全重複** — `lib/features/package_detail/screens/widgets/overview_section.dart:44–79` と `lib/features/package_detail/screens/widgets/versions_section.dart:169–204` — **対応済み**: `section_header.dart` として抽出し `icon` 未使用フィールドも削除。
   クラス名・実装・コメントまで完全に同一のプライベート Widget が 2 ファイルに存在する。共通 Widget として `core/widgets/section_header.dart` または `package_detail/screens/widgets/section_header.dart` に切り出すべき。
   ```dart
   // core/widgets/section_header.dart（または feature 内 widgets/）

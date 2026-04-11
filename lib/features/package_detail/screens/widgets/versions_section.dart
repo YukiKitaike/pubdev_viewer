@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/design_system/design_system.dart';
 import '../../models/package_detail_version.dart';
+import 'section_header.dart';
 
 /// パッケージのバージョン一覧を公開日の降順でタイムライン形式で表示するセクション。
 class VersionsSection extends StatelessWidget {
@@ -35,7 +36,7 @@ class VersionsSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _SectionHeader(label: 'Versions', icon: Icons.history),
+            const SectionHeader(label: 'Versions'),
             const Divider(height: 20),
             ...sorted.indexed.map((entry) {
               final (index, v) = entry;
@@ -161,44 +162,6 @@ class _VersionTimelineItem extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// セクション共通ヘッダー（左ボーダーアクセント + ラベル）。
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({
-    required this.label,
-    required this.icon,
-  });
-
-  final String label;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
-
-    return Row(
-      children: [
-        Container(
-          width: 3,
-          height: 18,
-          decoration: BoxDecoration(
-            color: primary,
-            borderRadius: BorderRadius.circular(AppRadius.sectionAccent),
-          ),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        Text(
-          label,
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.2,
-          ),
-        ),
-      ],
     );
   }
 }

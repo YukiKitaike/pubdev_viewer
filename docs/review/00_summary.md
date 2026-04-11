@@ -37,7 +37,7 @@
 | # | 問題 | ファイル | 担当フェーズ |
 |---|------|---------|------------|
 | ~~M1~~ | ~~`package:checks` が `dev_dependencies` に宣言されているが全テストで未使用~~ **✅ 対応済み（削除）** | `pubspec.yaml:33` | Phase 2, 7 |
-| M2 | `_SectionHeader` が `overview_section.dart` と `versions_section.dart` に完全重複 — `package_detail/screens/widgets/section_header.dart` として抽出 | `lib/features/package_detail/screens/widgets/overview_section.dart` / `versions_section.dart` | Phase 5, 6 |
+| ~~M2~~ | ~~`_SectionHeader` が `overview_section.dart` と `versions_section.dart` に完全重複~~ **✅ 対応済み（`section_header.dart` に抽出）** | `lib/features/package_detail/screens/widgets/` | Phase 5, 6 |
 | ~~M3~~ | ~~`PackageDetailScreen` が `HookConsumerWidget` を継承しているが Flutter Hooks を一切使っていない — `ConsumerWidget` に変更~~ **✅ 対応済み** | `lib/features/package_detail/screens/package_detail_screen.dart:20` | Phase 5 |
 | ~~M4~~ | ~~`on Exception catch (e)` が `Error` サブクラス（`AssertionError`, `StateError` 等）を取り逃す~~ **✅ 対応済み（`on Object catch (e)` に変更）** | `lib/features/package_list/notifiers/package_list_notifier.dart:49` | Phase 3 |
 | ~~M5~~ | ~~`context.tokens` extension の `?? AppThemeTokens.light` フォールバックが登録忘れを隠す — `assert` 追加を推奨~~ **✅ 対応済み** | `lib/core/design_system/extensions/app_theme_tokens.dart:97` | Phase 1 |
