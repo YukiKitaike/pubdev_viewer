@@ -6,7 +6,6 @@
       "Bash(grep:*)",
       "Bash(ls:*)",
       "Bash(git diff:*)",
-      "WebFetch(domain:github.com)",
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(fvm dart analyze *)",
@@ -37,10 +36,10 @@
       "Bash(git rebase:*)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "marionette"
   ],
-  "enableAllProjectMcpServers": true,
   "hooks": {
     "PostToolUse": [
       {
