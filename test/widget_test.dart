@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pubdev_viewer/app/app.dart';
 import 'package:pubdev_viewer/features/package_list/models/package_list_response.dart';
 import 'package:pubdev_viewer/features/package_list/repository/package_list_repository.dart';
-import 'package:pubdev_viewer/main.dart';
 
 import 'helpers/fakes.dart';
 import 'helpers/fixtures.dart';

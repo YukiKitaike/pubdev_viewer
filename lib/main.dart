@@ -5,9 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:marionette_flutter/marionette_flutter.dart';
 import 'package:marionette_logging/marionette_logging.dart';
 
-import 'app/router.dart';
-import 'app/theme.dart';
-import 'app/theme_mode_notifier.dart';
+import 'app/app.dart';
 
 void main() {
   if (kDebugMode) {
@@ -22,20 +20,4 @@ void main() {
     debugPrint('${record.level.name}: ${record.loggerName}: ${record.message}');
   });
   runApp(const ProviderScope(child: PubDevViewerApp()));
-}
-
-class PubDevViewerApp extends ConsumerWidget {
-  const PubDevViewerApp({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeNotifierProvider);
-    return MaterialApp.router(
-      title: 'pub.dev Viewer',
-      theme: appLightTheme,
-      darkTheme: appDarkTheme,
-      themeMode: themeMode,
-      routerConfig: router,
-    );
-  }
 }
