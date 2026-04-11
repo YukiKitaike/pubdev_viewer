@@ -214,7 +214,17 @@ class _ExternalLinkButton extends StatelessWidget {
         return IconButton(
           icon: const Icon(Icons.open_in_new),
           tooltip: '外部サイトで開く',
-          onPressed: () => launchUrl(parsed),
+          onPressed: () async {
+            final success = await launchUrl(
+              parsed,
+              mode: LaunchMode.externalApplication,
+            );
+            if (!success && context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('リンクを開けませんでした')),
+              );
+            }
+          },
         );
       }
     }

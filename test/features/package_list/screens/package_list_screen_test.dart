@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
+import 'package:pubdev_viewer/core/widgets/skeleton_list_view.dart';
 import 'package:pubdev_viewer/features/package_list/models/package_list_response.dart';
 import 'package:pubdev_viewer/features/package_list/repository/package_list_repository.dart';
 import 'package:pubdev_viewer/features/package_list/screens/package_list_screen.dart';
@@ -38,7 +39,7 @@ void main() {
       await tester.pump();
 
       expect(
-        find.byType(CircularProgressIndicator),
+        find.byType(SkeletonListView),
         findsOneWidget,
       );
 
@@ -82,7 +83,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('再試行'), findsOneWidget);
-      expect(find.byIcon(Icons.error_outline), findsOneWidget);
+      expect(find.byIcon(Icons.cloud_off_rounded), findsOneWidget);
     });
 
     testWidgets('golden test for package list', (tester) async {

@@ -12,7 +12,6 @@ abstract final class AppColors {
   static const Color lightBackground = Color(0xFFF8FAFC);
   static const Color lightSurface = Color(0xFFFFFFFF);
   static const Color lightBorder = Color(0xFFE2E8F0);
-  static const Color lightBorderSubtle = Color(0xFF334155);
   static const Color lightSkeletonBase = Color(0xFFF1F5F9);
   static const Color lightSkeletonHighlight = Color(0xFFE2E8F0);
 

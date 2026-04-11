@@ -60,18 +60,25 @@ class PubDevApiClient {
       return data;
     } on DioException catch (e) {
       _logger.severe('GET $url failed: $e');
-      if (e.type == DioExceptionType.connectionError ||
-          e.type == DioExceptionType.connectionTimeout ||
-          e.error is SocketException) {
-        throw const NetworkException();
+      switch (e.type) {
+        case DioExceptionType.connectionError:
+        case DioExceptionType.connectionTimeout:
+        case DioExceptionType.receiveTimeout:
+        case DioExceptionType.sendTimeout:
+          throw const NetworkException();
+        case DioExceptionType.badResponse:
+          throw ServerException(
+            e.response?.statusCode ?? 500,
+            'Server returned ${e.response?.statusCode}',
+          );
+        case DioExceptionType.cancel:
+        case DioExceptionType.badCertificate:
+        case DioExceptionType.unknown:
+          if (e.error is SocketException) {
+            throw const NetworkException();
+          }
+          throw const NetworkException();
       }
-      if (e.response != null) {
-        throw ServerException(
-          e.response!.statusCode ?? 500,
-          'Server returned ${e.response!.statusCode}',
-        );
-      }
-      throw const NetworkException();
     }
   }
 }

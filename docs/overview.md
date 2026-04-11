@@ -42,11 +42,16 @@ tap された item の `name` を元に、以下の情報を取得する。
     2. `PackageDetails.latest.pubspec.repository`（homepage がない場合）
     3. どちらもない場合は、アイコンを表示しない。
 
+#### ヒーローヘッダー
+
+- パッケージ名・最新バージョンを表示する。
+- `PackagePublisher.publisherId` が存在する場合、検証済みバッジ（verified badge）として表示する。
+  - 元仕様では Overview セクション内・右寄せでの表示だったが、UX 改善のためヒーローヘッダー内の左寄せバッジに変更した。
+
 #### Overview セクション
 
 - 内容を Border で囲む（color、width などは自由）。
 - `PackageDetails.latest.pubspec.description` を表示する。
-- `PackagePublisher.publisherId` を description の下部に右寄せ（`end`）で表示する。
 
 #### Versions セクション
 
