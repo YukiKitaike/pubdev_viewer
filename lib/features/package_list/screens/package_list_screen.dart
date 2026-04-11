@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../app/theme_mode_notifier.dart';
 import '../../../core/design_system/design_system.dart';
+import '../../../core/strings/app_strings.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/skeleton_list_view.dart';
 import '../notifiers/package_list_notifier.dart';
@@ -42,7 +43,7 @@ class PackageListScreen extends HookConsumerWidget {
         if (error != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('追加読み込みに失敗しました'),
+              content: Text(AppStrings.errorMessageLoadMoreFailed),
             ),
           );
           ref.read(packageListNotifierProvider.notifier).clearLoadMoreError();
@@ -89,8 +90,8 @@ class PackageListScreen extends HookConsumerWidget {
               },
             ),
             tooltip: switch (themeMode) {
-              .dark => 'ライトモード',
-              _ => 'ダークモード',
+              .dark => AppStrings.labelLightMode,
+              _ => AppStrings.labelDarkMode,
             },
             onPressed: () =>
                 ref.read(themeModeNotifierProvider.notifier).toggle(),

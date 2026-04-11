@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 
 import '../design_system/design_system.dart';
 import '../error/app_exception.dart';
+import '../strings/app_strings.dart';
 
 /// エラー発生時に表示する再利用可能な Widget。
 ///
@@ -19,15 +20,15 @@ class ErrorView extends StatelessWidget {
   final VoidCallback onRetry;
 
   String get _title => switch (error) {
-    NetworkException() => '通信エラー',
-    ServerException() => 'サーバーエラー',
-    _ => '予期しないエラー',
+    NetworkException() => AppStrings.errorTitleNetwork,
+    ServerException() => AppStrings.errorTitleServer,
+    _ => AppStrings.errorTitleUnexpected,
   };
 
   String get _message => switch (error) {
-    NetworkException() => 'ネットワーク接続を確認してから\n再試行してください。',
-    ServerException() => 'しばらくしてから再試行してください。',
-    _ => '問題が解決しない場合はアプリを再起動してください。',
+    NetworkException() => AppStrings.errorMessageNetwork,
+    ServerException() => AppStrings.errorMessageServer,
+    _ => AppStrings.errorMessageUnexpected,
   };
 
   @override
@@ -75,7 +76,7 @@ class ErrorView extends StatelessWidget {
                 onRetry();
               },
               icon: const Icon(Icons.refresh, size: 18),
-              label: const Text('再試行'),
+              label: const Text(AppStrings.labelRetry),
             ),
           ],
         ),

@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/design_system/design_system.dart';
+import '../../../core/strings/app_strings.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_view.dart';
 import '../models/package_detail_response.dart';
@@ -194,7 +195,7 @@ class _ShareButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.share),
-      tooltip: '共有',
+      tooltip: AppStrings.labelShare,
       onPressed: () {
         final uri = Uri.tryParse('https://pub.dev/packages/$packageName');
         if (uri == null) {
@@ -220,7 +221,7 @@ class _ExternalLinkButton extends StatelessWidget {
           (parsed.scheme == 'https' || parsed.scheme == 'http')) {
         return IconButton(
           icon: const Icon(Icons.open_in_new),
-          tooltip: '外部サイトで開く',
+          tooltip: AppStrings.labelOpenExternal,
           onPressed: () async {
             final success = await launchUrl(
               parsed,
@@ -228,7 +229,9 @@ class _ExternalLinkButton extends StatelessWidget {
             );
             if (!success && context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('リンクを開けませんでした')),
+                const SnackBar(
+                  content: Text(AppStrings.errorMessageLinkFailed),
+                ),
               );
             }
           },
