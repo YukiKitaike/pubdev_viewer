@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
@@ -74,9 +72,6 @@ class PubDevApiClient {
         case DioExceptionType.cancel:
         case DioExceptionType.badCertificate:
         case DioExceptionType.unknown:
-          if (e.error is SocketException) {
-            throw const NetworkException();
-          }
           throw const NetworkException();
       }
     }
