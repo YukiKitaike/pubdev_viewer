@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PackageDetailVersion {
 
- String get version; Pubspec get pubspec;@JsonKey(name: 'archive_url') String get archiveUrl;@JsonKey(name: 'archive_sha256') String get archiveSha256; String get published;
+ String get version; Pubspec get pubspec;@JsonKey(name: 'archive_url') String get archiveUrl;@JsonKey(name: 'archive_sha256') String get archiveSha256;@JsonKey(fromJson: _publishedFromJson, toJson: _publishedToJson) DateTime get published;
 /// Create a copy of PackageDetailVersion
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $PackageDetailVersionCopyWith<$Res>  {
   factory $PackageDetailVersionCopyWith(PackageDetailVersion value, $Res Function(PackageDetailVersion) _then) = _$PackageDetailVersionCopyWithImpl;
 @useResult
 $Res call({
- String version, Pubspec pubspec,@JsonKey(name: 'archive_url') String archiveUrl,@JsonKey(name: 'archive_sha256') String archiveSha256, String published
+ String version, Pubspec pubspec,@JsonKey(name: 'archive_url') String archiveUrl,@JsonKey(name: 'archive_sha256') String archiveSha256,@JsonKey(fromJson: _publishedFromJson, toJson: _publishedToJson) DateTime published
 });
 
 
@@ -72,7 +72,7 @@ as String,pubspec: null == pubspec ? _self.pubspec : pubspec // ignore: cast_nul
 as Pubspec,archiveUrl: null == archiveUrl ? _self.archiveUrl : archiveUrl // ignore: cast_nullable_to_non_nullable
 as String,archiveSha256: null == archiveSha256 ? _self.archiveSha256 : archiveSha256 // ignore: cast_nullable_to_non_nullable
 as String,published: null == published ? _self.published : published // ignore: cast_nullable_to_non_nullable
-as String,
+as DateTime,
   ));
 }
 /// Create a copy of PackageDetailVersion
@@ -166,7 +166,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String version,  Pubspec pubspec, @JsonKey(name: 'archive_url')  String archiveUrl, @JsonKey(name: 'archive_sha256')  String archiveSha256,  String published)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String version,  Pubspec pubspec, @JsonKey(name: 'archive_url')  String archiveUrl, @JsonKey(name: 'archive_sha256')  String archiveSha256, @JsonKey(fromJson: _publishedFromJson, toJson: _publishedToJson)  DateTime published)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PackageDetailVersion() when $default != null:
 return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.archiveSha256,_that.published);case _:
@@ -187,7 +187,7 @@ return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.archiveSha256
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String version,  Pubspec pubspec, @JsonKey(name: 'archive_url')  String archiveUrl, @JsonKey(name: 'archive_sha256')  String archiveSha256,  String published)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String version,  Pubspec pubspec, @JsonKey(name: 'archive_url')  String archiveUrl, @JsonKey(name: 'archive_sha256')  String archiveSha256, @JsonKey(fromJson: _publishedFromJson, toJson: _publishedToJson)  DateTime published)  $default,) {final _that = this;
 switch (_that) {
 case _PackageDetailVersion():
 return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.archiveSha256,_that.published);case _:
@@ -207,7 +207,7 @@ return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.archiveSha256
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String version,  Pubspec pubspec, @JsonKey(name: 'archive_url')  String archiveUrl, @JsonKey(name: 'archive_sha256')  String archiveSha256,  String published)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String version,  Pubspec pubspec, @JsonKey(name: 'archive_url')  String archiveUrl, @JsonKey(name: 'archive_sha256')  String archiveSha256, @JsonKey(fromJson: _publishedFromJson, toJson: _publishedToJson)  DateTime published)?  $default,) {final _that = this;
 switch (_that) {
 case _PackageDetailVersion() when $default != null:
 return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.archiveSha256,_that.published);case _:
@@ -222,14 +222,14 @@ return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.archiveSha256
 @JsonSerializable()
 
 class _PackageDetailVersion implements PackageDetailVersion {
-  const _PackageDetailVersion({required this.version, required this.pubspec, @JsonKey(name: 'archive_url') required this.archiveUrl, @JsonKey(name: 'archive_sha256') required this.archiveSha256, required this.published});
+  const _PackageDetailVersion({required this.version, required this.pubspec, @JsonKey(name: 'archive_url') required this.archiveUrl, @JsonKey(name: 'archive_sha256') required this.archiveSha256, @JsonKey(fromJson: _publishedFromJson, toJson: _publishedToJson) required this.published});
   factory _PackageDetailVersion.fromJson(Map<String, dynamic> json) => _$PackageDetailVersionFromJson(json);
 
 @override final  String version;
 @override final  Pubspec pubspec;
 @override@JsonKey(name: 'archive_url') final  String archiveUrl;
 @override@JsonKey(name: 'archive_sha256') final  String archiveSha256;
-@override final  String published;
+@override@JsonKey(fromJson: _publishedFromJson, toJson: _publishedToJson) final  DateTime published;
 
 /// Create a copy of PackageDetailVersion
 /// with the given fields replaced by the non-null parameter values.
@@ -264,7 +264,7 @@ abstract mixin class _$PackageDetailVersionCopyWith<$Res> implements $PackageDet
   factory _$PackageDetailVersionCopyWith(_PackageDetailVersion value, $Res Function(_PackageDetailVersion) _then) = __$PackageDetailVersionCopyWithImpl;
 @override @useResult
 $Res call({
- String version, Pubspec pubspec,@JsonKey(name: 'archive_url') String archiveUrl,@JsonKey(name: 'archive_sha256') String archiveSha256, String published
+ String version, Pubspec pubspec,@JsonKey(name: 'archive_url') String archiveUrl,@JsonKey(name: 'archive_sha256') String archiveSha256,@JsonKey(fromJson: _publishedFromJson, toJson: _publishedToJson) DateTime published
 });
 
 
@@ -288,7 +288,7 @@ as String,pubspec: null == pubspec ? _self.pubspec : pubspec // ignore: cast_nul
 as Pubspec,archiveUrl: null == archiveUrl ? _self.archiveUrl : archiveUrl // ignore: cast_nullable_to_non_nullable
 as String,archiveSha256: null == archiveSha256 ? _self.archiveSha256 : archiveSha256 // ignore: cast_nullable_to_non_nullable
 as String,published: null == published ? _self.published : published // ignore: cast_nullable_to_non_nullable
-as String,
+as DateTime,
   ));
 }
 

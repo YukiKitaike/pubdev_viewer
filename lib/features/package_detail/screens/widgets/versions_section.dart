@@ -60,12 +60,7 @@ class _VersionTimelineItem extends StatelessWidget {
   final bool isLast;
   final DateFormat dateFormat;
 
-  String _formatDate(String published) {
-    if (DateTime.tryParse(published) case final date?) {
-      return dateFormat.format(date);
-    }
-    return published;
-  }
+  String _formatDate(DateTime published) => dateFormat.format(published);
 
   @override
   Widget build(BuildContext context) {

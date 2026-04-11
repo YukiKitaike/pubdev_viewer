@@ -126,7 +126,7 @@
   ],
   ```
 
-- [ ] **`_formatDate` が Widget クラスのインスタンスメソッドとして存在** — `lib/features/package_detail/screens/widgets/versions_section.dart:69–74`
+- [x] **`_formatDate` が Widget クラスのインスタンスメソッドとして存在** — `lib/features/package_detail/screens/widgets/versions_section.dart:69–74` — **対応済み(M9と一括)**: `published` を `DateTime` 型に変更し `_formatDate` は単純な `dateFormat.format()` 呼び出しになった。
   `PackageDetailVersion.published` が `String` 型であるため Widget 層でパースしている。モデル層で `DateTime` 型にするか（`package_detail_version.dart` の `published` フィールドを `DateTime` 型に変更）、`DateFormat` と `_formatDate` を `VersionsSection` レベルのトップレベル関数か Extension として切り出すことで Widget の責務を減らせる。
 
 - [ ] **`http` スキームの URL を許可している理由のコメント欠如** — `lib/features/package_detail/screens/package_detail_screen.dart:213`

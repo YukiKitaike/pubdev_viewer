@@ -13,7 +13,7 @@ _PackageDetailVersion _$PackageDetailVersionFromJson(
   pubspec: Pubspec.fromJson(json['pubspec'] as Map<String, dynamic>),
   archiveUrl: json['archive_url'] as String,
   archiveSha256: json['archive_sha256'] as String,
-  published: json['published'] as String,
+  published: _publishedFromJson(json['published'] as String),
 );
 
 Map<String, dynamic> _$PackageDetailVersionToJson(
@@ -23,5 +23,5 @@ Map<String, dynamic> _$PackageDetailVersionToJson(
   'pubspec': instance.pubspec,
   'archive_url': instance.archiveUrl,
   'archive_sha256': instance.archiveSha256,
-  'published': instance.published,
+  'published': _publishedToJson(instance.published),
 };
