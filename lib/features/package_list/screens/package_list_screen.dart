@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../app/theme_mode_notifier.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/skeleton_list_view.dart';
 import '../notifiers/package_list_notifier.dart';
@@ -49,6 +50,7 @@ class PackageListScreen extends HookConsumerWidget {
     );
 
     final theme = Theme.of(context);
+    final themeMode = ref.watch(themeModeNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -77,6 +79,18 @@ class PackageListScreen extends HookConsumerWidget {
             ],
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              themeMode == ThemeMode.dark
+                  ? Icons.light_mode_outlined
+                  : Icons.dark_mode_outlined,
+            ),
+            tooltip: themeMode == ThemeMode.dark ? 'ライトモード' : 'ダークモード',
+            onPressed: () =>
+                ref.read(themeModeNotifierProvider.notifier).toggle(),
+          ),
+        ],
       ),
       body: asyncState.when(
         loading: () => const SkeletonListView(),

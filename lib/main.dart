@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 
 import 'app/router.dart';
 import 'app/theme.dart';
+import 'app/theme_mode_notifier.dart';
 
 void main() {
   Logger.root.level = Level.INFO;
@@ -13,15 +14,17 @@ void main() {
   runApp(const ProviderScope(child: PubDevViewerApp()));
 }
 
-class PubDevViewerApp extends StatelessWidget {
+class PubDevViewerApp extends ConsumerWidget {
   const PubDevViewerApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeNotifierProvider);
     return MaterialApp.router(
       title: 'pub.dev Viewer',
       theme: appLightTheme,
       darkTheme: appDarkTheme,
+      themeMode: themeMode,
       routerConfig: router,
     );
   }

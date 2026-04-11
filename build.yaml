@@ -14,6 +14,7 @@ targets:
       riverpod_generator:
         generate_for:
           include:
+            - lib/app/*.dart
             - lib/core/api/*.dart
             - lib/features/**/notifiers/*.dart
             - lib/features/**/repository/*.dart
