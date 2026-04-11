@@ -18,7 +18,7 @@
 
 | パッケージ一覧 | パッケージ詳細 |
 |:---:|:---:|
-| ![パッケージ一覧](test/features/package_list/screens/goldens/package_list_screen.png) | ![パッケージ詳細](test/features/package_detail/screens/goldens/package_detail_screen.png) |
+| ![パッケージ一覧](docs/screenshots/package_list.png) | ![パッケージ詳細](docs/screenshots/package_detail.png) |
 
 ## セットアップ
 
