@@ -14,7 +14,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PackageDetailState {
 
- PackageDetailResponse get detail; PackagePublisherResponse get publisher;
+ PackageDetailResponse get detail; PackagePublisherResponse get publisher;/// 公開日の降順でソート済みのバージョンリスト。
+/// Notifier の build() で一度だけソートし、リビルドごとの再計算を避ける。
+ List<PackageDetailVersion> get sortedVersions;
 /// Create a copy of PackageDetailState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +27,16 @@ $PackageDetailStateCopyWith<PackageDetailState> get copyWith => _$PackageDetailS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackageDetailState&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.publisher, publisher) || other.publisher == publisher));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackageDetailState&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.publisher, publisher) || other.publisher == publisher)&&const DeepCollectionEquality().equals(other.sortedVersions, sortedVersions));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,detail,publisher);
+int get hashCode => Object.hash(runtimeType,detail,publisher,const DeepCollectionEquality().hash(sortedVersions));
 
 @override
 String toString() {
-  return 'PackageDetailState(detail: $detail, publisher: $publisher)';
+  return 'PackageDetailState(detail: $detail, publisher: $publisher, sortedVersions: $sortedVersions)';
 }
 
 
@@ -45,7 +47,7 @@ abstract mixin class $PackageDetailStateCopyWith<$Res>  {
   factory $PackageDetailStateCopyWith(PackageDetailState value, $Res Function(PackageDetailState) _then) = _$PackageDetailStateCopyWithImpl;
 @useResult
 $Res call({
- PackageDetailResponse detail, PackagePublisherResponse publisher
+ PackageDetailResponse detail, PackagePublisherResponse publisher, List<PackageDetailVersion> sortedVersions
 });
 
 
@@ -62,11 +64,12 @@ class _$PackageDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of PackageDetailState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? detail = null,Object? publisher = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? detail = null,Object? publisher = null,Object? sortedVersions = null,}) {
   return _then(_self.copyWith(
 detail: null == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
 as PackageDetailResponse,publisher: null == publisher ? _self.publisher : publisher // ignore: cast_nullable_to_non_nullable
-as PackagePublisherResponse,
+as PackagePublisherResponse,sortedVersions: null == sortedVersions ? _self.sortedVersions : sortedVersions // ignore: cast_nullable_to_non_nullable
+as List<PackageDetailVersion>,
   ));
 }
 /// Create a copy of PackageDetailState
@@ -169,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PackageDetailResponse detail,  PackagePublisherResponse publisher)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PackageDetailResponse detail,  PackagePublisherResponse publisher,  List<PackageDetailVersion> sortedVersions)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PackageDetailState() when $default != null:
-return $default(_that.detail,_that.publisher);case _:
+return $default(_that.detail,_that.publisher,_that.sortedVersions);case _:
   return orElse();
 
 }
@@ -190,10 +193,10 @@ return $default(_that.detail,_that.publisher);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PackageDetailResponse detail,  PackagePublisherResponse publisher)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PackageDetailResponse detail,  PackagePublisherResponse publisher,  List<PackageDetailVersion> sortedVersions)  $default,) {final _that = this;
 switch (_that) {
 case _PackageDetailState():
-return $default(_that.detail,_that.publisher);case _:
+return $default(_that.detail,_that.publisher,_that.sortedVersions);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -210,10 +213,10 @@ return $default(_that.detail,_that.publisher);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PackageDetailResponse detail,  PackagePublisherResponse publisher)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PackageDetailResponse detail,  PackagePublisherResponse publisher,  List<PackageDetailVersion> sortedVersions)?  $default,) {final _that = this;
 switch (_that) {
 case _PackageDetailState() when $default != null:
-return $default(_that.detail,_that.publisher);case _:
+return $default(_that.detail,_that.publisher,_that.sortedVersions);case _:
   return null;
 
 }
@@ -225,11 +228,22 @@ return $default(_that.detail,_that.publisher);case _:
 
 
 class _PackageDetailState implements PackageDetailState {
-  const _PackageDetailState({required this.detail, required this.publisher});
+  const _PackageDetailState({required this.detail, required this.publisher, required final  List<PackageDetailVersion> sortedVersions}): _sortedVersions = sortedVersions;
   
 
 @override final  PackageDetailResponse detail;
 @override final  PackagePublisherResponse publisher;
+/// 公開日の降順でソート済みのバージョンリスト。
+/// Notifier の build() で一度だけソートし、リビルドごとの再計算を避ける。
+ final  List<PackageDetailVersion> _sortedVersions;
+/// 公開日の降順でソート済みのバージョンリスト。
+/// Notifier の build() で一度だけソートし、リビルドごとの再計算を避ける。
+@override List<PackageDetailVersion> get sortedVersions {
+  if (_sortedVersions is EqualUnmodifiableListView) return _sortedVersions;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_sortedVersions);
+}
+
 
 /// Create a copy of PackageDetailState
 /// with the given fields replaced by the non-null parameter values.
@@ -241,16 +255,16 @@ _$PackageDetailStateCopyWith<_PackageDetailState> get copyWith => __$PackageDeta
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackageDetailState&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.publisher, publisher) || other.publisher == publisher));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackageDetailState&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.publisher, publisher) || other.publisher == publisher)&&const DeepCollectionEquality().equals(other._sortedVersions, _sortedVersions));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,detail,publisher);
+int get hashCode => Object.hash(runtimeType,detail,publisher,const DeepCollectionEquality().hash(_sortedVersions));
 
 @override
 String toString() {
-  return 'PackageDetailState(detail: $detail, publisher: $publisher)';
+  return 'PackageDetailState(detail: $detail, publisher: $publisher, sortedVersions: $sortedVersions)';
 }
 
 
@@ -261,7 +275,7 @@ abstract mixin class _$PackageDetailStateCopyWith<$Res> implements $PackageDetai
   factory _$PackageDetailStateCopyWith(_PackageDetailState value, $Res Function(_PackageDetailState) _then) = __$PackageDetailStateCopyWithImpl;
 @override @useResult
 $Res call({
- PackageDetailResponse detail, PackagePublisherResponse publisher
+ PackageDetailResponse detail, PackagePublisherResponse publisher, List<PackageDetailVersion> sortedVersions
 });
 
 
@@ -278,11 +292,12 @@ class __$PackageDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of PackageDetailState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? detail = null,Object? publisher = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? detail = null,Object? publisher = null,Object? sortedVersions = null,}) {
   return _then(_PackageDetailState(
 detail: null == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
 as PackageDetailResponse,publisher: null == publisher ? _self.publisher : publisher // ignore: cast_nullable_to_non_nullable
-as PackagePublisherResponse,
+as PackagePublisherResponse,sortedVersions: null == sortedVersions ? _self._sortedVersions : sortedVersions // ignore: cast_nullable_to_non_nullable
+as List<PackageDetailVersion>,
   ));
 }
 

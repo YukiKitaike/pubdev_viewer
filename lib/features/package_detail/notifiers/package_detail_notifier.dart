@@ -19,9 +19,12 @@ class PackageDetailNotifier extends _$PackageDetailNotifier {
       repository.getPackageDetail(packageName),
       repository.getPackagePublisher(packageName),
     ).wait;
+    final sortedVersions = [...detail.versions]
+      ..sort((a, b) => b.published.compareTo(a.published));
     return PackageDetailState(
       detail: detail,
       publisher: publisher,
+      sortedVersions: sortedVersions,
     );
   }
 
