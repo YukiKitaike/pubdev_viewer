@@ -2,61 +2,47 @@
 
 pub.dev のパッケージ情報を閲覧する Flutter アプリ。
 
-## Tech Stack
+## Commands
 
-- Flutter 3.41.x / Dart SDK ^3.11.4
-- FVM でバージョン管理。`dart` / `flutter` コマンドは `fvm dart` / `fvm flutter` を使うこと。
+- `fvm flutter` / `fvm dart` — FVM 管理。`flutter` / `dart` 直接呼び出し禁止
+- `fvm dart run build_runner build -d` — コード生成（freezed/riverpod/json/go_router）
+- `fvm dart analyze` / `fvm flutter test` — 解析 / テスト
+- `fvm dart format .` — フォーマット（PostToolUse hook で自動実行済み）
 
-## Architecture: Feature-First + Riverpod
+## Architecture
 
-```
-lib/
-├── app/                        # アプリ全体の設定（MaterialApp, ルーティング, テーマ）
-├── core/                       # 共通基盤（ネットワーク, エラーハンドリング, 定数）
-│   ├── api/                    #   API クライアント
-│   └── error/                  #   エラー型
-└── features/                   # 機能単位のモジュール
-    ├── package_list/           #   Home 画面（パッケージ一覧）
-    │   ├── models/              #     データクラス（freezed 等）
-    │   ├── repository/          #     Repository, API 通信
-    │   ├── notifiers/          #     Riverpod Notifier / AsyncNotifier
-    │   └── screens/            #     画面, Widget
-    └── package_detail/         #   Details 画面（パッケージ詳細）
-        ├── models/
-        ├── repository/
-        ├── notifiers/
-        └── screens/
-```
-
-### ルール
+Feature-First + Riverpod。依存方向: `screens/` → `notifiers/` → `repository/` → `models/`
 
 - feature 間の直接依存は禁止。共通処理は `core/` に置く。
-- 各 feature 内の依存方向: `screens/` → `notifiers/` → `repository/` → `models/`
-  - `models/` は純粋なデータクラスのみ。他レイヤーに依存しない。
-  - `repository/` は API 通信と Repository を担当する。
-  - `notifiers/` は Riverpod の Notifier/AsyncNotifier で状態管理を行う。
-  - `screens/` は `ref.watch` で notifiers を購読し UI を構築する。
-- 状態管理は Riverpod に統一する。setState は原則使わない。
-- API スキーマは `docs/openapi.yaml` に定義済み。モデル作成時はこれを参照する。
-- 画面仕様は `docs/overview.md` を参照する。
+- API スキーマは `docs/openapi.yaml` を参照。画面仕様は `docs/overview.md` を参照。
+- 新しい feature を追加するときは `/pubdev-new-feature` スキルを参照。
 
-### やらないこと（Clean Architecture 化の防止）
+## Critical Rules
 
-- **Entity と models を分離しない。** `fromJson` / `toJson` を持つ1クラスで完結させる。API レスポンスとドメインモデルの構造が実際に異なる場合のみ、変換用の別クラスを作る。
-- **Repository のインターフェース（abstract class）を作らない。** 具象クラスを直接使う。テスト時は mockito 等でクラスごとモックする。
-- **UseCase クラスを作らない。** Repository を呼ぶだけのパススルーは不要。Notifier から直接 Repository を呼ぶ。複数サービスの調整が必要になったら Service クラスを作る。
-- **DataSource 層を分離しない。** Remote / Local / Cache の抽象化は Repository 内で直接扱う。
-- **`Either<Failure, T>` パターンを使わない。** エラーは例外で表現し、try/catch で処理する。
-- **先回りして抽象化しない。** インターフェース、ヘルパー、ユーティリティは、2つ以上の箇所で実際に必要になってから作る。
-- **feature 固有のモデルを最初から `core/` に置かない。** 2つ以上の feature で共有される時点で昇格させる。
+**No interfaces.** Repository は具象クラスのみ。`abstract class XxxRepository` は作らない。
+テストは `FakeXxxRepository extends Fake implements XxxRepository` で対応。
 
-## Git コミットルール
+**No UseCase.** Notifier から Repository を直接呼ぶ。中間クラスなし。
 
-- コードを変更したら、論理的なまとまりごとにコミットする。1つのコミットに無関係な変更を混ぜない。
-- Conventional Commits 形式を使う: `<type>: <簡潔な説明>`
-  - `feat`: 新機能
-  - `fix`: バグ修正
-  - `refactor`: リファクタリング
-  - `docs`: ドキュメント
-  - `chore`: 設定変更、依存更新など
-- コミットメッセージは日本語で書く。
+**No Either.** エラーは例外で表現し try/catch で処理する。`Result<T>` / `Either<F,T>` 禁止。
+
+**No Entity split.** `fromJson`/`toJson` を持つ 1 クラスで完結。API 形状と UI が実際に異なる場合のみ変換クラスを作る。
+
+**No premature core promotion.** feature 固有モデルは 2 feature で共有されてから `core/` に昇格させる。
+
+**No hardcoded colors/spacing.** Widget 内に `Colors.red` や `fontSize: 24` 直書き禁止。
+
+## Design System
+
+```dart
+import '../../../core/design_system/design_system.dart';
+// AppSpacing.xs/sm/md/lg/xl/xxl/xxxl (4dp grid)
+// AppRadius.skeleton/avatar/button/card/full
+// context.tokens → AppThemeTokens (light/dark aware semantic colors)
+// cardElevatedShadow(colorScheme.primary, isDark: ...)
+```
+
+## Git
+
+Conventional Commits 形式、日本語メッセージ。論理単位ごとにコミット。
+`feat` / `fix` / `refactor` / `docs` / `chore`
