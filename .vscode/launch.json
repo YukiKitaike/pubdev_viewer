@@ -2,18 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "pubdev_viewer",
+            "name": "Debug dev",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "pubdev_viewer (profile mode)",
+            "name": "Run profile",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "pubdev_viewer (release mode)",
+            "name": "Run release",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
