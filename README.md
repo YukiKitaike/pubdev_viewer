@@ -14,6 +14,13 @@
 - **ライト / ダークテーマ** — アプリバーからトグル切り替え
 - **プラットフォーム対応 UX** — 触覚フィードバック、iOS バウンス、Android 予測的バック、セーフエリア対応
 
+## ドキュメント
+
+| ファイル | 内容 |
+|---|---|
+| [docs/overview.md](docs/overview.md) | 画面仕様（Home・Details の要件・Challenge 一覧） |
+| [docs/openapi.yaml](docs/openapi.yaml) | pub.dev API の OpenAPI スキーマ |
+
 ## スクリーンショット
 
 | パッケージ一覧 | パッケージ詳細 |
@@ -187,6 +194,9 @@ fvm dart format .
    ```
 
 `main.dart` でデバッグビルド時のみ `MarionetteBinding` を初期化しているため、リリースビルドへの影響はありません。
+
+> [!IMPORTANT]
+> **仕様適合の最終確認は MCP Marionette で行う。** 実装後は必ずアプリをデバッグモードで起動し、Claude Code から Marionette MCP 経由で実際の画面を操作して [docs/overview.md](docs/overview.md) の要件をすべて満たしていることを確認すること。ユニットテスト・静的解析だけでは UI の振る舞いは検証できない。
 
 ### カスタムスキル
 
