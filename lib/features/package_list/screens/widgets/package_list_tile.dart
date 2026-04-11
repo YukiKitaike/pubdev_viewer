@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../app/router.dart';
@@ -47,113 +48,128 @@ class _PackageListTileState extends State<PackageListTile> {
         scale: _pressed ? 0.97 : 1.0,
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeOut,
-        child: GestureDetector(
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) {
-            setState(() => _pressed = false);
-            PackageDetailRoute(name: widget.package.name).go(context);
-          },
-          onTapCancel: () => setState(() => _pressed = false),
-          child: Container(
-            decoration: BoxDecoration(
-              color: isLight ? Colors.white : const Color(0xFF1E293B),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isLight
-                    ? const Color(0xFFE2E8F0)
-                    : const Color(0xFF334155),
-              ),
-              boxShadow: isLight
-                  ? [
-                      BoxShadow(
-                        color: const Color(0xFF0175C2).withValues(alpha: 0.07),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ]
-                  : null,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: isLight ? Colors.white : const Color(0xFF1E293B),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isLight
+                  ? const Color(0xFFE2E8F0)
+                  : const Color(0xFF334155),
             ),
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: _gradient,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+            boxShadow: isLight
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF0175C2).withValues(alpha: 0.07),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text(
-                      widget.package.name[0].toUpperCase(),
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
+                  ]
+                : null,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(16),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: () {
+                HapticFeedback.lightImpact();
+                PackageDetailRoute(name: widget.package.name).go(context);
+              },
+              onHighlightChanged: (highlighted) =>
+                  setState(() => _pressed = highlighted),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: _gradient,
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.package.name[0].toUpperCase(),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Text(
-                              widget.package.name,
-                              style: theme.textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: theme.colorScheme.primary.withValues(
-                                  alpha: 0.4,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  widget.package.name,
+                                  style: theme.textTheme.titleSmall?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Text(
-                              'v${widget.package.latest.version}',
-                              style: GoogleFonts.jetBrainsMono(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.primary,
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: theme.colorScheme.primary.withValues(
+                                      alpha: 0.4,
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Text(
+                                  'v${widget.package.latest.version}',
+                                  style: GoogleFonts.jetBrainsMono(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                ),
                               ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            widget.package.latest.pubspec.description,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                              height: 1.5,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 6),
-                      Text(
-                        widget.package.latest.pubspec.description,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                          height: 1.5,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 16,
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.5,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
