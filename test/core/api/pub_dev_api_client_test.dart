@@ -81,6 +81,34 @@ void main() {
       );
     });
 
+    test('throws NetworkException on receive timeout', () {
+      fakeDio.onGet = <T>(url) {
+        throw DioException(
+          type: DioExceptionType.receiveTimeout,
+          requestOptions: RequestOptions(),
+        );
+      };
+
+      expect(
+        () => apiClient.getPackages(),
+        throwsA(isA<NetworkException>()),
+      );
+    });
+
+    test('throws NetworkException on send timeout', () {
+      fakeDio.onGet = <T>(url) {
+        throw DioException(
+          type: DioExceptionType.sendTimeout,
+          requestOptions: RequestOptions(),
+        );
+      };
+
+      expect(
+        () => apiClient.getPackages(),
+        throwsA(isA<NetworkException>()),
+      );
+    });
+
     test('throws NetworkException on SocketException', () {
       fakeDio.onGet = <T>(url) {
         throw DioException(

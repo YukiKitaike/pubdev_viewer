@@ -72,7 +72,7 @@
   }
   ```
 
-- [ ] **`receiveTimeout` 時の `NetworkException` テストが欠けている** — `test/core/api/pub_dev_api_client_test.dart` の `error handling` グループにて `DioExceptionType.connectionError`、`connectionTimeout`、`SocketException` の3ケースはテスト済みだが、`DioExceptionType.receiveTimeout` と `DioExceptionType.sendTimeout` に対するテストが存在しない。APIクライアントの実装でこれらが `NetworkException` にマッピングされているか未検証状態。
+- [x] **`receiveTimeout` 時の `NetworkException` テストが欠けている** — `test/core/api/pub_dev_api_client_test.dart` の `error handling` グループ — **対応済み**: `receiveTimeout` と `sendTimeout` の2テストを追加。APIクライアントの実装でこれらが `NetworkException` にマッピングされているか未検証状態。
 
   ```dart
   test('throws NetworkException on receive timeout', () {
