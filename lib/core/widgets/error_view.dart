@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 import '../error/app_exception.dart';
@@ -76,7 +77,10 @@ class ErrorView extends StatelessWidget {
             ),
             const Gap(28),
             FilledButton.icon(
-              onPressed: onRetry,
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                onRetry();
+              },
               icon: const Icon(Icons.refresh, size: 18),
               label: const Text('再試行'),
             ),

@@ -89,7 +89,10 @@ class PackageListScreen extends HookConsumerWidget {
               ref.read(packageListNotifierProvider.notifier).refresh(),
           child: ListView.builder(
             controller: scrollController,
-            padding: const EdgeInsets.only(top: 8, bottom: 16),
+            padding: EdgeInsets.only(
+              top: 8,
+              bottom: 16 + MediaQuery.paddingOf(context).bottom,
+            ),
             itemCount: state.packages.length + (state.isLoadingMore ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == state.packages.length) {

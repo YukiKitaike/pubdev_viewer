@@ -59,7 +59,13 @@ class PackageDetailScreen extends HookConsumerWidget {
               )
               .refresh(),
           child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: Theme.of(context).platform == TargetPlatform.iOS
+                ? const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  )
+                : const ClampingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
             child: Column(
               children: [
                 _PackageHeroHeader(
@@ -72,7 +78,9 @@ class PackageDetailScreen extends HookConsumerWidget {
                 VersionsSection(
                   versions: state.detail.versions,
                 ),
-                const Gap(16),
+                SizedBox(
+                  height: 16 + MediaQuery.paddingOf(context).bottom,
+                ),
               ],
             ),
           ),
