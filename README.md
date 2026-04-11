@@ -1,108 +1,108 @@
 # pub.dev Viewer
 
-A Flutter app for browsing Dart packages on [pub.dev](https://pub.dev). Explore the package registry with a clean, platform-aware UI built with Material Design 3.
+[pub.dev](https://pub.dev) の Dart パッケージを閲覧する Flutter アプリ。Material Design 3 に準拠したクリーンなUIで、パッケージの検索・詳細確認・共有が行えます。
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.41.x-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-^3.11.4-0175C2?logo=dart)](https://dart.dev)
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-lightgrey)](https://flutter.dev)
 
-## Features
+## 機能
 
-- **Package list** — Paginated, infinite-scroll list of pub.dev packages with skeleton loading and pull-to-refresh
-- **Package detail** — Full details including description, version history (timeline view), and publisher information
-- **Share & open** — Share packages or open their homepage/repository in a browser
-- **Light / Dark theme** — Toggle from the app bar; persists via Riverpod state
-- **Platform-aware UX** — Haptic feedback, iOS bouncing physics, Android predictive back gesture, proper safe-area handling
+- **パッケージ一覧** — スケルトンローディングと引っ張り更新付きの無限スクロール一覧
+- **パッケージ詳細** — 説明文、バージョン履歴（タイムライン表示）、パブリッシャー情報
+- **共有・外部リンク** — パッケージをシェアしたり、ホームページ/リポジトリをブラウザで開く
+- **ライト / ダークテーマ** — アプリバーからトグル切り替え
+- **プラットフォーム対応UX** — 触覚フィードバック、iOS バウンス、Android 予測的バック、セーフエリア対応
 
-## Screenshots
+## スクリーンショット
 
-| Package List | Package Detail |
+| パッケージ一覧 | パッケージ詳細 |
 |:---:|:---:|
-| ![Package List](test/features/package_list/screens/goldens/package_list_screen.png) | ![Package Detail](test/features/package_detail/screens/goldens/package_detail_screen.png) |
+| ![パッケージ一覧](test/features/package_list/screens/goldens/package_list_screen.png) | ![パッケージ詳細](test/features/package_detail/screens/goldens/package_detail_screen.png) |
 
-## Getting Started
+## セットアップ
 
-### Prerequisites
+### 前提条件
 
-- [Flutter](https://flutter.dev/docs/get-started/install) (managed via [FVM](https://fvm.app))
-- [FVM](https://fvm.app/docs/getting_started/installation) installed globally
+- [Flutter](https://flutter.dev/docs/get-started/install)（[FVM](https://fvm.app) でバージョン管理）
+- [FVM](https://fvm.app/docs/getting_started/installation) がグローバルにインストール済みであること
 
-### Setup
+### インストール
 
 ```bash
-# Install the pinned Flutter version
+# ピン留めされた Flutter バージョンをインストール
 fvm install
 
-# Get dependencies
+# 依存パッケージを取得
 fvm flutter pub get
 
-# Run code generation (freezed, Riverpod, GoRouter, JSON)
+# コード生成（freezed / Riverpod / GoRouter / JSON）
 fvm dart run build_runner build --delete-conflicting-outputs
 ```
 
-### Run
+### 実行
 
 ```bash
 fvm flutter run
 ```
 
 > [!NOTE]
-> Always use `fvm flutter` / `fvm dart` instead of the global `flutter` / `dart` commands to ensure the correct SDK version is used.
+> グローバルの `flutter` / `dart` コマンドではなく、必ず `fvm flutter` / `fvm dart` を使用してください。
 
-## Architecture
+## アーキテクチャ
 
-The app follows a **Feature-First + Riverpod** layered structure:
+**Feature-First + Riverpod** によるレイヤー構造を採用しています。
 
 ```
 lib/
-├── app/               # MaterialApp, routing (GoRouter), theme
-├── core/              # Shared infrastructure
-│   ├── api/           #   Dio-based pub.dev API client
-│   ├── design_system/ #   Design tokens (colors, spacing, radius, shadows)
-│   ├── error/         #   Sealed AppException hierarchy
-│   └── widgets/       #   Shared UI components (ErrorView, SkeletonListView)
+├── app/               # MaterialApp、ルーティング（GoRouter）、テーマ
+├── core/              # 共通基盤
+│   ├── api/           #   Dio ベースの pub.dev API クライアント
+│   ├── design_system/ #   デザイントークン（色、余白、角丸、影）
+│   ├── error/         #   sealed AppException 階層
+│   └── widgets/       #   共通ウィジェット（ErrorView、SkeletonListView）
 └── features/
-    ├── package_list/  # Home screen — list, pagination, state
-    └── package_detail/# Detail screen — info, versions, publisher
+    ├── package_list/  # ホーム画面 — 一覧・ページネーション・状態管理
+    └── package_detail/# 詳細画面 — 情報・バージョン・パブリッシャー
 ```
 
-Each feature is self-contained with its own `models/`, `repository/`, `notifiers/`, and `screens/` layers. Cross-feature dependencies are prohibited; shared code lives in `core/`.
+各 feature は `models/`、`repository/`、`notifiers/`、`screens/` で独立しています。feature 間の直接依存は禁止で、共通処理は `core/` に置きます。
 
-**Dependency direction within a feature:**
+**feature 内の依存方向：**
 ```
 screens → notifiers → repository → models
 ```
 
-## Tech Stack
+## 技術スタック
 
-| Layer | Library |
+| レイヤー | ライブラリ |
 |---|---|
-| State management | [flutter_riverpod](https://pub.dev/packages/flutter_riverpod) + [hooks_riverpod](https://pub.dev/packages/hooks_riverpod) |
-| Routing | [go_router](https://pub.dev/packages/go_router) |
+| 状態管理 | [flutter_riverpod](https://pub.dev/packages/flutter_riverpod) + [hooks_riverpod](https://pub.dev/packages/hooks_riverpod) |
+| ルーティング | [go_router](https://pub.dev/packages/go_router) |
 | HTTP | [dio](https://pub.dev/packages/dio) |
-| Immutable models | [freezed](https://pub.dev/packages/freezed) + [json_serializable](https://pub.dev/packages/json_serializable) |
-| Fonts | [google_fonts](https://pub.dev/packages/google_fonts) (Noto Sans JP, JetBrains Mono) |
-| Loading animation | [shimmer](https://pub.dev/packages/shimmer) |
-| Share / URL | [share_plus](https://pub.dev/packages/share_plus) + [url_launcher](https://pub.dev/packages/url_launcher) |
+| イミュータブルモデル | [freezed](https://pub.dev/packages/freezed) + [json_serializable](https://pub.dev/packages/json_serializable) |
+| フォント | [google_fonts](https://pub.dev/packages/google_fonts)（Noto Sans JP、JetBrains Mono） |
+| ローディングアニメーション | [shimmer](https://pub.dev/packages/shimmer) |
+| 共有 / URL | [share_plus](https://pub.dev/packages/share_plus) + [url_launcher](https://pub.dev/packages/url_launcher) |
 
-## Testing
+## テスト
 
 ```bash
-# Unit & widget tests
+# ユニット・ウィジェットテスト
 fvm flutter test
 
-# Integration tests (requires a running device/emulator)
+# インテグレーションテスト（実機またはエミュレータが必要）
 fvm flutter test integration_test
 ```
 
-Golden images are stored under `test/**/goldens/` and serve as visual regression baselines.
+ゴールデン画像は `test/**/goldens/` に格納されており、ビジュアルリグレッションのベースラインとして使用されます。
 
 ## API
 
-Package data is fetched from the public pub.dev REST API. The full OpenAPI schema is at [docs/openapi.yaml](docs/openapi.yaml).
+pub.dev の公開 REST API からデータを取得します。OpenAPI スキーマは [docs/openapi.yaml](docs/openapi.yaml) を参照してください。
 
-| Endpoint | Description |
+| エンドポイント | 説明 |
 |---|---|
-| `GET /api/packages` | Paginated package list |
-| `GET /api/packages/{name}` | Package details and versions |
-| `GET /api/packages/{name}/publisher` | Publisher information |
+| `GET /api/packages` | パッケージ一覧（ページネーション付き） |
+| `GET /api/packages/{name}` | パッケージ詳細とバージョン |
+| `GET /api/packages/{name}/publisher` | パブリッシャー情報 |
