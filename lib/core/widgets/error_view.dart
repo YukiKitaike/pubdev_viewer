@@ -3,6 +3,9 @@ import 'package:gap/gap.dart';
 
 import '../error/app_exception.dart';
 
+/// エラー発生時に表示する再利用可能な Widget。
+///
+/// エラー種別に応じたメッセージと再試行ボタンを表示する。
 class ErrorView extends StatelessWidget {
   const ErrorView({
     required this.error,

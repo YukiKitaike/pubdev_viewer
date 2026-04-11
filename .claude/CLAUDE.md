@@ -42,7 +42,7 @@ lib/
 ### やらないこと（Clean Architecture 化の防止）
 
 - **Entity と models を分離しない。** `fromJson` / `toJson` を持つ1クラスで完結させる。API レスポンスとドメインモデルの構造が実際に異なる場合のみ、変換用の別クラスを作る。
-- **Repository のインターフェース（abstract class）を作らない。** 具象クラスを直接使う。テスト時は mocktail 等でクラスごとモックする。
+- **Repository のインターフェース（abstract class）を作らない。** 具象クラスを直接使う。テスト時は mockito 等でクラスごとモックする。
 - **UseCase クラスを作らない。** Repository を呼ぶだけのパススルーは不要。Notifier から直接 Repository を呼ぶ。複数サービスの調整が必要になったら Service クラスを作る。
 - **DataSource 層を分離しない。** Remote / Local / Cache の抽象化は Repository 内で直接扱う。
 - **`Either<Failure, T>` パターンを使わない。** エラーは例外で表現し、try/catch で処理する。

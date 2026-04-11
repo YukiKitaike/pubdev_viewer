@@ -37,17 +37,33 @@ abstract class _$PackageDetailNotifier
   FutureOr<PackageDetailState> build(String packageName);
 }
 
-/// See also [PackageDetailNotifier].
+/// パッケージ詳細の状態管理を担当する Notifier。
+///
+/// 詳細情報とパブリッシャー情報を並列に取得する。
+///
+/// Copied from [PackageDetailNotifier].
 @ProviderFor(PackageDetailNotifier)
 const packageDetailNotifierProvider = PackageDetailNotifierFamily();
 
-/// See also [PackageDetailNotifier].
+/// パッケージ詳細の状態管理を担当する Notifier。
+///
+/// 詳細情報とパブリッシャー情報を並列に取得する。
+///
+/// Copied from [PackageDetailNotifier].
 class PackageDetailNotifierFamily
     extends Family<AsyncValue<PackageDetailState>> {
-  /// See also [PackageDetailNotifier].
+  /// パッケージ詳細の状態管理を担当する Notifier。
+  ///
+  /// 詳細情報とパブリッシャー情報を並列に取得する。
+  ///
+  /// Copied from [PackageDetailNotifier].
   const PackageDetailNotifierFamily();
 
-  /// See also [PackageDetailNotifier].
+  /// パッケージ詳細の状態管理を担当する Notifier。
+  ///
+  /// 詳細情報とパブリッシャー情報を並列に取得する。
+  ///
+  /// Copied from [PackageDetailNotifier].
   PackageDetailNotifierProvider call(String packageName) {
     return PackageDetailNotifierProvider(packageName);
   }
@@ -74,14 +90,22 @@ class PackageDetailNotifierFamily
   String? get name => r'packageDetailNotifierProvider';
 }
 
-/// See also [PackageDetailNotifier].
+/// パッケージ詳細の状態管理を担当する Notifier。
+///
+/// 詳細情報とパブリッシャー情報を並列に取得する。
+///
+/// Copied from [PackageDetailNotifier].
 class PackageDetailNotifierProvider
     extends
         AutoDisposeAsyncNotifierProviderImpl<
           PackageDetailNotifier,
           PackageDetailState
         > {
-  /// See also [PackageDetailNotifier].
+  /// パッケージ詳細の状態管理を担当する Notifier。
+  ///
+  /// 詳細情報とパブリッシャー情報を並列に取得する。
+  ///
+  /// Copied from [PackageDetailNotifier].
   PackageDetailNotifierProvider(String packageName)
     : this._internal(
         () => PackageDetailNotifier()..packageName = packageName,

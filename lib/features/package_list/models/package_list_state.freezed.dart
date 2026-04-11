@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PackageListState {
 
- List<PackageListItem> get packages; String? get nextUrl; bool get isLoadingMore;
+ List<PackageListItem> get packages; String? get nextUrl; bool get isLoadingMore; Object? get loadMoreError;
 /// Create a copy of PackageListState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PackageListStateCopyWith<PackageListState> get copyWith => _$PackageListStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackageListState&&const DeepCollectionEquality().equals(other.packages, packages)&&(identical(other.nextUrl, nextUrl) || other.nextUrl == nextUrl)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackageListState&&const DeepCollectionEquality().equals(other.packages, packages)&&(identical(other.nextUrl, nextUrl) || other.nextUrl == nextUrl)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.loadMoreError, loadMoreError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(packages),nextUrl,isLoadingMore);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(packages),nextUrl,isLoadingMore,const DeepCollectionEquality().hash(loadMoreError));
 
 @override
 String toString() {
-  return 'PackageListState(packages: $packages, nextUrl: $nextUrl, isLoadingMore: $isLoadingMore)';
+  return 'PackageListState(packages: $packages, nextUrl: $nextUrl, isLoadingMore: $isLoadingMore, loadMoreError: $loadMoreError)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PackageListStateCopyWith<$Res>  {
   factory $PackageListStateCopyWith(PackageListState value, $Res Function(PackageListState) _then) = _$PackageListStateCopyWithImpl;
 @useResult
 $Res call({
- List<PackageListItem> packages, String? nextUrl, bool isLoadingMore
+ List<PackageListItem> packages, String? nextUrl, bool isLoadingMore, Object? loadMoreError
 });
 
 
@@ -62,12 +62,12 @@ class _$PackageListStateCopyWithImpl<$Res>
 
 /// Create a copy of PackageListState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? packages = null,Object? nextUrl = freezed,Object? isLoadingMore = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? packages = null,Object? nextUrl = freezed,Object? isLoadingMore = null,Object? loadMoreError = freezed,}) {
   return _then(_self.copyWith(
 packages: null == packages ? _self.packages : packages // ignore: cast_nullable_to_non_nullable
 as List<PackageListItem>,nextUrl: freezed == nextUrl ? _self.nextUrl : nextUrl // ignore: cast_nullable_to_non_nullable
 as String?,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,loadMoreError: freezed == loadMoreError ? _self.loadMoreError : loadMoreError ,
   ));
 }
 
@@ -152,10 +152,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<PackageListItem> packages,  String? nextUrl,  bool isLoadingMore)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<PackageListItem> packages,  String? nextUrl,  bool isLoadingMore,  Object? loadMoreError)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PackageListState() when $default != null:
-return $default(_that.packages,_that.nextUrl,_that.isLoadingMore);case _:
+return $default(_that.packages,_that.nextUrl,_that.isLoadingMore,_that.loadMoreError);case _:
   return orElse();
 
 }
@@ -173,10 +173,10 @@ return $default(_that.packages,_that.nextUrl,_that.isLoadingMore);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<PackageListItem> packages,  String? nextUrl,  bool isLoadingMore)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<PackageListItem> packages,  String? nextUrl,  bool isLoadingMore,  Object? loadMoreError)  $default,) {final _that = this;
 switch (_that) {
 case _PackageListState():
-return $default(_that.packages,_that.nextUrl,_that.isLoadingMore);case _:
+return $default(_that.packages,_that.nextUrl,_that.isLoadingMore,_that.loadMoreError);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +193,10 @@ return $default(_that.packages,_that.nextUrl,_that.isLoadingMore);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<PackageListItem> packages,  String? nextUrl,  bool isLoadingMore)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<PackageListItem> packages,  String? nextUrl,  bool isLoadingMore,  Object? loadMoreError)?  $default,) {final _that = this;
 switch (_that) {
 case _PackageListState() when $default != null:
-return $default(_that.packages,_that.nextUrl,_that.isLoadingMore);case _:
+return $default(_that.packages,_that.nextUrl,_that.isLoadingMore,_that.loadMoreError);case _:
   return null;
 
 }
@@ -208,7 +208,7 @@ return $default(_that.packages,_that.nextUrl,_that.isLoadingMore);case _:
 
 
 class _PackageListState implements PackageListState {
-  const _PackageListState({final  List<PackageListItem> packages = const [], this.nextUrl, this.isLoadingMore = false}): _packages = packages;
+  const _PackageListState({final  List<PackageListItem> packages = const [], this.nextUrl, this.isLoadingMore = false, this.loadMoreError}): _packages = packages;
   
 
  final  List<PackageListItem> _packages;
@@ -220,6 +220,7 @@ class _PackageListState implements PackageListState {
 
 @override final  String? nextUrl;
 @override@JsonKey() final  bool isLoadingMore;
+@override final  Object? loadMoreError;
 
 /// Create a copy of PackageListState
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +232,16 @@ _$PackageListStateCopyWith<_PackageListState> get copyWith => __$PackageListStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackageListState&&const DeepCollectionEquality().equals(other._packages, _packages)&&(identical(other.nextUrl, nextUrl) || other.nextUrl == nextUrl)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackageListState&&const DeepCollectionEquality().equals(other._packages, _packages)&&(identical(other.nextUrl, nextUrl) || other.nextUrl == nextUrl)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.loadMoreError, loadMoreError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_packages),nextUrl,isLoadingMore);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_packages),nextUrl,isLoadingMore,const DeepCollectionEquality().hash(loadMoreError));
 
 @override
 String toString() {
-  return 'PackageListState(packages: $packages, nextUrl: $nextUrl, isLoadingMore: $isLoadingMore)';
+  return 'PackageListState(packages: $packages, nextUrl: $nextUrl, isLoadingMore: $isLoadingMore, loadMoreError: $loadMoreError)';
 }
 
 
@@ -251,7 +252,7 @@ abstract mixin class _$PackageListStateCopyWith<$Res> implements $PackageListSta
   factory _$PackageListStateCopyWith(_PackageListState value, $Res Function(_PackageListState) _then) = __$PackageListStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<PackageListItem> packages, String? nextUrl, bool isLoadingMore
+ List<PackageListItem> packages, String? nextUrl, bool isLoadingMore, Object? loadMoreError
 });
 
 
@@ -268,12 +269,12 @@ class __$PackageListStateCopyWithImpl<$Res>
 
 /// Create a copy of PackageListState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? packages = null,Object? nextUrl = freezed,Object? isLoadingMore = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? packages = null,Object? nextUrl = freezed,Object? isLoadingMore = null,Object? loadMoreError = freezed,}) {
   return _then(_PackageListState(
 packages: null == packages ? _self._packages : packages // ignore: cast_nullable_to_non_nullable
 as List<PackageListItem>,nextUrl: freezed == nextUrl ? _self.nextUrl : nextUrl // ignore: cast_nullable_to_non_nullable
 as String?,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,loadMoreError: freezed == loadMoreError ? _self.loadMoreError : loadMoreError ,
   ));
 }
 

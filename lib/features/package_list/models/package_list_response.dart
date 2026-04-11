@@ -5,6 +5,7 @@ import 'package_list_item.dart';
 part 'package_list_response.freezed.dart';
 part 'package_list_response.g.dart';
 
+/// パッケージ一覧 API のレスポンスモデル。
 @freezed
 abstract class PackageListResponse with _$PackageListResponse {
   const factory PackageListResponse({

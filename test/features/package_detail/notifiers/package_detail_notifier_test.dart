@@ -1,23 +1,33 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
 import 'package:pubdev_viewer/features/package_detail/notifiers/package_detail_notifier.dart';
 import 'package:pubdev_viewer/features/package_detail/repository/package_detail_repository.dart';
 
+import '../../../helpers/fakes.dart';
 import '../../../helpers/fixtures.dart';
-import '../../../helpers/mocks.dart';
+
+Future<PackageDetailResponse> _detailResponse(String _) async =>
+    PackageDetailResponse.fromJson(
+      Map<String, dynamic>.from(packageDetailResponseJson),
+    );
+
+Future<PackagePublisherResponse> _publisherResponse(String _) async =>
+    PackagePublisherResponse.fromJson(
+      Map<String, dynamic>.from(packagePublisherResponseJson),
+    );
 
 void main() {
-  late MockPackageDetailRepository mockRepository;
+  late FakePackageDetailRepository fakeRepository;
   late ProviderContainer container;
 
   setUp(() {
-    mockRepository = MockPackageDetailRepository();
+    fakeRepository = FakePackageDetailRepository();
     container = ProviderContainer(
       overrides: [
-        packageDetailRepositoryProvider.overrideWithValue(mockRepository),
+        packageDetailRepositoryProvider.overrideWithValue(fakeRepository),
       ],
     );
   });
@@ -27,73 +37,51 @@ void main() {
   });
 
   group('PackageDetailNotifier', () {
-    test(
-      'build fetches detail and publisher in parallel',
-      () async {
-        when(
-          () => mockRepository.getPackageDetail('http'),
-        ).thenAnswer(
-          (_) async => PackageDetailResponse.fromJson(
-            Map<String, dynamic>.from(
-              packageDetailResponseJson,
-            ),
-          ),
-        );
+    test('build fetches detail and publisher in parallel', () async {
+      fakeRepository
+        ..onGetPackageDetail = _detailResponse
+        ..onGetPackagePublisher = _publisherResponse;
 
-        when(
-          () => mockRepository.getPackagePublisher('http'),
-        ).thenAnswer(
-          (_) async => PackagePublisherResponse.fromJson(
-            Map<String, dynamic>.from(
-              packagePublisherResponseJson,
-            ),
-          ),
-        );
+      final state = await container.read(
+        packageDetailNotifierProvider('http').future,
+      );
 
-        final state = await container.read(
-          packageDetailNotifierProvider('http').future,
-        );
+      expect(state.detail.name, 'http');
+      expect(state.publisher.publisherId, 'dart.dev');
+      expect(fakeRepository.getPackageDetailCallCount, 1);
+      expect(fakeRepository.getPackagePublisherCallCount, 1);
+    });
 
-        expect(state.detail.name, 'http');
-        expect(state.publisher.publisherId, 'dart.dev');
-        verify(
-          () => mockRepository.getPackageDetail('http'),
-        ).called(1);
-        verify(
-          () => mockRepository.getPackagePublisher('http'),
-        ).called(1);
-      },
-    );
+    test('handles null publisherId', () async {
+      fakeRepository
+        ..onGetPackageDetail = _detailResponse
+        ..onGetPackagePublisher = (name) async =>
+            PackagePublisherResponse.fromJson(
+              Map<String, dynamic>.from(packagePublisherNullResponseJson),
+            );
 
-    test(
-      'handles null publisherId',
-      () async {
-        when(
-          () => mockRepository.getPackageDetail('http'),
-        ).thenAnswer(
-          (_) async => PackageDetailResponse.fromJson(
-            Map<String, dynamic>.from(
-              packageDetailResponseJson,
-            ),
-          ),
-        );
+      final state = await container.read(
+        packageDetailNotifierProvider('http').future,
+      );
 
-        when(
-          () => mockRepository.getPackagePublisher('http'),
-        ).thenAnswer(
-          (_) async => PackagePublisherResponse.fromJson(
-            Map<String, dynamic>.from(
-              packagePublisherNullResponseJson,
-            ),
-          ),
-        );
+      expect(state.publisher.publisherId, isNull);
+    });
 
-        final state = await container.read(
-          packageDetailNotifierProvider('http').future,
-        );
+    test('sets AsyncError when getPackageDetail throws', () async {
+      fakeRepository.onGetPackageDetail =
+          (_) => throw const NetworkException();
+      // ignore: cascade_invocations
+      fakeRepository.onGetPackagePublisher = _publisherResponse;
 
-        expect(state.publisher.publisherId, isNull);
-      },
-    );
+      await container
+          .read(packageDetailNotifierProvider('http').future)
+          .then((_) => null)
+          .catchError((_) => null);
+
+      final asyncValue = container.read(
+        packageDetailNotifierProvider('http'),
+      );
+      expect(asyncValue.hasError, isTrue);
+    });
   });
 }

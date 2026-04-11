@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../app/theme.dart';
 import '../../models/package_detail_response.dart';
 import '../../models/package_publisher_response.dart';
 
+/// パッケージの概要情報（説明文・パブリッシャー）を表示するセクション。
 class OverviewSection extends StatelessWidget {
   const OverviewSection({
     required this.detail,
@@ -16,15 +18,18 @@ class OverviewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardTheme =
+        Theme.of(context).extension<AppCardTheme>() ?? defaultCardTheme;
+
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
+      margin: cardTheme.margin.copyWith(top: 16, bottom: 0),
+      padding: cardTheme.padding,
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.outline,
         ),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(cardTheme.borderRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

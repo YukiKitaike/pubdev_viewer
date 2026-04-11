@@ -7,11 +7,14 @@ import '../models/package_publisher_response.dart';
 
 part 'package_detail_repository.g.dart';
 
+/// パッケージ詳細データの取得を担当する Repository。
 class PackageDetailRepository {
+  /// [PubDevApiClient] を使用してインスタンスを生成する。
   PackageDetailRepository(this._apiClient);
 
   final PubDevApiClient _apiClient;
 
+  /// 指定パッケージの詳細情報を取得する。
   Future<PackageDetailResponse> getPackageDetail(
     String name,
   ) async {
@@ -19,6 +22,7 @@ class PackageDetailRepository {
     return PackageDetailResponse.fromJson(json);
   }
 
+  /// 指定パッケージのパブリッシャー情報を取得する。
   Future<PackagePublisherResponse> getPackagePublisher(
     String name,
   ) async {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/router.dart';
 import '../../models/package_list_item.dart';
 
+/// パッケージ一覧の各行を表示する ListTile Widget。
 class PackageListTile extends StatelessWidget {
   const PackageListTile({
     required this.package,

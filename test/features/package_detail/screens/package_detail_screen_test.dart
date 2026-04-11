@@ -3,74 +3,55 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
 import 'package:pubdev_viewer/features/package_detail/repository/package_detail_repository.dart';
 import 'package:pubdev_viewer/features/package_detail/screens/package_detail_screen.dart';
 
+import '../../../helpers/fakes.dart';
 import '../../../helpers/fixtures.dart';
-import '../../../helpers/mocks.dart';
+
+Future<PackageDetailResponse> _detailResponse(String _) async =>
+    PackageDetailResponse.fromJson(
+      Map<String, dynamic>.from(packageDetailResponseJson),
+    );
+
+Future<PackagePublisherResponse> _publisherResponse(String _) async =>
+    PackagePublisherResponse.fromJson(
+      Map<String, dynamic>.from(packagePublisherResponseJson),
+    );
 
 void main() {
-  late MockPackageDetailRepository mockRepository;
+  late FakePackageDetailRepository fakeRepository;
 
   setUp(() {
-    mockRepository = MockPackageDetailRepository();
+    fakeRepository = FakePackageDetailRepository();
   });
 
   Widget createTestWidget({String packageName = 'http'}) {
     return ProviderScope(
       overrides: [
-        packageDetailRepositoryProvider.overrideWithValue(mockRepository),
+        packageDetailRepositoryProvider.overrideWithValue(fakeRepository),
       ],
       child: MaterialApp(
-        home: PackageDetailScreen(
-          packageName: packageName,
-        ),
+        home: PackageDetailScreen(packageName: packageName),
       ),
     );
   }
 
   void stubSuccessResponse() {
-    when(
-      () => mockRepository.getPackageDetail('http'),
-    ).thenAnswer(
-      (_) async => PackageDetailResponse.fromJson(
-        Map<String, dynamic>.from(
-          packageDetailResponseJson,
-        ),
-      ),
-    );
-    when(
-      () => mockRepository.getPackagePublisher('http'),
-    ).thenAnswer(
-      (_) async => PackagePublisherResponse.fromJson(
-        Map<String, dynamic>.from(
-          packagePublisherResponseJson,
-        ),
-      ),
-    );
+    fakeRepository
+      ..onGetPackageDetail = _detailResponse
+      ..onGetPackagePublisher = _publisherResponse;
   }
 
   group('PackageDetailScreen', () {
-    testWidgets('shows loading indicator initially', (
-      tester,
-    ) async {
+    testWidgets('shows loading indicator initially', (tester) async {
       final detailCompleter = Completer<PackageDetailResponse>();
-      when(
-        () => mockRepository.getPackageDetail('http'),
-      ).thenAnswer((_) => detailCompleter.future);
-      when(
-        () => mockRepository.getPackagePublisher('http'),
-      ).thenAnswer(
-        (_) async => PackagePublisherResponse.fromJson(
-          Map<String, dynamic>.from(
-            packagePublisherResponseJson,
-          ),
-        ),
-      );
+      fakeRepository
+        ..getPackageDetailCompleter = detailCompleter
+        ..onGetPackagePublisher = _publisherResponse;
 
       await tester.pumpWidget(createTestWidget());
       await tester.pump();
@@ -80,39 +61,27 @@ void main() {
         findsOneWidget,
       );
 
-      // Complete to clean up
       detailCompleter.complete(
         PackageDetailResponse.fromJson(
-          Map<String, dynamic>.from(
-            packageDetailResponseJson,
-          ),
+          Map<String, dynamic>.from(packageDetailResponseJson),
         ),
       );
       await tester.pumpAndSettle();
     });
 
-    testWidgets('shows overview and versions on success', (
-      tester,
-    ) async {
+    testWidgets('shows overview and versions on success', (tester) async {
       stubSuccessResponse();
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      // AppBar title
       expect(find.text('http'), findsOneWidget);
-
-      // Overview section
       expect(find.text('Overview'), findsOneWidget);
       expect(
-        find.text(
-          'A composable API for HTTP requests.',
-        ),
+        find.text('A composable API for HTTP requests.'),
         findsOneWidget,
       );
       expect(find.text('dart.dev'), findsOneWidget);
-
-      // Versions section
       expect(find.text('Versions'), findsOneWidget);
       expect(find.text('1.6.0'), findsOneWidget);
       expect(find.text('1.5.0'), findsOneWidget);
@@ -126,28 +95,27 @@ void main() {
         await tester.pumpWidget(createTestWidget());
         await tester.pumpAndSettle();
 
-        expect(
-          find.byIcon(Icons.open_in_new),
-          findsOneWidget,
-        );
+        expect(find.byIcon(Icons.open_in_new), findsOneWidget);
       },
     );
 
-    testWidgets('shows error view on failure', (
-      tester,
-    ) async {
-      when(
-        () => mockRepository.getPackageDetail('http'),
-      ).thenThrow(const NetworkException());
-      when(
-        () => mockRepository.getPackagePublisher('http'),
-      ).thenAnswer(
-        (_) async => PackagePublisherResponse.fromJson(
-          Map<String, dynamic>.from(
-            packagePublisherResponseJson,
-          ),
-        ),
+    testWidgets('golden test for package detail', (tester) async {
+      stubSuccessResponse();
+
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(PackageDetailScreen),
+        matchesGoldenFile('goldens/package_detail_screen.png'),
       );
+    });
+
+    testWidgets('shows error view on failure', (tester) async {
+      fakeRepository.onGetPackageDetail = (name) =>
+          throw const NetworkException();
+      // ignore: cascade_invocations
+      fakeRepository.onGetPackagePublisher = _publisherResponse;
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();

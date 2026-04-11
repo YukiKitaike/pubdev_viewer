@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../app/theme.dart';
 import '../../models/package_detail_version.dart';
 
+/// パッケージのバージョン一覧を公開日の降順で表示するセクション。
 class VersionsSection extends StatelessWidget {
   const VersionsSection({
     required this.versions,
@@ -24,15 +26,18 @@ class VersionsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final sorted = _sortedVersions;
 
+    final cardTheme =
+        Theme.of(context).extension<AppCardTheme>() ?? defaultCardTheme;
+
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(16),
+      margin: cardTheme.margin,
+      padding: cardTheme.padding,
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.outline,
         ),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(cardTheme.borderRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,9 +55,7 @@ class VersionsSection extends StatelessWidget {
                 children: [
                   Text(
                     v.version,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   Text(
                     _formatDate(v.published),

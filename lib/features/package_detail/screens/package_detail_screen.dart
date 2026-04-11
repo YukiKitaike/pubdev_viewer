@@ -6,11 +6,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_view.dart';
-import '../models/package_detail_state.dart';
 import '../notifiers/package_detail_notifier.dart';
 import 'widgets/overview_section.dart';
 import 'widgets/versions_section.dart';
 
+/// パッケージ詳細画面。
+///
+/// パッケージの概要、バージョン一覧、パブリッシャー情報を表示する。
 class PackageDetailScreen extends HookConsumerWidget {
   const PackageDetailScreen({
     required this.packageName,
@@ -30,9 +32,11 @@ class PackageDetailScreen extends HookConsumerWidget {
         title: Text(packageName),
         actions: [
           if (asyncState.valueOrNull != null) ...[
-            _buildShareButton(asyncState.requireValue),
-            _buildExternalLinkButton(
-              asyncState.requireValue,
+            _ShareButton(packageName: asyncState.requireValue.detail.name),
+            _ExternalLinkButton(
+              url:
+                  asyncState.requireValue.detail.latest.pubspec.homepage ??
+                  asyncState.requireValue.detail.latest.pubspec.repository,
             ),
           ],
         ],
@@ -70,34 +74,42 @@ class PackageDetailScreen extends HookConsumerWidget {
       ),
     );
   }
+}
 
-  Widget _buildShareButton(PackageDetailState state) {
+class _ShareButton extends StatelessWidget {
+  const _ShareButton({required this.packageName});
+
+  final String packageName;
+
+  @override
+  Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.share),
+      tooltip: '共有',
       onPressed: () => SharePlus.instance.share(
         ShareParams(
-          uri: Uri.parse(
-            'https://pub.dev/packages/${state.detail.name}',
-          ),
+          uri: Uri.parse('https://pub.dev/packages/$packageName'),
         ),
       ),
     );
   }
+}
 
-  Widget _buildExternalLinkButton(
-    PackageDetailState state,
-  ) {
-    final url =
-        state.detail.latest.pubspec.homepage ??
-        state.detail.latest.pubspec.repository;
+class _ExternalLinkButton extends StatelessWidget {
+  const _ExternalLinkButton({required this.url});
 
-    if (url == null || url.isEmpty) {
+  final String? url;
+
+  @override
+  Widget build(BuildContext context) {
+    if (url == null || url!.isEmpty) {
       return const SizedBox.shrink();
     }
 
     return IconButton(
       icon: const Icon(Icons.open_in_new),
-      onPressed: () => launchUrl(Uri.parse(url)),
+      tooltip: '外部サイトで開く',
+      onPressed: () => launchUrl(Uri.parse(url!)),
     );
   }
 }

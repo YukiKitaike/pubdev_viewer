@@ -5,6 +5,9 @@ import '../repository/package_list_repository.dart';
 
 part 'package_list_notifier.g.dart';
 
+/// パッケージ一覧の状態管理を担当する Notifier。
+///
+/// 初回読み込み、ページネーション、リフレッシュを管理する。
 @riverpod
 class PackageListNotifier extends _$PackageListNotifier {
   @override
@@ -43,12 +46,19 @@ class PackageListNotifier extends _$PackageListNotifier {
           nextUrl: response.nextUrl,
         ),
       );
-    } on Exception catch (e, st) {
+    } on Exception catch (e) {
       state = AsyncData(
-        current.copyWith(isLoadingMore: false),
+        current.copyWith(isLoadingMore: false, loadMoreError: e),
       );
-      state = AsyncError(e, st);
     }
+  }
+
+  void clearLoadMoreError() {
+    final current = state.valueOrNull;
+    if (current == null) {
+      return;
+    }
+    state = AsyncData(current.copyWith(loadMoreError: null));
   }
 
   Future<void> refresh() async {

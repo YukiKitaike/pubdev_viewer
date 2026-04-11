@@ -5,6 +5,7 @@ import '../../../core/models/pubspec.dart';
 part 'package_list_version.freezed.dart';
 part 'package_list_version.g.dart';
 
+/// パッケージ一覧で使用するバージョン情報のデータクラス。
 @freezed
 abstract class PackageListVersion with _$PackageListVersion {
   const factory PackageListVersion({
