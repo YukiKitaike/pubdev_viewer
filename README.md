@@ -88,14 +88,8 @@ screens → notifiers → repository → models
 ## テスト
 
 ```bash
-# ユニット・ウィジェットテスト
 fvm flutter test
-
-# インテグレーションテスト（実機またはエミュレータが必要）
-fvm flutter test integration_test
 ```
-
-ゴールデン画像は `test/**/goldens/` に格納されており、ビジュアルリグレッションのベースラインとして使用されます。
 
 ## API
 
