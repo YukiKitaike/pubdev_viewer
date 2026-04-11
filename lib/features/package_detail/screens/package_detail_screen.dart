@@ -192,11 +192,13 @@ class _ShareButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.share),
       tooltip: '共有',
-      onPressed: () => SharePlus.instance.share(
-        ShareParams(
-          uri: Uri.parse('https://pub.dev/packages/$packageName'),
-        ),
-      ),
+      onPressed: () {
+        final uri = Uri.tryParse('https://pub.dev/packages/$packageName');
+        if (uri == null) {
+          return;
+        }
+        SharePlus.instance.share(ShareParams(uri: uri));
+      },
     );
   }
 }
@@ -210,6 +212,7 @@ class _ExternalLinkButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (url case final String u when u.isNotEmpty) {
       final parsed = Uri.tryParse(u);
+      // http も許可: 古い pubspec.yaml では homepage が http:// で登録されている場合がある。
       if (parsed != null &&
           (parsed.scheme == 'https' || parsed.scheme == 'http')) {
         return IconButton(

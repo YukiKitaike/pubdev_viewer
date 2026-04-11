@@ -45,8 +45,8 @@
 | ~~M7~~ | ~~`_gradient` getter がビルドのたびに `codeUnits.fold` でハッシュ計算~~ **✅ 対応済み（`late final` + `didUpdateWidget`）** | `lib/features/package_list/screens/widgets/package_list_tile.dart` | Phase 3, 8 |
 | ~~M8~~ | ~~`_sortedVersions` getter がビルドのたびにリストコピー＋ソートを実行~~ **✅ 対応済み（呼び出し元でソート済みリストを渡す方式に変更）** | `lib/features/package_detail/screens/widgets/versions_section.dart` | Phase 5, 8 |
 | ~~M9~~ | ~~`PackageDetailVersion.published` が `String` — `DateTime` へ型変更~~ **✅ 対応済み（`@JsonKey(fromJson/toJson)` で `DateTime` 変換。`_formatDate` も簡素化）** | `lib/features/package_detail/models/package_detail_version.dart` | Phase 4 |
-| M10 | `http` スキーム許可の理由がコメントで未記載 — MITM リスクがあるため `https` 限定または意図コメントを追加 | `lib/features/package_detail/screens/package_detail_screen.dart:213` | Phase 8 |
-| M11 | `Uri.parse` が `_ShareButton` 内で使われており例外を投げる可能性 — `Uri.tryParse` に変更 | `lib/features/package_detail/screens/package_detail_screen.dart:194` | Phase 8 |
+| ~~M10~~ | ~~`http` スキーム許可の理由がコメントで未記載~~ **✅ 対応済み（意図コメント追加）** | `lib/features/package_detail/screens/package_detail_screen.dart` | Phase 8 |
+| ~~M11~~ | ~~`Uri.parse` が `_ShareButton` 内で例外を投げる可能性~~ **✅ 対応済み（`Uri.tryParse` に変更）** | `lib/features/package_detail/screens/package_detail_screen.dart` | Phase 8 |
 | ~~M12~~ | ~~Widget テストで `MaterialApp` にテーマ（`appLightTheme`）が未設定 — `context.tokens` フォールバックに依存~~ **✅ 対応済み** | `test/features/package_list/screens/package_list_screen_test.dart` | Phase 7 |
 | M13 | `pub_dev_api_client_test.dart` で `receiveTimeout` / `sendTimeout` 時の `NetworkException` テストが欠落 | `test/core/api/pub_dev_api_client_test.dart` | Phase 7 |
 | M14 | `PackageListState.loadMoreError: Object?` が型として広すぎる — `AppException?` に絞ることで Widget 側での exhaustive switch が可能に | `lib/features/package_list/models/package_list_state.dart` | Phase 2 |

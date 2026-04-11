@@ -80,7 +80,7 @@
   await launchUrl(parsed, mode: LaunchMode.externalApplication);
   ```
 
-- [ ] **`Uri.parse` で例外の可能性** — `lib/features/package_detail/screens/package_detail_screen.dart:196`
+- [x] **`Uri.parse` で例外の可能性** — `lib/features/package_detail/screens/package_detail_screen.dart:196` — **対応済み**: `Uri.tryParse` に変更し null ガードを追加。
 
   ```dart
   // 現在（Bad）
