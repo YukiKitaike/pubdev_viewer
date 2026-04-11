@@ -18,25 +18,17 @@ class ErrorView extends StatelessWidget {
   final Object error;
   final VoidCallback onRetry;
 
-  String get _title {
-    if (error is NetworkException) {
-      return '通信エラー';
-    }
-    if (error is ServerException) {
-      return 'サーバーエラー';
-    }
-    return '予期しないエラー';
-  }
+  String get _title => switch (error) {
+    NetworkException() => '通信エラー',
+    ServerException() => 'サーバーエラー',
+    _ => '予期しないエラー',
+  };
 
-  String get _message {
-    if (error is NetworkException) {
-      return 'ネットワーク接続を確認してから\n再試行してください。';
-    }
-    if (error is ServerException) {
-      return 'しばらくしてから再試行してください。';
-    }
-    return '問題が解決しない場合はアプリを再起動してください。';
-  }
+  String get _message => switch (error) {
+    NetworkException() => 'ネットワーク接続を確認してから\n再試行してください。',
+    ServerException() => 'しばらくしてから再試行してください。',
+    _ => '問題が解決しない場合はアプリを再起動してください。',
+  };
 
   @override
   Widget build(BuildContext context) {
