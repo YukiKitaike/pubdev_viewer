@@ -37,14 +37,12 @@ class VersionsSection extends StatelessWidget {
           children: [
             const _SectionHeader(label: 'Versions', icon: Icons.history),
             const Divider(height: 20),
-            ...sorted.asMap().entries.map((entry) {
-              final isLatest = entry.key == 0;
-              final isLast = entry.key == sorted.length - 1;
-              final v = entry.value;
+            ...sorted.indexed.map((entry) {
+              final (index, v) = entry;
               return _VersionTimelineItem(
                 version: v,
-                isLatest: isLatest,
-                isLast: isLast,
+                isLatest: index == 0,
+                isLast: index == sorted.length - 1,
                 dateFormat: _dateFormat,
               );
             }),
@@ -69,11 +67,10 @@ class _VersionTimelineItem extends StatelessWidget {
   final DateFormat dateFormat;
 
   String _formatDate(String published) {
-    final date = DateTime.tryParse(published);
-    if (date == null) {
-      return published;
+    if (DateTime.tryParse(published) case final date?) {
+      return dateFormat.format(date);
     }
-    return dateFormat.format(date);
+    return published;
   }
 
   @override
