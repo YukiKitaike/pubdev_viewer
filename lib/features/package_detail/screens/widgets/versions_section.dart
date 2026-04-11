@@ -93,7 +93,9 @@ class _VersionTimelineItem extends StatelessWidget {
                     child: Container(
                       width: 1,
                       color: lineColor,
-                      margin: const EdgeInsets.symmetric(vertical: 2),
+                      margin: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.xxs,
+                      ),
                     ),
                   ),
               ],
@@ -120,8 +122,8 @@ class _VersionTimelineItem extends StatelessWidget {
                     const SizedBox(width: AppSpacing.sm),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 7,
-                        vertical: 2,
+                        horizontal: AppSpacing.sm,
+                        vertical: AppSpacing.xxs,
                       ),
                       decoration: BoxDecoration(
                         border: Border.all(color: primary),

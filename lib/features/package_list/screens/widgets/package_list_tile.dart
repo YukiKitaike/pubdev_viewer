@@ -97,7 +97,7 @@ class _PackageListTileState extends State<PackageListTile> {
                         child: Text(
                           widget.package.name[0].toUpperCase(),
                           style: theme.textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
+                            color: AppColors.avatarText,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -124,7 +124,7 @@ class _PackageListTileState extends State<PackageListTile> {
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: AppSpacing.sm,
-                                  vertical: 3,
+                                  vertical: AppSpacing.xxs,
                                 ),
                                 decoration: BoxDecoration(
                                   border: Border.all(

@@ -8,6 +8,9 @@ class SectionHeader extends StatelessWidget {
 
   final String label;
 
+  static const double _accentWidth = 3;
+  static const double _accentHeight = 18;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -16,8 +19,8 @@ class SectionHeader extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 3,
-          height: 18,
+          width: _accentWidth,
+          height: _accentHeight,
           decoration: BoxDecoration(
             color: primary,
             borderRadius: BorderRadius.circular(AppRadius.sectionAccent),
