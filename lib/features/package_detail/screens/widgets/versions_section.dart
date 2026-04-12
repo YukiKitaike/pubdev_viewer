@@ -53,6 +53,11 @@ class _VersionTimelineItem extends StatelessWidget {
     required this.isLast,
   });
 
+  static const _trackWidth = 20.0;
+  static const _dotSize = 8.0;
+  static const _dotTopMargin = 5.0;
+  static const _lineWidth = 1.0;
+
   final PackageDetailVersion version;
   final bool isLatest;
   final bool isLast;
@@ -71,26 +76,32 @@ class _VersionTimelineItem extends StatelessWidget {
         children: [
           // タイムラインのドット & ライン
           SizedBox(
-            width: 20,
+            width: _trackWidth,
             child: Column(
               children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.only(top: 5),
-                  decoration: BoxDecoration(
-                    color: isLatest ? primary : lineColor,
-                    shape: BoxShape.circle,
-                    border: isLatest ? null : Border.all(color: lineColor),
+                Padding(
+                  padding: const EdgeInsets.only(top: _dotTopMargin),
+                  child: SizedBox(
+                    width: _dotSize,
+                    height: _dotSize,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: isLatest ? primary : lineColor,
+                        shape: BoxShape.circle,
+                        border: isLatest ? null : Border.all(color: lineColor),
+                      ),
+                    ),
                   ),
                 ),
                 if (!isLast)
                   Expanded(
-                    child: Container(
-                      width: 1,
-                      color: lineColor,
-                      margin: const EdgeInsets.symmetric(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
                         vertical: AppSpacing.xxs,
+                      ),
+                      child: SizedBox(
+                        width: _lineWidth,
+                        child: ColoredBox(color: lineColor),
                       ),
                     ),
                   ),
@@ -116,21 +127,23 @@ class _VersionTimelineItem extends StatelessWidget {
                   ),
                   if (isLatest) ...[
                     const Gap(AppSpacing.sm),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.sm,
-                        vertical: AppSpacing.xxs,
-                      ),
+                    DecoratedBox(
                       decoration: BoxDecoration(
                         border: Border.all(color: primary),
                         borderRadius: BorderRadius.circular(AppRadius.full),
                       ),
-                      child: Text(
-                        AppStrings.latestBadge,
-                        style: GoogleFonts.jetBrainsMono(
-                          fontSize: AppTextSize.mono10,
-                          fontWeight: FontWeight.w700,
-                          color: primary,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.sm,
+                          vertical: AppSpacing.xxs,
+                        ),
+                        child: Text(
+                          AppStrings.latestBadge,
+                          style: GoogleFonts.jetBrainsMono(
+                            fontSize: AppTextSize.mono10,
+                            fontWeight: FontWeight.w700,
+                            color: primary,
+                          ),
                         ),
                       ),
                     ),

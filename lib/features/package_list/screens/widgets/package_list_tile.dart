@@ -21,6 +21,12 @@ class PackageListTile extends StatefulWidget {
 }
 
 class _PackageListTileState extends State<PackageListTile> {
+  static const _pressedScale = 0.97;
+  static const _animationDuration = Duration(milliseconds: 150);
+  static const _avatarSize = 44.0;
+  static const _descriptionLineHeight = 1.5;
+  static const _chevronIconSize = 16.0;
+
   bool _pressed = false;
   late List<Color> _gradient;
 
@@ -50,8 +56,8 @@ class _PackageListTileState extends State<PackageListTile> {
         vertical: AppSpacing.xs,
       ),
       child: AnimatedScale(
-        scale: _pressed ? 0.97 : 1.0,
-        duration: const Duration(milliseconds: 150),
+        scale: _pressed ? _pressedScale : 1.0,
+        duration: _animationDuration,
         curve: Curves.easeOut,
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -80,23 +86,25 @@ class _PackageListTileState extends State<PackageListTile> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: _gradient,
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                    SizedBox(
+                      width: _avatarSize,
+                      height: _avatarSize,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: _gradient,
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(AppRadius.avatar),
                         ),
-                        borderRadius: BorderRadius.circular(AppRadius.avatar),
-                      ),
-                      child: Center(
-                        child: Text(
-                          widget.package.name[0].toUpperCase(),
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: AppColors.avatarText,
-                            fontWeight: FontWeight.w700,
+                        child: Center(
+                          child: Text(
+                            widget.package.name[0].toUpperCase(),
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: AppColors.avatarText,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ),
@@ -119,11 +127,7 @@ class _PackageListTileState extends State<PackageListTile> {
                                 ),
                               ),
                               const Gap(AppSpacing.sm),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: AppSpacing.sm,
-                                  vertical: AppSpacing.xxs,
-                                ),
+                              DecoratedBox(
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: theme.colorScheme.primary.withValues(
@@ -134,12 +138,18 @@ class _PackageListTileState extends State<PackageListTile> {
                                     AppRadius.full,
                                   ),
                                 ),
-                                child: Text(
-                                  'v${widget.package.latest.version}',
-                                  style: GoogleFonts.jetBrainsMono(
-                                    fontSize: AppTextSize.mono10,
-                                    fontWeight: FontWeight.w600,
-                                    color: theme.colorScheme.primary,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppSpacing.sm,
+                                    vertical: AppSpacing.xxs,
+                                  ),
+                                  child: Text(
+                                    'v${widget.package.latest.version}',
+                                    style: GoogleFonts.jetBrainsMono(
+                                      fontSize: AppTextSize.mono10,
+                                      fontWeight: FontWeight.w600,
+                                      color: theme.colorScheme.primary,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -150,7 +160,7 @@ class _PackageListTileState extends State<PackageListTile> {
                             widget.package.latest.pubspec.description,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
-                              height: 1.5,
+                              height: _descriptionLineHeight,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -161,7 +171,7 @@ class _PackageListTileState extends State<PackageListTile> {
                     const Gap(AppSpacing.sm),
                     Icon(
                       Icons.chevron_right,
-                      size: 16,
+                      size: _chevronIconSize,
                       color: theme.colorScheme.onSurfaceVariant.withValues(
                         alpha: 0.5,
                       ),

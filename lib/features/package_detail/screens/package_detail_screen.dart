@@ -97,6 +97,9 @@ class _PackageHeroHeader extends StatelessWidget {
     required this.publisher,
   });
 
+  static const _titleLetterSpacing = -0.5;
+  static const _publisherIconSize = 13.0;
+
   final PackageDetailResponse detail;
   final PackagePublisherResponse publisher;
 
@@ -134,7 +137,7 @@ class _PackageHeroHeader extends StatelessWidget {
             detail.name,
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w700,
-              letterSpacing: -0.5,
+              letterSpacing: _titleLetterSpacing,
             ),
           ),
           const Gap(AppSpacing.sm),
@@ -148,32 +151,34 @@ class _PackageHeroHeader extends StatelessWidget {
           ),
           if (publisher.publisherId != null) ...[
             const Gap(AppSpacing.md),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
-                vertical: AppSpacing.xs,
-              ),
+            DecoratedBox(
               decoration: BoxDecoration(
                 color: theme.colorScheme.secondaryContainer,
                 borderRadius: BorderRadius.circular(AppRadius.full),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.verified_outlined,
-                    size: 13,
-                    color: theme.colorScheme.onSecondaryContainer,
-                  ),
-                  const Gap(AppSpacing.xs),
-                  Text(
-                    publisher.publisherId!,
-                    style: theme.textTheme.labelSmall?.copyWith(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm,
+                  vertical: AppSpacing.xs,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.verified_outlined,
+                      size: _publisherIconSize,
                       color: theme.colorScheme.onSecondaryContainer,
-                      fontWeight: FontWeight.w500,
                     ),
-                  ),
-                ],
+                    const Gap(AppSpacing.xs),
+                    Text(
+                      publisher.publisherId!,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSecondaryContainer,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

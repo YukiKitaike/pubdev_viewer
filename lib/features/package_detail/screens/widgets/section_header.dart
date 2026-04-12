@@ -10,6 +10,7 @@ class SectionHeader extends StatelessWidget {
 
   static const double _accentWidth = 3;
   static const double _accentHeight = 18;
+  static const _letterSpacing = 0.2;
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +19,14 @@ class SectionHeader extends StatelessWidget {
 
     return Row(
       children: [
-        Container(
+        SizedBox(
           width: _accentWidth,
           height: _accentHeight,
-          decoration: BoxDecoration(
-            color: primary,
-            borderRadius: BorderRadius.circular(AppRadius.sectionAccent),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: primary,
+              borderRadius: BorderRadius.circular(AppRadius.sectionAccent),
+            ),
           ),
         ),
         const Gap(AppSpacing.sm),
@@ -31,7 +34,7 @@ class SectionHeader extends StatelessWidget {
           label,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w700,
-            letterSpacing: 0.2,
+            letterSpacing: _letterSpacing,
           ),
         ),
       ],

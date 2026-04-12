@@ -13,6 +13,8 @@ import 'package:pubdev_viewer/features/package_list/screens/widgets/package_list
 class PackageListScreen extends HookConsumerWidget {
   const PackageListScreen({super.key});
 
+  static const _loadMoreThreshold = 200.0;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncState = ref.watch(packageListProvider);
@@ -23,7 +25,7 @@ class PackageListScreen extends HookConsumerWidget {
         void onScroll() {
           // 底辺 200px 手前で発火。スクロール慣性で底に達する前にロード開始し待ち時間を感じさせない。
           if (scrollController.position.pixels >=
-              scrollController.position.maxScrollExtent - 200) {
+              scrollController.position.maxScrollExtent - _loadMoreThreshold) {
             ref.read(packageListProvider.notifier).loadMore();
           }
         }
