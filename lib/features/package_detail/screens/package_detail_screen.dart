@@ -99,6 +99,7 @@ class _PackageHeroHeader extends StatelessWidget {
 
   static const _titleLetterSpacing = -0.5;
   static const _publisherIconSize = 13.0;
+  static const _gradientStartAlpha = 0.08;
 
   final PackageDetailResponse detail;
   final PackagePublisherResponse publisher;
@@ -109,80 +110,84 @@ class _PackageHeroHeader extends StatelessWidget {
     final primary = theme.colorScheme.primary;
     final tokens = context.tokens;
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            primary.withValues(alpha: 0.08),
-            primary.withValues(alpha: 0),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        border: Border(
-          bottom: BorderSide(color: tokens.border),
-        ),
-      ),
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.xl,
-        AppSpacing.xxl,
-        AppSpacing.xl,
-        AppSpacing.xl,
-      ),
-      child: Column(
-        crossAxisAlignment: .start,
-        children: [
-          Text(
-            detail.name,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: .w700,
-              letterSpacing: _titleLetterSpacing,
-            ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              primary.withValues(alpha: _gradientStartAlpha),
+              primary.withValues(alpha: 0),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          const Gap(AppSpacing.sm),
-          Text(
-            detail.latest.version,
-            style: GoogleFonts.jetBrainsMono(
-              fontSize: AppTextSize.mono14,
-              fontWeight: .w500,
-              color: primary,
-            ),
+          border: Border(
+            bottom: BorderSide(color: tokens.border),
           ),
-          if (publisher.publisherId != null) ...[
-            const Gap(AppSpacing.md),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.secondaryContainer,
-                borderRadius: BorderRadius.circular(AppRadius.full),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm,
-                  vertical: AppSpacing.xs,
-                ),
-                child: Row(
-                  mainAxisSize: .min,
-                  children: [
-                    Icon(
-                      Icons.verified_outlined,
-                      size: _publisherIconSize,
-                      color: theme.colorScheme.onSecondaryContainer,
-                    ),
-                    const Gap(AppSpacing.xs),
-                    Text(
-                      publisher.publisherId!,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSecondaryContainer,
-                        fontWeight: .w500,
-                      ),
-                    ),
-                  ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.xl,
+            AppSpacing.xxl,
+            AppSpacing.xl,
+            AppSpacing.xl,
+          ),
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              Text(
+                detail.name,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: .w700,
+                  letterSpacing: _titleLetterSpacing,
                 ),
               ),
-            ),
-          ],
-        ],
+              const Gap(AppSpacing.sm),
+              Text(
+                detail.latest.version,
+                style: GoogleFonts.jetBrainsMono(
+                  fontSize: AppTextSize.mono14,
+                  fontWeight: .w500,
+                  color: primary,
+                ),
+              ),
+              if (publisher.publisherId != null) ...[
+                const Gap(AppSpacing.md),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(AppRadius.full),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                      vertical: AppSpacing.xs,
+                    ),
+                    child: Row(
+                      mainAxisSize: .min,
+                      children: [
+                        Icon(
+                          Icons.verified_outlined,
+                          size: _publisherIconSize,
+                          color: theme.colorScheme.onSecondaryContainer,
+                        ),
+                        const Gap(AppSpacing.xs),
+                        Text(
+                          publisher.publisherId!,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onSecondaryContainer,
+                            fontWeight: .w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

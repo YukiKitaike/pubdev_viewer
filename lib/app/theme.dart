@@ -5,6 +5,11 @@ import 'package:pubdev_viewer/core/design_system/design_system.dart';
 final ThemeData appLightTheme = _buildTheme(.light);
 final ThemeData appDarkTheme = _buildTheme(.dark);
 
+const _shadowAlpha = 0.07;
+const _appBarFontSize = 20.0;
+const _scrolledUnderElevation = 3.0;
+const _chipHorizontalPadding = 6.0;
+
 ThemeData _buildTheme(Brightness brightness) {
   final isLight = brightness == .light;
   final colorScheme = ColorScheme.fromSeed(
@@ -30,7 +35,7 @@ ThemeData _buildTheme(Brightness brightness) {
       color: tokens.surface,
       // ダークモードではシャドウが目立たないため transparent にし、ボーダーで区別する。
       shadowColor: isLight
-          ? AppColors.pubBlue.withValues(alpha: 0.07)
+          ? AppColors.pubBlue.withValues(alpha: _shadowAlpha)
           : Colors.transparent,
       clipBehavior: Clip.antiAlias,
       margin: EdgeInsets.zero,
@@ -39,11 +44,11 @@ ThemeData _buildTheme(Brightness brightness) {
       centerTitle: false,
       elevation: 0,
       // スクロール時のみ微細な影を付けて AppBar とコンテンツの境界を示す。
-      scrolledUnderElevation: 3,
+      scrolledUnderElevation: _scrolledUnderElevation,
       backgroundColor: tokens.background,
       foregroundColor: colorScheme.onSurface,
       titleTextStyle: GoogleFonts.notoSansJp(
-        fontSize: 20,
+        fontSize: _appBarFontSize,
         fontWeight: .w700,
         color: colorScheme.onSurface,
       ),
@@ -62,7 +67,7 @@ ThemeData _buildTheme(Brightness brightness) {
     ),
     chipTheme: ChipThemeData(
       labelStyle: baseTextTheme.labelSmall,
-      padding: const EdgeInsets.symmetric(horizontal: 6),
+      padding: const EdgeInsets.symmetric(horizontal: _chipHorizontalPadding),
     ),
     dividerTheme: DividerThemeData(
       color: tokens.border,

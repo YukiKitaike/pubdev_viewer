@@ -13,6 +13,11 @@ class ErrorView extends StatelessWidget {
     super.key,
   });
 
+  static const _iconContainerSize = 80.0;
+  static const _errorIconSize = 36.0;
+  static const _retryIconSize = 18.0;
+  static const _messageLineHeight = 1.6;
+
   final Object error;
   final VoidCallback onRetry;
 
@@ -38,8 +43,8 @@ class ErrorView extends StatelessWidget {
           mainAxisSize: .min,
           children: [
             SizedBox(
-              width: 80,
-              height: 80,
+              width: _iconContainerSize,
+              height: _iconContainerSize,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surfaceContainerHighest,
@@ -47,7 +52,7 @@ class ErrorView extends StatelessWidget {
                 ),
                 child: Icon(
                   Icons.cloud_off_rounded,
-                  size: 36,
+                  size: _errorIconSize,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
@@ -65,7 +70,7 @@ class ErrorView extends StatelessWidget {
               textAlign: .center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
-                height: 1.6,
+                height: _messageLineHeight,
               ),
             ),
             const Gap(AppSpacing.xxl),
@@ -74,7 +79,7 @@ class ErrorView extends StatelessWidget {
                 HapticFeedback.lightImpact();
                 onRetry();
               },
-              icon: const Icon(Icons.refresh, size: 18),
+              icon: const Icon(Icons.refresh, size: _retryIconSize),
               label: const Text(AppStrings.retry),
             ),
           ],

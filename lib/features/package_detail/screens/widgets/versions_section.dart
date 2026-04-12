@@ -14,6 +14,8 @@ class VersionsSection extends StatelessWidget {
     super.key,
   });
 
+  static const _dividerHeight = 20.0;
+
   final List<PackageDetailVersion> versions;
 
   @override
@@ -29,7 +31,7 @@ class VersionsSection extends StatelessWidget {
           crossAxisAlignment: .start,
           children: [
             const SectionHeader(label: AppStrings.sectionVersions),
-            const Divider(height: 20),
+            const Divider(height: _dividerHeight),
             // .indexed で index を取得。先頭の LATEST 判定と末尾の線描画制御に必要。
             ...versions.indexed.map((entry) {
               final (index, v) = entry;

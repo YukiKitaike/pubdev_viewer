@@ -26,6 +26,8 @@ class _PackageListTileState extends State<PackageListTile> {
   static const _avatarSize = 44.0;
   static const _descriptionLineHeight = 1.5;
   static const _chevronIconSize = 16.0;
+  static const _badgeBorderAlpha = 0.4;
+  static const _chevronAlpha = 0.5;
 
   bool _pressed = false;
   late List<Color> _gradient;
@@ -131,7 +133,7 @@ class _PackageListTileState extends State<PackageListTile> {
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: theme.colorScheme.primary.withValues(
-                                      alpha: 0.4,
+                                      alpha: _badgeBorderAlpha,
                                     ),
                                   ),
                                   borderRadius: BorderRadius.circular(
@@ -173,7 +175,7 @@ class _PackageListTileState extends State<PackageListTile> {
                       Icons.chevron_right,
                       size: _chevronIconSize,
                       color: theme.colorScheme.onSurfaceVariant.withValues(
-                        alpha: 0.5,
+                        alpha: _chevronAlpha,
                       ),
                     ),
                   ],

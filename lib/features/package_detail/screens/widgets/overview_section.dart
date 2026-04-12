@@ -12,6 +12,9 @@ class OverviewSection extends StatelessWidget {
     super.key,
   });
 
+  static const _dividerHeight = 20.0;
+  static const _descriptionLineHeight = 1.6;
+
   final PackageDetailResponse detail;
 
   @override
@@ -28,10 +31,12 @@ class OverviewSection extends StatelessWidget {
           crossAxisAlignment: .start,
           children: [
             const SectionHeader(label: AppStrings.sectionOverview),
-            const Divider(height: 20),
+            const Divider(height: _dividerHeight),
             Text(
               detail.latest.pubspec.description,
-              style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                height: _descriptionLineHeight,
+              ),
             ),
           ],
         ),

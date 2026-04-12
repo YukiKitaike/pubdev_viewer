@@ -40,6 +40,12 @@ class SkeletonListView extends StatelessWidget {
 class SkeletonTile extends StatelessWidget {
   const SkeletonTile({super.key});
 
+  static const _avatarSize = 44.0;
+  static const _titleHeight = 14.0;
+  static const _tagWidth = 48.0;
+  static const _tagHeight = 20.0;
+  static const _descriptionHeight = 12.0;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -58,8 +64,8 @@ class SkeletonTile extends StatelessWidget {
             crossAxisAlignment: .start,
             children: [
               SizedBox(
-                width: 44,
-                height: 44,
+                width: _avatarSize,
+                height: _avatarSize,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: AppColors.shimmerPlaceholder,
@@ -76,7 +82,7 @@ class SkeletonTile extends StatelessWidget {
                       children: [
                         Expanded(
                           child: SizedBox(
-                            height: 14,
+                            height: _titleHeight,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
                                 color: AppColors.shimmerPlaceholder,
@@ -89,8 +95,8 @@ class SkeletonTile extends StatelessWidget {
                         ),
                         const Gap(AppSpacing.sm),
                         SizedBox(
-                          width: 48,
-                          height: 20,
+                          width: _tagWidth,
+                          height: _tagHeight,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               color: AppColors.shimmerPlaceholder,
@@ -104,7 +110,7 @@ class SkeletonTile extends StatelessWidget {
                     ),
                     const Gap(AppSpacing.sm),
                     SizedBox(
-                      height: 12,
+                      height: _descriptionHeight,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: AppColors.shimmerPlaceholder,
@@ -116,7 +122,7 @@ class SkeletonTile extends StatelessWidget {
                     ),
                     const Gap(AppSpacing.xs),
                     SizedBox(
-                      height: 12,
+                      height: _descriptionHeight,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: AppColors.shimmerPlaceholder,
