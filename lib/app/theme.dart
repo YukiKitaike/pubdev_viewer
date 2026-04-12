@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../core/design_system/design_system.dart';
 
-export '../core/design_system/extensions/app_card_theme.dart'
-    show AppCardTheme, defaultCardTheme;
-
-/// ライトテーマ。
 final ThemeData appLightTheme = _buildTheme(Brightness.light);
-
-/// ダークテーマ。
 final ThemeData appDarkTheme = _buildTheme(Brightness.dark);
 
 ThemeData _buildTheme(Brightness brightness) {
@@ -66,7 +59,7 @@ ThemeData _buildTheme(Brightness brightness) {
     ),
     chipTheme: ChipThemeData(
       labelStyle: baseTextTheme.labelSmall,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm - 2),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
     ),
     dividerTheme: DividerThemeData(
       color: tokens.border,
