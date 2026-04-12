@@ -173,10 +173,37 @@ fvm dart format .
 | `pubdev-models` | Freezed + json_serializable モデルパターン |
 | `pubdev-testing` | テストパターン（Fake・Notifier・Widget） |
 | `pubdev-ui` | デザイントークン・テーマ・Widget パターン |
+| `dart-new-syntax` | Dart 3.7+ の新機能リファレンス（Dot shorthands 等） |
 
-### 自動フォーマット（PostToolUse hook）
+### プラグイン
 
-`.claude/settings.json` の `PostToolUse` hook により、ファイル編集後に `fvm dart format .` が自動実行されます。手動でのフォーマットは原則不要です。
+[公式マーケットプレイス](https://claude.com/plugins)からインストール済みのプラグイン：
+
+| プラグイン | 用途 |
+|---|---|
+| `claude-md-management` | CLAUDE.md の監査・改善・セッション学習の反映 |
+| `claude-code-setup` | コードベース解析による自動化推奨 |
+| `skill-creator` | スキルの新規作成・改善・パフォーマンス計測 |
+| `plugin-dev` | プラグイン開発ツールキット |
+| `hookify` | 会話パターンからカスタム hook を生成 |
+
+### サブエージェント
+
+`.claude/agents/` にプロジェクト固有のサブエージェントが定義されています：
+
+| エージェント | 用途 |
+|---|---|
+| `code-reviewer` | CLAUDE.md の Critical Rules に基づくコードレビュー |
+
+### Hooks
+
+`.claude/settings.json` に以下の hook が設定されています：
+
+| イベント | 内容 |
+|---|---|
+| PreToolUse | `.g.dart` / `.freezed.dart` の直接編集をブロック（`build_runner` で生成するため） |
+| PostToolUse | ファイル編集後に `fvm dart format .` を自動実行 |
+| PostToolUse | ファイル編集後に `fvm dart analyze` を自動実行（エラー・警告ゼロを維持） |
 
 ## API
 
