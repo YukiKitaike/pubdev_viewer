@@ -8,8 +8,9 @@ part 'package_list_response.g.dart';
 /// パッケージ一覧 API のレスポンスモデル。
 @freezed
 abstract class PackageListResponse with _$PackageListResponse {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory PackageListResponse({
-    @JsonKey(name: 'next_url') String? nextUrl,
+    String? nextUrl,
     required List<PackageListItem> packages,
   }) = _PackageListResponse;
 

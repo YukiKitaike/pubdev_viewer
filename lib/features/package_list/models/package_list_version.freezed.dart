@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PackageListVersion {
 
- String get version; Pubspec get pubspec;@JsonKey(name: 'archive_url') String get archiveUrl;@JsonKey(name: 'package_url') String get packageUrl; String get url;
+ String get version; Pubspec get pubspec; String get archiveUrl; String get packageUrl; String get url;
 /// Create a copy of PackageListVersion
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $PackageListVersionCopyWith<$Res>  {
   factory $PackageListVersionCopyWith(PackageListVersion value, $Res Function(PackageListVersion) _then) = _$PackageListVersionCopyWithImpl;
 @useResult
 $Res call({
- String version, Pubspec pubspec,@JsonKey(name: 'archive_url') String archiveUrl,@JsonKey(name: 'package_url') String packageUrl, String url
+ String version, Pubspec pubspec, String archiveUrl, String packageUrl, String url
 });
 
 
@@ -166,7 +166,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String version,  Pubspec pubspec, @JsonKey(name: 'archive_url')  String archiveUrl, @JsonKey(name: 'package_url')  String packageUrl,  String url)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String version,  Pubspec pubspec,  String archiveUrl,  String packageUrl,  String url)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PackageListVersion() when $default != null:
 return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.packageUrl,_that.url);case _:
@@ -187,7 +187,7 @@ return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.packageUrl,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String version,  Pubspec pubspec, @JsonKey(name: 'archive_url')  String archiveUrl, @JsonKey(name: 'package_url')  String packageUrl,  String url)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String version,  Pubspec pubspec,  String archiveUrl,  String packageUrl,  String url)  $default,) {final _that = this;
 switch (_that) {
 case _PackageListVersion():
 return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.packageUrl,_that.url);case _:
@@ -207,7 +207,7 @@ return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.packageUrl,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String version,  Pubspec pubspec, @JsonKey(name: 'archive_url')  String archiveUrl, @JsonKey(name: 'package_url')  String packageUrl,  String url)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String version,  Pubspec pubspec,  String archiveUrl,  String packageUrl,  String url)?  $default,) {final _that = this;
 switch (_that) {
 case _PackageListVersion() when $default != null:
 return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.packageUrl,_that.url);case _:
@@ -219,16 +219,16 @@ return $default(_that.version,_that.pubspec,_that.archiveUrl,_that.packageUrl,_t
 }
 
 /// @nodoc
-@JsonSerializable()
 
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _PackageListVersion implements PackageListVersion {
-  const _PackageListVersion({required this.version, required this.pubspec, @JsonKey(name: 'archive_url') required this.archiveUrl, @JsonKey(name: 'package_url') required this.packageUrl, required this.url});
+  const _PackageListVersion({required this.version, required this.pubspec, required this.archiveUrl, required this.packageUrl, required this.url});
   factory _PackageListVersion.fromJson(Map<String, dynamic> json) => _$PackageListVersionFromJson(json);
 
 @override final  String version;
 @override final  Pubspec pubspec;
-@override@JsonKey(name: 'archive_url') final  String archiveUrl;
-@override@JsonKey(name: 'package_url') final  String packageUrl;
+@override final  String archiveUrl;
+@override final  String packageUrl;
 @override final  String url;
 
 /// Create a copy of PackageListVersion
@@ -264,7 +264,7 @@ abstract mixin class _$PackageListVersionCopyWith<$Res> implements $PackageListV
   factory _$PackageListVersionCopyWith(_PackageListVersion value, $Res Function(_PackageListVersion) _then) = __$PackageListVersionCopyWithImpl;
 @override @useResult
 $Res call({
- String version, Pubspec pubspec,@JsonKey(name: 'archive_url') String archiveUrl,@JsonKey(name: 'package_url') String packageUrl, String url
+ String version, Pubspec pubspec, String archiveUrl, String packageUrl, String url
 });
 
 

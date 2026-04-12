@@ -11,11 +11,12 @@ String _publishedToJson(DateTime value) => value.toIso8601String();
 /// パッケージ詳細で使用するバージョン情報のデータクラス。
 @freezed
 abstract class PackageDetailVersion with _$PackageDetailVersion {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory PackageDetailVersion({
     required String version,
     required Pubspec pubspec,
-    @JsonKey(name: 'archive_url') required String archiveUrl,
-    @JsonKey(name: 'archive_sha256') required String archiveSha256,
+    required String archiveUrl,
+    required String archiveSha256,
     @JsonKey(fromJson: _publishedFromJson, toJson: _publishedToJson)
     required DateTime published,
   }) = _PackageDetailVersion;

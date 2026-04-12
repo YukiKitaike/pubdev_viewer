@@ -6,17 +6,18 @@ part 'pubspec.g.dart';
 /// パッケージの pubspec.yaml 情報を表すデータクラス。
 @freezed
 abstract class Pubspec with _$Pubspec {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Pubspec({
     required String name,
     required String version,
     required String description,
     String? homepage,
     String? repository,
-    @JsonKey(name: 'issue_tracker') String? issueTracker,
+    String? issueTracker,
     List<String>? topics,
     Map<String, String>? environment,
     Map<String, dynamic>? dependencies,
-    @JsonKey(name: 'dev_dependencies') Map<String, dynamic>? devDependencies,
+    Map<String, dynamic>? devDependencies,
   }) = _Pubspec;
 
   factory Pubspec.fromJson(Map<String, dynamic> json) =>

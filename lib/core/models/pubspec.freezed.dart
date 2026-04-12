@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Pubspec {
 
- String get name; String get version; String get description; String? get homepage; String? get repository;@JsonKey(name: 'issue_tracker') String? get issueTracker; List<String>? get topics; Map<String, String>? get environment; Map<String, dynamic>? get dependencies;@JsonKey(name: 'dev_dependencies') Map<String, dynamic>? get devDependencies;
+ String get name; String get version; String get description; String? get homepage; String? get repository; String? get issueTracker; List<String>? get topics; Map<String, String>? get environment; Map<String, dynamic>? get dependencies; Map<String, dynamic>? get devDependencies;
 /// Create a copy of Pubspec
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $PubspecCopyWith<$Res>  {
   factory $PubspecCopyWith(Pubspec value, $Res Function(Pubspec) _then) = _$PubspecCopyWithImpl;
 @useResult
 $Res call({
- String name, String version, String description, String? homepage, String? repository,@JsonKey(name: 'issue_tracker') String? issueTracker, List<String>? topics, Map<String, String>? environment, Map<String, dynamic>? dependencies,@JsonKey(name: 'dev_dependencies') Map<String, dynamic>? devDependencies
+ String name, String version, String description, String? homepage, String? repository, String? issueTracker, List<String>? topics, Map<String, String>? environment, Map<String, dynamic>? dependencies, Map<String, dynamic>? devDependencies
 });
 
 
@@ -162,7 +162,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String version,  String description,  String? homepage,  String? repository, @JsonKey(name: 'issue_tracker')  String? issueTracker,  List<String>? topics,  Map<String, String>? environment,  Map<String, dynamic>? dependencies, @JsonKey(name: 'dev_dependencies')  Map<String, dynamic>? devDependencies)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String version,  String description,  String? homepage,  String? repository,  String? issueTracker,  List<String>? topics,  Map<String, String>? environment,  Map<String, dynamic>? dependencies,  Map<String, dynamic>? devDependencies)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Pubspec() when $default != null:
 return $default(_that.name,_that.version,_that.description,_that.homepage,_that.repository,_that.issueTracker,_that.topics,_that.environment,_that.dependencies,_that.devDependencies);case _:
@@ -183,7 +183,7 @@ return $default(_that.name,_that.version,_that.description,_that.homepage,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String version,  String description,  String? homepage,  String? repository, @JsonKey(name: 'issue_tracker')  String? issueTracker,  List<String>? topics,  Map<String, String>? environment,  Map<String, dynamic>? dependencies, @JsonKey(name: 'dev_dependencies')  Map<String, dynamic>? devDependencies)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String version,  String description,  String? homepage,  String? repository,  String? issueTracker,  List<String>? topics,  Map<String, String>? environment,  Map<String, dynamic>? dependencies,  Map<String, dynamic>? devDependencies)  $default,) {final _that = this;
 switch (_that) {
 case _Pubspec():
 return $default(_that.name,_that.version,_that.description,_that.homepage,_that.repository,_that.issueTracker,_that.topics,_that.environment,_that.dependencies,_that.devDependencies);case _:
@@ -203,7 +203,7 @@ return $default(_that.name,_that.version,_that.description,_that.homepage,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String version,  String description,  String? homepage,  String? repository, @JsonKey(name: 'issue_tracker')  String? issueTracker,  List<String>? topics,  Map<String, String>? environment,  Map<String, dynamic>? dependencies, @JsonKey(name: 'dev_dependencies')  Map<String, dynamic>? devDependencies)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String version,  String description,  String? homepage,  String? repository,  String? issueTracker,  List<String>? topics,  Map<String, String>? environment,  Map<String, dynamic>? dependencies,  Map<String, dynamic>? devDependencies)?  $default,) {final _that = this;
 switch (_that) {
 case _Pubspec() when $default != null:
 return $default(_that.name,_that.version,_that.description,_that.homepage,_that.repository,_that.issueTracker,_that.topics,_that.environment,_that.dependencies,_that.devDependencies);case _:
@@ -215,10 +215,10 @@ return $default(_that.name,_that.version,_that.description,_that.homepage,_that.
 }
 
 /// @nodoc
-@JsonSerializable()
 
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _Pubspec implements Pubspec {
-  const _Pubspec({required this.name, required this.version, required this.description, this.homepage, this.repository, @JsonKey(name: 'issue_tracker') this.issueTracker, final  List<String>? topics, final  Map<String, String>? environment, final  Map<String, dynamic>? dependencies, @JsonKey(name: 'dev_dependencies') final  Map<String, dynamic>? devDependencies}): _topics = topics,_environment = environment,_dependencies = dependencies,_devDependencies = devDependencies;
+  const _Pubspec({required this.name, required this.version, required this.description, this.homepage, this.repository, this.issueTracker, final  List<String>? topics, final  Map<String, String>? environment, final  Map<String, dynamic>? dependencies, final  Map<String, dynamic>? devDependencies}): _topics = topics,_environment = environment,_dependencies = dependencies,_devDependencies = devDependencies;
   factory _Pubspec.fromJson(Map<String, dynamic> json) => _$PubspecFromJson(json);
 
 @override final  String name;
@@ -226,7 +226,7 @@ class _Pubspec implements Pubspec {
 @override final  String description;
 @override final  String? homepage;
 @override final  String? repository;
-@override@JsonKey(name: 'issue_tracker') final  String? issueTracker;
+@override final  String? issueTracker;
  final  List<String>? _topics;
 @override List<String>? get topics {
   final value = _topics;
@@ -255,7 +255,7 @@ class _Pubspec implements Pubspec {
 }
 
  final  Map<String, dynamic>? _devDependencies;
-@override@JsonKey(name: 'dev_dependencies') Map<String, dynamic>? get devDependencies {
+@override Map<String, dynamic>? get devDependencies {
   final value = _devDependencies;
   if (value == null) return null;
   if (_devDependencies is EqualUnmodifiableMapView) return _devDependencies;
@@ -297,7 +297,7 @@ abstract mixin class _$PubspecCopyWith<$Res> implements $PubspecCopyWith<$Res> {
   factory _$PubspecCopyWith(_Pubspec value, $Res Function(_Pubspec) _then) = __$PubspecCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String version, String description, String? homepage, String? repository,@JsonKey(name: 'issue_tracker') String? issueTracker, List<String>? topics, Map<String, String>? environment, Map<String, dynamic>? dependencies,@JsonKey(name: 'dev_dependencies') Map<String, dynamic>? devDependencies
+ String name, String version, String description, String? homepage, String? repository, String? issueTracker, List<String>? topics, Map<String, String>? environment, Map<String, dynamic>? dependencies, Map<String, dynamic>? devDependencies
 });
 
 
