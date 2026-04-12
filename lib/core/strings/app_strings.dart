@@ -3,21 +3,21 @@ class AppStrings {
   AppStrings._();
 
   // エラータイトル
-  static const String errorTitleNetwork = '通信エラー';
-  static const String errorTitleServer = 'サーバーエラー';
-  static const String errorTitleUnexpected = '予期しないエラー';
+  static const String networkErrorTitle = '通信エラー';
+  static const String serverErrorTitle = 'サーバーエラー';
+  static const String unexpectedErrorTitle = '予期しないエラー';
 
   // エラーメッセージ
-  static const String errorMessageNetwork = 'ネットワーク接続を確認してから\n再試行してください。';
-  static const String errorMessageServer = 'しばらくしてから再試行してください。';
-  static const String errorMessageUnexpected = '問題が解決しない場合はアプリを再起動してください。';
-  static const String errorMessageLoadMoreFailed = '追加読み込みに失敗しました';
-  static const String errorMessageLinkFailed = 'リンクを開けませんでした';
+  static const String networkErrorMessage = 'ネットワーク接続を確認してから\n再試行してください。';
+  static const String serverErrorMessage = 'しばらくしてから再試行してください。';
+  static const String unexpectedErrorMessage = '問題が解決しない場合はアプリを再起動してください。';
+  static const String loadMoreFailed = '追加読み込みに失敗しました';
+  static const String linkOpenFailed = 'リンクを開けませんでした';
 
   // ラベル・アクション
-  static const String labelRetry = '再試行';
-  static const String labelShare = '共有';
-  static const String labelOpenExternal = '外部サイトで開く';
-  static const String labelLightMode = 'ライトモード';
-  static const String labelDarkMode = 'ダークモード';
+  static const String retry = '再試行';
+  static const String share = '共有';
+  static const String openExternal = '外部サイトで開く';
+  static const String lightMode = 'ライトモード';
+  static const String darkMode = 'ダークモード';
 }

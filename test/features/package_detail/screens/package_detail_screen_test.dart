@@ -114,7 +114,7 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      expect(find.text(AppStrings.labelRetry), findsOneWidget);
+      expect(find.text(AppStrings.retry), findsOneWidget);
     });
   });
 }

@@ -85,7 +85,7 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      expect(find.text(AppStrings.labelRetry), findsOneWidget);
+      expect(find.text(AppStrings.retry), findsOneWidget);
       expect(find.byIcon(Icons.cloud_off_rounded), findsOneWidget);
     });
 
@@ -104,7 +104,7 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text(AppStrings.labelRetry));
+      await tester.tap(find.text(AppStrings.retry));
       await tester.pump();
       await tester.pump();
 

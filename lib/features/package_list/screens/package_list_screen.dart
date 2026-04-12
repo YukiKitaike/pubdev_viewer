@@ -43,7 +43,7 @@ class PackageListScreen extends HookConsumerWidget {
         if (error != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text(AppStrings.errorMessageLoadMoreFailed),
+              content: Text(AppStrings.loadMoreFailed),
             ),
           );
           ref.read(packageListNotifierProvider.notifier).clearLoadMoreError();
@@ -90,8 +90,8 @@ class PackageListScreen extends HookConsumerWidget {
               },
             ),
             tooltip: switch (themeMode) {
-              .dark => AppStrings.labelLightMode,
-              _ => AppStrings.labelDarkMode,
+              .dark => AppStrings.lightMode,
+              _ => AppStrings.darkMode,
             },
             onPressed: () =>
                 ref.read(themeModeNotifierProvider.notifier).toggle(),

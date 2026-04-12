@@ -20,15 +20,15 @@ class ErrorView extends StatelessWidget {
   final VoidCallback onRetry;
 
   String get _title => switch (error) {
-    NetworkException() => AppStrings.errorTitleNetwork,
-    ServerException() => AppStrings.errorTitleServer,
-    _ => AppStrings.errorTitleUnexpected,
+    NetworkException() => AppStrings.networkErrorTitle,
+    ServerException() => AppStrings.serverErrorTitle,
+    _ => AppStrings.unexpectedErrorTitle,
   };
 
   String get _message => switch (error) {
-    NetworkException() => AppStrings.errorMessageNetwork,
-    ServerException() => AppStrings.errorMessageServer,
-    _ => AppStrings.errorMessageUnexpected,
+    NetworkException() => AppStrings.networkErrorMessage,
+    ServerException() => AppStrings.serverErrorMessage,
+    _ => AppStrings.unexpectedErrorMessage,
   };
 
   @override
@@ -76,7 +76,7 @@ class ErrorView extends StatelessWidget {
                 onRetry();
               },
               icon: const Icon(Icons.refresh, size: 18),
-              label: const Text(AppStrings.labelRetry),
+              label: const Text(AppStrings.retry),
             ),
           ],
         ),

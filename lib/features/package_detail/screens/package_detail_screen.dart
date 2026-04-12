@@ -194,7 +194,7 @@ class _ShareButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.share),
-      tooltip: AppStrings.labelShare,
+      tooltip: AppStrings.share,
       onPressed: () {
         final uri = Uri.tryParse('https://pub.dev/packages/$packageName');
         if (uri == null) {
@@ -220,7 +220,7 @@ class _ExternalLinkButton extends StatelessWidget {
           (parsed.scheme == 'https' || parsed.scheme == 'http')) {
         return IconButton(
           icon: const Icon(Icons.open_in_new),
-          tooltip: AppStrings.labelOpenExternal,
+          tooltip: AppStrings.openExternal,
           onPressed: () async {
             final success = await launchUrl(
               parsed,
@@ -229,7 +229,7 @@ class _ExternalLinkButton extends StatelessWidget {
             if (!success && context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text(AppStrings.errorMessageLinkFailed),
+                  content: Text(AppStrings.linkOpenFailed),
                 ),
               );
             }
