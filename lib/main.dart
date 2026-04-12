@@ -6,6 +6,7 @@ import 'package:marionette_flutter/marionette_flutter.dart';
 import 'package:marionette_logging/marionette_logging.dart';
 
 import 'package:pubdev_viewer/app/app.dart';
+import 'package:pubdev_viewer/core/utils/app_retry.dart';
 
 void main() {
   if (kDebugMode) {
@@ -19,5 +20,7 @@ void main() {
   Logger.root.onRecord.listen((record) {
     debugPrint('${record.level.name}: ${record.loggerName}: ${record.message}');
   });
-  runApp(const ProviderScope(child: PubDevViewerApp()));
+  runApp(
+    const ProviderScope(retry: appRetry, child: PubDevViewerApp()),
+  );
 }
