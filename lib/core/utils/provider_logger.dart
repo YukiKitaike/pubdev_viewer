@@ -13,9 +13,8 @@ final class ProviderLogger extends ProviderObserver {
     Object? newValue,
   ) {
     _logger.info(
-      '[UPDATE] ${context.provider} '
-      '| prev: $previousValue '
-      '| new: $newValue'
+      '[UPDATE] ${context.provider.name ?? context.provider.runtimeType} '
+      '| ${_summarize(previousValue)} \u2192 ${_summarize(newValue)}'
       '${context.mutation != null ? ' | mutation: ${context.mutation}' : ''}',
     );
   }
@@ -27,9 +26,22 @@ final class ProviderLogger extends ProviderObserver {
     StackTrace stackTrace,
   ) {
     _logger.severe(
-      '[FAIL] ${context.provider} | error: $error',
+      '[FAIL] ${context.provider.name ?? context.provider.runtimeType} '
+      '| $error',
       error,
       stackTrace,
     );
+  }
+
+  /// AsyncValue の中身をダンプせず型名だけ表示する。
+  /// フル toString は数百文字になりデバッグコンソールが埋まるため。
+  String _summarize(Object? value) {
+    return switch (value) {
+      AsyncData(:final value) => 'Data(${value.runtimeType})',
+      AsyncLoading() => 'Loading',
+      AsyncError(:final error) => 'Error($error)',
+      null => 'null',
+      _ => value.runtimeType.toString(),
+    };
   }
 }
