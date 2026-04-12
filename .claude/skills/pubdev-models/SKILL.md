@@ -142,3 +142,13 @@ class MyModel { ... }
 // ❌ 不要な toJson を定義する（ローカル保存などで実際に必要になるまで書かない）
 Map<String, dynamic> toJson() => _$MyModelToJson(this);
 ```
+
+---
+
+## コメントルール
+
+`/// パッケージ一覧 API のレスポンスモデル。` のような WHAT docstring は不要。
+
+WHY コメントが必要なケース:
+- カスタム `@JsonKey(fromJson: ...)` を使う理由（API の返却形式が想定と異なる等）
+- `@JsonSerializable(fieldRename: FieldRename.snake)` を選んだ理由

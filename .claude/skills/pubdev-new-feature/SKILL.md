@@ -249,3 +249,10 @@ class FeatureNameRoute extends GoRouteData {
 - [ ] 各レイヤー追加後に `fvm dart run build_runner build -d` 実行
 - [ ] `fvm dart analyze` でエラー 0 件確認
 - [ ] `fvm flutter test` で既存テスト PASS 確認
+
+---
+
+## コメントルール
+
+新 feature のコード生成時、`///` docstring にクラス名・メソッド名の言い換えを書かない。
+設計判断が非自明な箇所にのみ WHY コメントを付ける。詳細は CLAUDE.md の Comments セクションを参照。

@@ -32,6 +32,15 @@ Feature-First + Riverpod。依存方向: `screens/` → `notifiers/` → `reposi
 
 **No hardcoded colors/spacing.** Widget 内に `Colors.red` や `fontSize: 24` 直書き禁止。
 
+## Comments
+
+**WHY only.** コメントは「なぜこの実装か」を書く。コードから読める WHAT は書かない。
+
+- `/// XxxResponse のデータクラス。` のようなクラス名の言い換え禁止
+- マジックナンバー・設計判断・トレードオフ・外部制約に WHY コメントを付ける
+- 1〜2 行、日本語で簡潔に
+- 自明なコードにはコメント不要
+
 ## Design System
 
 ```dart
