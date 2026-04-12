@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../tokens/app_radius.dart';
-import '../tokens/app_spacing.dart';
+import 'package:pubdev_viewer/core/design_system/tokens/app_radius.dart';
+import 'package:pubdev_viewer/core/design_system/tokens/app_spacing.dart';
 
 class AppCardTheme extends ThemeExtension<AppCardTheme> {
   const AppCardTheme({

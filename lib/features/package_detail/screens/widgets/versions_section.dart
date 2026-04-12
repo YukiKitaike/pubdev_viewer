@@ -3,10 +3,10 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/design_system/design_system.dart';
-import '../../../../core/strings/app_strings.dart';
-import '../../models/package_detail_version.dart';
-import 'section_header.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
+import 'package:pubdev_viewer/features/package_detail/models/package_detail_version.dart';
+import 'package:pubdev_viewer/features/package_detail/screens/widgets/section_header.dart';
 
 class VersionsSection extends StatelessWidget {
   const VersionsSection({

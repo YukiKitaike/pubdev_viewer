@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 
-import '../error/app_exception.dart';
+import 'package:pubdev_viewer/core/error/app_exception.dart';
 
 class ApiClient {
   ApiClient(Dio dio) : _dio = dio;

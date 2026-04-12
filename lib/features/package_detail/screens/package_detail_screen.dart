@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
+import 'package:pubdev_viewer/core/widgets/error_view.dart';
+import 'package:pubdev_viewer/core/widgets/loading_view.dart';
+import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
+import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
+import 'package:pubdev_viewer/features/package_detail/notifiers/package_detail_notifier.dart';
+import 'package:pubdev_viewer/features/package_detail/screens/widgets/overview_section.dart';
+import 'package:pubdev_viewer/features/package_detail/screens/widgets/versions_section.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../core/design_system/design_system.dart';
-import '../../../core/strings/app_strings.dart';
-import '../../../core/widgets/error_view.dart';
-import '../../../core/widgets/loading_view.dart';
-import '../models/package_detail_response.dart';
-import '../models/package_publisher_response.dart';
-import '../notifiers/package_detail_notifier.dart';
-import 'widgets/overview_section.dart';
-import 'widgets/versions_section.dart';
 
 class PackageDetailScreen extends ConsumerWidget {
   const PackageDetailScreen({

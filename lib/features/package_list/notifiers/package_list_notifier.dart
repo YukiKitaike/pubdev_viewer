@@ -1,8 +1,7 @@
+import 'package:pubdev_viewer/core/error/app_exception.dart';
+import 'package:pubdev_viewer/features/package_list/models/package_list_state.dart';
+import 'package:pubdev_viewer/features/package_list/repository/package_list_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../../core/error/app_exception.dart';
-import '../models/package_list_state.dart';
-import '../repository/package_list_repository.dart';
 
 part 'package_list_notifier.g.dart';
 

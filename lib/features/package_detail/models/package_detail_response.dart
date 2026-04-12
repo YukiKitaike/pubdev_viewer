@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package_detail_version.dart';
+import 'package:pubdev_viewer/features/package_detail/models/package_detail_version.dart';
 
 part 'package_detail_response.freezed.dart';
 part 'package_detail_response.g.dart';

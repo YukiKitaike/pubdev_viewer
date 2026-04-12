@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/design_system/design_system.dart';
-import '../../../../core/strings/app_strings.dart';
-import '../../models/package_detail_response.dart';
-import 'section_header.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
+import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
+import 'package:pubdev_viewer/features/package_detail/screens/widgets/section_header.dart';
 
 // パブリッシャー情報はヒーローヘッダーに表示するためここでは省略。
 class OverviewSection extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
 
 final ThemeData appLightTheme = _buildTheme(Brightness.light);
 final ThemeData appDarkTheme = _buildTheme(Brightness.dark);

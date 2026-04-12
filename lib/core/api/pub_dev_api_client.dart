@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pubdev_viewer/core/api/api_client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'api_client.dart';
 
 part 'pub_dev_api_client.g.dart';
 

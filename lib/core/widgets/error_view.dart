@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
-import '../design_system/design_system.dart';
-import '../error/app_exception.dart';
-import '../strings/app_strings.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/error/app_exception.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
 
 class ErrorView extends StatelessWidget {
   const ErrorView({

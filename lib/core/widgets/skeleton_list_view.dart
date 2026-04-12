@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../design_system/design_system.dart';
 
 class SkeletonListView extends StatelessWidget {
   const SkeletonListView({super.key});

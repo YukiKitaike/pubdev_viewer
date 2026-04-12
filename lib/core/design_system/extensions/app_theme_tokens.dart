@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../tokens/app_colors.dart';
+import 'package:pubdev_viewer/core/design_system/tokens/app_colors.dart';
 
 // コンポーネント内での `isLight ? Color(0xFF...) : Color(0xFF...)` パターンを排除する。
 class AppThemeTokens extends ThemeExtension<AppThemeTokens> {

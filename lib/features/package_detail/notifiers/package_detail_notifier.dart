@@ -1,7 +1,6 @@
+import 'package:pubdev_viewer/features/package_detail/models/package_detail_state.dart';
+import 'package:pubdev_viewer/features/package_detail/repository/package_detail_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../models/package_detail_state.dart';
-import '../repository/package_detail_repository.dart';
 
 part 'package_detail_notifier.g.dart';
 

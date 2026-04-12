@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:marionette_flutter/marionette_flutter.dart';
 import 'package:marionette_logging/marionette_logging.dart';
 
-import 'app/app.dart';
+import 'package:pubdev_viewer/app/app.dart';
 
 void main() {
   if (kDebugMode) {

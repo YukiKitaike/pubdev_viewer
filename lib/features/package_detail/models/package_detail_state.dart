@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package_detail_response.dart';
-import 'package_detail_version.dart';
-import 'package_publisher_response.dart';
+import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
+import 'package:pubdev_viewer/features/package_detail/models/package_detail_version.dart';
+import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
 
 part 'package_detail_state.freezed.dart';
 

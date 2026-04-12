@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../app/theme_mode_notifier.dart';
-import '../../../core/design_system/design_system.dart';
-import '../../../core/strings/app_strings.dart';
-import '../../../core/widgets/error_view.dart';
-import '../../../core/widgets/skeleton_list_view.dart';
-import '../notifiers/package_list_notifier.dart';
-import 'widgets/package_list_tile.dart';
+import 'package:pubdev_viewer/app/theme_mode_notifier.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
+import 'package:pubdev_viewer/core/widgets/error_view.dart';
+import 'package:pubdev_viewer/core/widgets/skeleton_list_view.dart';
+import 'package:pubdev_viewer/features/package_list/notifiers/package_list_notifier.dart';
+import 'package:pubdev_viewer/features/package_list/screens/widgets/package_list_tile.dart';
 
 class PackageListScreen extends HookConsumerWidget {
   const PackageListScreen({super.key});

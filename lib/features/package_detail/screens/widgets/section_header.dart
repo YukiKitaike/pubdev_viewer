@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader({required this.label, super.key});

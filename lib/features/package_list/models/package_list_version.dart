@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../core/models/pubspec.dart';
+import 'package:pubdev_viewer/core/models/pubspec.dart';
 
 part 'package_list_version.freezed.dart';
 part 'package_list_version.g.dart';

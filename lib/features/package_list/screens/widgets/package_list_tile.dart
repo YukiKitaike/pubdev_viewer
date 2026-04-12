@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../app/router.dart';
-import '../../../../core/design_system/design_system.dart';
-import '../../models/package_list_item.dart';
+import 'package:pubdev_viewer/app/router.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
+import 'package:pubdev_viewer/features/package_list/models/package_list_item.dart';
 
 class PackageListTile extends StatefulWidget {
   const PackageListTile({
