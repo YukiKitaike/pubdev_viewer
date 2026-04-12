@@ -216,6 +216,28 @@ UI トークンの使い方は `/pubdev-ui` スキルを参照。
 
 ---
 
+## Core Utils の活用
+
+`lib/core/utils/` に汎用ユーティリティ関数がある。feature 内で同等の処理を再実装せず、既存の util を使う。
+
+| ファイル | 関数 | 用途 |
+|----------|------|------|
+| `date_formatter.dart` | `formatDate(DateTime)` | `yyyy-MM-dd` 形式の日付表示 |
+| `json_converters.dart` | `dateTimeFromIso8601` / `dateTimeToIso8601` | `@JsonKey` 用 ISO 8601 DateTime 変換 |
+| `gradient_selector.dart` | `selectGradientByName(String)` | 文字列ハッシュによるアバターグラデーション選択 |
+| `url_utils.dart` | `pubDevPackageUrl(String)` / `isHttpUrl(String?)` | pub.dev URL 構築・HTTP URL バリデーション |
+
+```dart
+import 'package:pubdev_viewer/core/utils/date_formatter.dart';
+import 'package:pubdev_viewer/core/utils/json_converters.dart';
+import 'package:pubdev_viewer/core/utils/gradient_selector.dart';
+import 'package:pubdev_viewer/core/utils/url_utils.dart';
+```
+
+新しい汎用関数が必要な場合は `core/utils/` に追加する。feature 固有のヘルパーは feature 内に留める。
+
+---
+
 ## Step 5: ルート登録
 
 `lib/app/router.dart` に型安全ルートを追加:

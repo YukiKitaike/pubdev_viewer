@@ -223,6 +223,30 @@ Text(
 
 ---
 
+## Core Utils（UI 関連）
+
+`lib/core/utils/` の UI 関連ユーティリティ:
+
+```dart
+import 'package:pubdev_viewer/core/utils/date_formatter.dart';
+import 'package:pubdev_viewer/core/utils/gradient_selector.dart';
+import 'package:pubdev_viewer/core/utils/url_utils.dart';
+
+// 日付表示
+Text(formatDate(version.published))  // → '2026-04-12'
+
+// アバターグラデーション（文字列ハッシュで決定的に選択）
+final gradient = selectGradientByName(packageName);
+
+// pub.dev URL 構築・バリデーション
+final uri = pubDevPackageUrl(packageName);
+if (isHttpUrl(url)) { ... }
+```
+
+feature 内に private ヘルパー (`_computeGradient`, `_formatDate` 等) を作らず、core の util を使う。
+
+---
+
 ## やってはいけないこと
 
 ```dart

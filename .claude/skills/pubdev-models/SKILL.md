@@ -86,6 +86,19 @@ JSON キーが Dart フィールド名と異なる場合のみ使用する。
 String? version,                                        // ✅ 同名なら不要
 ```
 
+### DateTime フィールドの JSON 変換
+
+pub.dev API は DateTime を ISO 8601 文字列で返す。`core/utils/json_converters.dart` の共有コンバーターを使う:
+
+```dart
+import 'package:pubdev_viewer/core/utils/json_converters.dart';
+
+@JsonKey(fromJson: dateTimeFromIso8601, toJson: dateTimeToIso8601)
+required DateTime published,
+```
+
+feature 内に private コンバーター (`_publishedFromJson` 等) を作らない。
+
 ---
 
 ## ネストしたモデル
