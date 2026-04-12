@@ -1,4 +1,3 @@
-/// セマンティックな角丸トークン。
 abstract final class AppRadius {
   /// セクションヘッダーの左ボーダーアクセント (2dp)
   static const double sectionAccent = 2;

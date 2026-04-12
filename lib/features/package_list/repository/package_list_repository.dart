@@ -6,14 +6,11 @@ import '../models/package_list_response.dart';
 
 part 'package_list_repository.g.dart';
 
-/// パッケージ一覧データの取得を担当する Repository。
 class PackageListRepository {
-  /// [PubDevApiClient] を使用してインスタンスを生成する。
   PackageListRepository(this._apiClient);
 
   final PubDevApiClient _apiClient;
 
-  /// パッケージ一覧を取得する。[pageUrl] でページネーションに対応。
   Future<PackageListResponse> getPackages({
     String? pageUrl,
   }) async {

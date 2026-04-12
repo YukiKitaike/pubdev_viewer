@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'pubspec.freezed.dart';
 part 'pubspec.g.dart';
 
-/// パッケージの pubspec.yaml 情報を表すデータクラス。
 @freezed
 abstract class Pubspec with _$Pubspec {
   @JsonSerializable(fieldRename: FieldRename.snake)

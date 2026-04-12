@@ -5,7 +5,6 @@ import 'package_list_item.dart';
 
 part 'package_list_state.freezed.dart';
 
-/// パッケージ一覧画面の UI 状態を表すデータクラス。
 @freezed
 abstract class PackageListState with _$PackageListState {
   const factory PackageListState({

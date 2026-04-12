@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 import '../tokens/app_radius.dart';
 import '../tokens/app_spacing.dart';
 
-/// アプリ共通のカードセクション装飾を定義する [ThemeExtension]。
-///
-/// カード風セクションで統一的なスタイルを適用するために使用する。
 class AppCardTheme extends ThemeExtension<AppCardTheme> {
   const AppCardTheme({
     required this.borderRadius,

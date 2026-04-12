@@ -5,7 +5,6 @@ import 'package_list_version.dart';
 part 'package_list_item.freezed.dart';
 part 'package_list_item.g.dart';
 
-/// パッケージ一覧の各アイテムを表すデータクラス。
 @freezed
 abstract class PackageListItem with _$PackageListItem {
   const factory PackageListItem({

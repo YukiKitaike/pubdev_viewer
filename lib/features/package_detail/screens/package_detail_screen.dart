@@ -58,8 +58,8 @@ class PackageDetailScreen extends ConsumerWidget {
               )
               .refresh(),
           child: SingleChildScrollView(
-            // iOS は BouncingScrollPhysics、他は ClampingScrollPhysics でプラットフォーム標準に合わせる。
-            // AlwaysScrollableScrollPhysics を parent にし RefreshIndicator を常に有効にする。
+            // iOS は Bouncing、他は Clamping でプラットフォーム標準に合わせる。
+            // Always を parent にし RefreshIndicator を常に有効にする。
             physics: switch (Theme.of(context).platform) {
               .iOS => const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),

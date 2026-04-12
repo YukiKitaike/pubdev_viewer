@@ -34,6 +34,7 @@ abstract final class AppColors {
   static const Color avatarText = Color(0xFFFFFFFF);
 
   // ── Avatar gradients ──────────────────────────────────
+  // 8 色パレット。パッケージ名ハッシュで割り当てるため区別しやすい数に抑えている。
   static const List<List<Color>> avatarGradients = [
     [Color(0xFF1565C0), Color(0xFF42A5F5)],
     [Color(0xFF6A1B9A), Color(0xFFCE93D8)],

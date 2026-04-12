@@ -1,4 +1,3 @@
-/// アプリケーション全体で使用する文字列定数を集中管理する。
 class AppStrings {
   AppStrings._();
 

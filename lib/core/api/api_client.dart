@@ -3,19 +3,12 @@ import 'package:logging/logging.dart';
 
 import '../error/app_exception.dart';
 
-/// HTTP GET 通信とエラーハンドリングを担当する汎用 API クライアント。
-///
-/// [Dio] を内部で使用し、エラー時は [AppException] サブクラスをスローする。
 class ApiClient {
-  /// [Dio] インスタンスを受け取って API クライアントを生成する。
   ApiClient(Dio dio) : _dio = dio;
 
   final Dio _dio;
   final _logger = Logger('ApiClient');
 
-  /// 指定 URL に GET リクエストを送信し、JSON Map を返す。
-  ///
-  /// 通信エラー時は [NetworkException]、サーバーエラー時は [ServerException] をスローする。
   Future<Map<String, dynamic>> get(String url) async {
     _logger.info('GET $url');
     try {
@@ -29,6 +22,8 @@ class ApiClient {
       }
       return data;
     } on DioException catch (e) {
+      // DioException を AppException に変換。ErrorView がユーザー向けメッセージを
+      // 出し分けるためにネットワーク系とサーバー系を分類する。
       _logger.severe('GET $url failed: $e');
       switch (e.type) {
         case DioExceptionType.connectionError:

@@ -28,6 +28,7 @@ ThemeData _buildTheme(Brightness brightness) {
         side: BorderSide(color: tokens.border),
       ),
       color: tokens.surface,
+      // ダークモードではシャドウが目立たないため transparent にし、ボーダーで区別する。
       shadowColor: isLight
           ? AppColors.pubBlue.withValues(alpha: 0.07)
           : Colors.transparent,
@@ -37,6 +38,7 @@ ThemeData _buildTheme(Brightness brightness) {
     appBarTheme: AppBarTheme(
       centerTitle: false,
       elevation: 0,
+      // スクロール時のみ微細な影を付けて AppBar とコンテンツの境界を示す。
       scrolledUnderElevation: 3,
       backgroundColor: tokens.background,
       foregroundColor: colorScheme.onSurface,
@@ -45,6 +47,7 @@ ThemeData _buildTheme(Brightness brightness) {
         fontWeight: FontWeight.w700,
         color: colorScheme.onSurface,
       ),
+      // M3 デフォルトの surfaceTint（スクロール時に紫がかる挙動）を無効化。
       surfaceTintColor: Colors.transparent,
     ),
     listTileTheme: const ListTileThemeData(
