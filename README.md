@@ -85,6 +85,16 @@ lib/
 
 **feature 内の依存方向：** `screens → notifiers → repository → models`
 
+## API
+
+pub.dev の公開 REST API（`https://pub.dev`）からデータを取得します。
+
+| メソッド | エンドポイント | 用途 |
+|---|---|---|
+| GET | `/api/packages` | パッケージ一覧（ページネーション対応） |
+| GET | `/api/packages/{name}` | パッケージ詳細 |
+| GET | `/api/packages/{name}/publisher` | パブリッシャー情報 |
+
 ## 技術スタック
 
 | レイヤー | ライブラリ |
@@ -179,13 +189,3 @@ fvm dart format .
 | PreToolUse | `.g.dart` / `.freezed.dart` の直接編集をブロック（`build_runner` で生成するため） |
 | PostToolUse | ファイル編集後に `fvm dart format .` を自動実行 |
 | PostToolUse | ファイル編集後に `fvm dart analyze` を自動実行（エラー・警告ゼロを維持） |
-
-## API
-
-pub.dev の公開 REST API（`https://pub.dev`）からデータを取得します。
-
-| メソッド | エンドポイント | 用途 |
-|---|---|---|
-| GET | `/api/packages` | パッケージ一覧（ページネーション対応） |
-| GET | `/api/packages/{name}` | パッケージ詳細 |
-| GET | `/api/packages/{name}/publisher` | パブリッシャー情報 |
