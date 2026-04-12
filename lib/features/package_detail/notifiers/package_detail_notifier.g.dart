@@ -7,7 +7,7 @@ part of 'package_detail_notifier.dart';
 // **************************************************************************
 
 String _$packageDetailNotifierHash() =>
-    r'0a3422a94ecacf117f9feb33e51832fee6f0b5de';
+    r'7dbc52f78c8ddc960516036d7aa75b2195d37b13';
 
 /// Copied from Dart SDK
 class _SystemHash {
