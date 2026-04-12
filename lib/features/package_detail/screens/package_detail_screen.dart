@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
 import 'package:pubdev_viewer/core/strings/app_strings.dart';
+import 'package:pubdev_viewer/core/utils/url_utils.dart';
 import 'package:pubdev_viewer/core/widgets/error_view.dart';
 import 'package:pubdev_viewer/core/widgets/loading_view.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
@@ -194,11 +195,9 @@ class _ShareButton extends StatelessWidget {
       icon: const Icon(Icons.share),
       tooltip: AppStrings.share,
       onPressed: () {
-        final uri = Uri.tryParse('https://pub.dev/packages/$packageName');
-        if (uri == null) {
-          return;
-        }
-        SharePlus.instance.share(ShareParams(uri: uri));
+        SharePlus.instance.share(
+          ShareParams(uri: pubDevPackageUrl(packageName)),
+        );
       },
     );
   }
@@ -211,30 +210,25 @@ class _ExternalLinkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (url case final String u when u.isNotEmpty) {
-      final parsed = Uri.tryParse(u);
-      // http も許可: 古い pubspec.yaml では homepage が http:// で登録されている場合がある。
-      if (parsed != null &&
-          (parsed.scheme == 'https' || parsed.scheme == 'http')) {
-        return IconButton(
-          icon: const Icon(Icons.open_in_new),
-          tooltip: AppStrings.openExternal,
-          onPressed: () async {
-            final success = await launchUrl(
-              parsed,
-              mode: LaunchMode.externalApplication,
-            );
-            if (!success && context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(AppStrings.linkOpenFailed),
-                ),
-              );
-            }
-          },
-        );
-      }
+    if (!isHttpUrl(url)) {
+      return const SizedBox.shrink();
     }
-    return const SizedBox.shrink();
+    return IconButton(
+      icon: const Icon(Icons.open_in_new),
+      tooltip: AppStrings.openExternal,
+      onPressed: () async {
+        final success = await launchUrl(
+          Uri.parse(url!),
+          mode: LaunchMode.externalApplication,
+        );
+        if (!success && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(AppStrings.linkOpenFailed),
+            ),
+          );
+        }
+      },
+    );
   }
 }

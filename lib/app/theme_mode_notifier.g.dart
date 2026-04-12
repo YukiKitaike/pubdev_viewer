@@ -8,9 +8,7 @@ part of 'theme_mode_notifier.dart';
 
 String _$themeModeNotifierHash() => r'a5f2d55e6d24eadf9135ed91b581f13783e7123b';
 
-/// アプリのテーマモード（ライト/ダーク/システム）を管理する Notifier。
-///
-/// Copied from [ThemeModeNotifier].
+/// See also [ThemeModeNotifier].
 @ProviderFor(ThemeModeNotifier)
 final themeModeNotifierProvider =
     NotifierProvider<ThemeModeNotifier, ThemeMode>.internal(

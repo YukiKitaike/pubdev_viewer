@@ -7,13 +7,9 @@ part of 'package_list_notifier.dart';
 // **************************************************************************
 
 String _$packageListNotifierHash() =>
-    r'6868ee03a7df427d7e13f2c999f2c30339eb1fb1';
+    r'1407cd700b4be9ad1db209c6920ff7bef66cff3f';
 
-/// パッケージ一覧の状態管理を担当する Notifier。
-///
-/// 初回読み込み、ページネーション、リフレッシュを管理する。
-///
-/// Copied from [PackageListNotifier].
+/// See also [PackageListNotifier].
 @ProviderFor(PackageListNotifier)
 final packageListNotifierProvider =
     AutoDisposeAsyncNotifierProvider<

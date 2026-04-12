@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
 import 'package:pubdev_viewer/core/strings/app_strings.dart';
+import 'package:pubdev_viewer/core/utils/date_formatter.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_version.dart';
 import 'package:pubdev_viewer/features/package_detail/screens/widgets/section_header.dart';
 
@@ -15,9 +15,6 @@ class VersionsSection extends StatelessWidget {
   });
 
   final List<PackageDetailVersion> versions;
-
-  // DateFormat の生成コストを避けるため static で再利用する。
-  static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +37,6 @@ class VersionsSection extends StatelessWidget {
                 version: v,
                 isLatest: index == 0,
                 isLast: index == versions.length - 1,
-                dateFormat: _dateFormat,
               );
             }),
           ],
@@ -55,15 +51,11 @@ class _VersionTimelineItem extends StatelessWidget {
     required this.version,
     required this.isLatest,
     required this.isLast,
-    required this.dateFormat,
   });
 
   final PackageDetailVersion version;
   final bool isLatest;
   final bool isLast;
-  final DateFormat dateFormat;
-
-  String _formatDate(DateTime published) => dateFormat.format(published);
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +137,7 @@ class _VersionTimelineItem extends StatelessWidget {
                   ],
                   const Spacer(),
                   Text(
-                    _formatDate(version.published),
+                    formatDate(version.published),
                     style: GoogleFonts.jetBrainsMono(
                       fontSize: AppTextSize.mono12,
                       color: theme.colorScheme.onSurfaceVariant,

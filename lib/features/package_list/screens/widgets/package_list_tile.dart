@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:pubdev_viewer/app/router.dart';
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/utils/gradient_selector.dart';
 import 'package:pubdev_viewer/features/package_list/models/package_list_item.dart';
 
 class PackageListTile extends StatefulWidget {
@@ -23,16 +24,10 @@ class _PackageListTileState extends State<PackageListTile> {
   bool _pressed = false;
   late List<Color> _gradient;
 
-  // パッケージ名のハッシュでグラデーション選択。同じ名前は常に同じ色になり視覚的に区別しやすい。
-  static List<Color> _computeGradient(String name) {
-    final hash = name.codeUnits.fold(0, (a, b) => a + b);
-    return AppColors.avatarGradients[hash % AppColors.avatarGradients.length];
-  }
-
   @override
   void initState() {
     super.initState();
-    _gradient = _computeGradient(widget.package.name);
+    _gradient = selectGradientByName(widget.package.name);
   }
 
   // ListView のリサイクルで別パッケージが割り当てられた場合にグラデーションを再計算する。
@@ -40,7 +35,7 @@ class _PackageListTileState extends State<PackageListTile> {
   void didUpdateWidget(PackageListTile oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.package.name != widget.package.name) {
-      _gradient = _computeGradient(widget.package.name);
+      _gradient = selectGradientByName(widget.package.name);
     }
   }
 
