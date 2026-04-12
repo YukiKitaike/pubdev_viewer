@@ -6,176 +6,97 @@ part of 'package_detail_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$packageDetailNotifierHash() =>
-    r'7dbc52f78c8ddc960516036d7aa75b2195d37b13';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$PackageDetailNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<PackageDetailState> {
-  late final String packageName;
-
-  FutureOr<PackageDetailState> build(String packageName);
-}
-
-/// See also [PackageDetailNotifier].
 @ProviderFor(PackageDetailNotifier)
-const packageDetailNotifierProvider = PackageDetailNotifierFamily();
+final packageDetailProvider = PackageDetailNotifierFamily._();
 
-/// See also [PackageDetailNotifier].
-class PackageDetailNotifierFamily
-    extends Family<AsyncValue<PackageDetailState>> {
-  /// See also [PackageDetailNotifier].
-  const PackageDetailNotifierFamily();
+final class PackageDetailNotifierProvider
+    extends $AsyncNotifierProvider<PackageDetailNotifier, PackageDetailState> {
+  PackageDetailNotifierProvider._({
+    required PackageDetailNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'packageDetailProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [PackageDetailNotifier].
-  PackageDetailNotifierProvider call(String packageName) {
-    return PackageDetailNotifierProvider(packageName);
+  @override
+  String debugGetCreateSourceHash() => _$packageDetailNotifierHash();
+
+  @override
+  String toString() {
+    return r'packageDetailProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  PackageDetailNotifierProvider getProviderOverride(
-    covariant PackageDetailNotifierProvider provider,
-  ) {
-    return call(provider.packageName);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'packageDetailNotifierProvider';
-}
-
-/// See also [PackageDetailNotifier].
-class PackageDetailNotifierProvider
-    extends
-        AutoDisposeAsyncNotifierProviderImpl<
-          PackageDetailNotifier,
-          PackageDetailState
-        > {
-  /// See also [PackageDetailNotifier].
-  PackageDetailNotifierProvider(String packageName)
-    : this._internal(
-        () => PackageDetailNotifier()..packageName = packageName,
-        from: packageDetailNotifierProvider,
-        name: r'packageDetailNotifierProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$packageDetailNotifierHash,
-        dependencies: PackageDetailNotifierFamily._dependencies,
-        allTransitiveDependencies:
-            PackageDetailNotifierFamily._allTransitiveDependencies,
-        packageName: packageName,
-      );
-
-  PackageDetailNotifierProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.packageName,
-  }) : super.internal();
-
-  final String packageName;
-
-  @override
-  FutureOr<PackageDetailState> runNotifierBuild(
-    covariant PackageDetailNotifier notifier,
-  ) {
-    return notifier.build(packageName);
-  }
-
-  @override
-  Override overrideWith(PackageDetailNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: PackageDetailNotifierProvider._internal(
-        () => create()..packageName = packageName,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        packageName: packageName,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<
-    PackageDetailNotifier,
-    PackageDetailState
-  >
-  createElement() {
-    return _PackageDetailNotifierProviderElement(this);
-  }
+  PackageDetailNotifier create() => PackageDetailNotifier();
 
   @override
   bool operator ==(Object other) {
-    return other is PackageDetailNotifierProvider &&
-        other.packageName == packageName;
+    return other is PackageDetailNotifierProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, packageName.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin PackageDetailNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<PackageDetailState> {
-  /// The parameter `packageName` of this provider.
-  String get packageName;
-}
+String _$packageDetailNotifierHash() =>
+    r'7dbc52f78c8ddc960516036d7aa75b2195d37b13';
 
-class _PackageDetailNotifierProviderElement
-    extends
-        AutoDisposeAsyncNotifierProviderElement<
+final class PackageDetailNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
           PackageDetailNotifier,
-          PackageDetailState
-        >
-    with PackageDetailNotifierRef {
-  _PackageDetailNotifierProviderElement(super.provider);
+          AsyncValue<PackageDetailState>,
+          PackageDetailState,
+          FutureOr<PackageDetailState>,
+          String
+        > {
+  PackageDetailNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'packageDetailProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  PackageDetailNotifierProvider call(String packageName) =>
+      PackageDetailNotifierProvider._(argument: packageName, from: this);
 
   @override
-  String get packageName =>
-      (origin as PackageDetailNotifierProvider).packageName;
+  String toString() => r'packageDetailProvider';
 }
 
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$PackageDetailNotifier
+    extends $AsyncNotifier<PackageDetailState> {
+  late final _$args = ref.$arg as String;
+  String get packageName => _$args;
+
+  FutureOr<PackageDetailState> build(String packageName);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref as $Ref<AsyncValue<PackageDetailState>, PackageDetailState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<PackageDetailState>, PackageDetailState>,
+              AsyncValue<PackageDetailState>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, () => build(_$args));
+  }
+}

@@ -263,9 +263,7 @@ void main() {
 
       final element = tester.element(find.byType(PackageDetailScreen));
       final container = ProviderScope.containerOf(element);
-      await container
-          .read(packageDetailNotifierProvider('http').notifier)
-          .refresh();
+      await container.read(packageDetailProvider('http').notifier).refresh();
       await tester.pump();
 
       check(fakeRepository.getPackageDetailCallCount).equals(2);

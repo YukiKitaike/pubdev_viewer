@@ -6,25 +6,51 @@ part of 'package_list_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$packageListNotifierHash() =>
-    r'1407cd700b4be9ad1db209c6920ff7bef66cff3f';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [PackageListNotifier].
 @ProviderFor(PackageListNotifier)
-final packageListNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<
-      PackageListNotifier,
-      PackageListState
-    >.internal(
-      PackageListNotifier.new,
-      name: r'packageListNotifierProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$packageListNotifierHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+final packageListProvider = PackageListNotifierProvider._();
 
-typedef _$PackageListNotifier = AutoDisposeAsyncNotifier<PackageListState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class PackageListNotifierProvider
+    extends $AsyncNotifierProvider<PackageListNotifier, PackageListState> {
+  PackageListNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'packageListProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$packageListNotifierHash();
+
+  @$internal
+  @override
+  PackageListNotifier create() => PackageListNotifier();
+}
+
+String _$packageListNotifierHash() =>
+    r'4b1a5320d5bc82139dfbdfae60bb0503e5086055';
+
+abstract class _$PackageListNotifier extends $AsyncNotifier<PackageListState> {
+  FutureOr<PackageListState> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref as $Ref<AsyncValue<PackageListState>, PackageListState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<PackageListState>, PackageListState>,
+              AsyncValue<PackageListState>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

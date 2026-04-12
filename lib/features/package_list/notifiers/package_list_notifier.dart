@@ -18,7 +18,7 @@ class PackageListNotifier extends _$PackageListNotifier {
   }
 
   Future<void> loadMore() async {
-    final current = state.valueOrNull;
+    final current = state.value;
     if (current == null || current.isLoadingMore || current.nextUrl == null) {
       return;
     }
@@ -54,7 +54,7 @@ class PackageListNotifier extends _$PackageListNotifier {
   }
 
   void clearLoadMoreError() {
-    final current = state.valueOrNull;
+    final current = state.value;
     if (current == null) {
       return;
     }

@@ -15,7 +15,7 @@ part 'router.g.dart';
   ],
 )
 @immutable
-class PackageListRoute extends GoRouteData with _$PackageListRoute {
+class PackageListRoute extends GoRouteData with $PackageListRoute {
   const PackageListRoute();
 
   @override
@@ -25,7 +25,7 @@ class PackageListRoute extends GoRouteData with _$PackageListRoute {
 }
 
 @immutable
-class PackageDetailRoute extends GoRouteData with _$PackageDetailRoute {
+class PackageDetailRoute extends GoRouteData with $PackageDetailRoute {
   const PackageDetailRoute({required this.name});
 
   final String name;

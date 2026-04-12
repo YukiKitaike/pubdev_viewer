@@ -6,22 +6,47 @@ part of 'pub_dev_api_client.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pubDevApiClientHash() => r'a8b6f911d98f24f0cd14246e89d2f9f7a8d98f3b';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [pubDevApiClient].
 @ProviderFor(pubDevApiClient)
-final pubDevApiClientProvider = Provider<PubDevApiClient>.internal(
-  pubDevApiClient,
-  name: r'pubDevApiClientProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$pubDevApiClientHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final pubDevApiClientProvider = PubDevApiClientProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef PubDevApiClientRef = ProviderRef<PubDevApiClient>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class PubDevApiClientProvider
+    extends
+        $FunctionalProvider<PubDevApiClient, PubDevApiClient, PubDevApiClient>
+    with $Provider<PubDevApiClient> {
+  PubDevApiClientProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'pubDevApiClientProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$pubDevApiClientHash();
+
+  @$internal
+  @override
+  $ProviderElement<PubDevApiClient> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  PubDevApiClient create(Ref ref) {
+    return pubDevApiClient(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PubDevApiClient value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PubDevApiClient>(value),
+    );
+  }
+}
+
+String _$pubDevApiClientHash() => r'a8b6f911d98f24f0cd14246e89d2f9f7a8d98f3b';

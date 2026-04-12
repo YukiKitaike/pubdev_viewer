@@ -15,7 +15,7 @@ class PackageListScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncState = ref.watch(packageListNotifierProvider);
+    final asyncState = ref.watch(packageListProvider);
     final scrollController = useScrollController();
 
     useEffect(
@@ -24,7 +24,7 @@ class PackageListScreen extends HookConsumerWidget {
           // 底辺 200px 手前で発火。スクロール慣性で底に達する前にロード開始し待ち時間を感じさせない。
           if (scrollController.position.pixels >=
               scrollController.position.maxScrollExtent - 200) {
-            ref.read(packageListNotifierProvider.notifier).loadMore();
+            ref.read(packageListProvider.notifier).loadMore();
           }
         }
 
@@ -37,22 +37,22 @@ class PackageListScreen extends HookConsumerWidget {
     // loadMoreError は state に一時保持 → SnackBar 表示 → 即クリア。
     // クリアしないと再構築のたびに再表示される。
     ref.listen(
-      packageListNotifierProvider,
+      packageListProvider,
       (_, next) {
-        final error = next.valueOrNull?.loadMoreError;
+        final error = next.value?.loadMoreError;
         if (error != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(AppStrings.loadMoreFailed),
             ),
           );
-          ref.read(packageListNotifierProvider.notifier).clearLoadMoreError();
+          ref.read(packageListProvider.notifier).clearLoadMoreError();
         }
       },
     );
 
     final theme = Theme.of(context);
-    final themeMode = ref.watch(themeModeNotifierProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -93,8 +93,7 @@ class PackageListScreen extends HookConsumerWidget {
               .dark => AppStrings.lightMode,
               _ => AppStrings.darkMode,
             },
-            onPressed: () =>
-                ref.read(themeModeNotifierProvider.notifier).toggle(),
+            onPressed: () => ref.read(themeModeProvider.notifier).toggle(),
           ),
         ],
       ),
@@ -102,12 +101,10 @@ class PackageListScreen extends HookConsumerWidget {
         loading: () => const SkeletonListView(),
         error: (error, _) => ErrorView(
           error: error,
-          onRetry: () =>
-              ref.read(packageListNotifierProvider.notifier).refresh(),
+          onRetry: () => ref.read(packageListProvider.notifier).refresh(),
         ),
         data: (state) => RefreshIndicator(
-          onRefresh: () =>
-              ref.read(packageListNotifierProvider.notifier).refresh(),
+          onRefresh: () => ref.read(packageListProvider.notifier).refresh(),
           child: ListView.builder(
             controller: scrollController,
             padding: EdgeInsets.only(

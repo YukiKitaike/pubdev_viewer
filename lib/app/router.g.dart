@@ -10,18 +10,16 @@ List<RouteBase> get $appRoutes => [$packageListRoute];
 
 RouteBase get $packageListRoute => GoRouteData.$route(
   path: '/',
-
-  factory: _$PackageListRoute._fromState,
+  factory: $PackageListRoute._fromState,
   routes: [
     GoRouteData.$route(
       path: 'packages/:name',
-
-      factory: _$PackageDetailRoute._fromState,
+      factory: $PackageDetailRoute._fromState,
     ),
   ],
 );
 
-mixin _$PackageListRoute on GoRouteData {
+mixin $PackageListRoute on GoRouteData {
   static PackageListRoute _fromState(GoRouterState state) =>
       const PackageListRoute();
 
@@ -42,7 +40,7 @@ mixin _$PackageListRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$PackageDetailRoute on GoRouteData {
+mixin $PackageDetailRoute on GoRouteData {
   static PackageDetailRoute _fromState(GoRouterState state) =>
       PackageDetailRoute(name: state.pathParameters['name']!);
 

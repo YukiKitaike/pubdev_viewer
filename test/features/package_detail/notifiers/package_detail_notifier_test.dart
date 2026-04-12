@@ -27,6 +27,8 @@ void main() {
   setUp(() {
     fakeRepository = FakePackageDetailRepository();
     container = ProviderContainer(
+      // Riverpod v3 の自動リトライを無効化。エラー系テストが安定しなくなるため。
+      retry: (_, _) => null,
       overrides: [
         packageDetailRepositoryProvider.overrideWithValue(fakeRepository),
       ],
@@ -44,7 +46,7 @@ void main() {
         ..onGetPackagePublisher = _publisherCallback;
 
       final state = await container.read(
-        packageDetailNotifierProvider('http').future,
+        packageDetailProvider('http').future,
       );
 
       check(state.detail.name).equals('http');
@@ -62,7 +64,7 @@ void main() {
             );
 
       final state = await container.read(
-        packageDetailNotifierProvider('http').future,
+        packageDetailProvider('http').future,
       );
 
       check(state.publisher.publisherId).isNull();
@@ -74,12 +76,12 @@ void main() {
       fakeRepository.onGetPackagePublisher = _publisherCallback;
 
       await container
-          .read(packageDetailNotifierProvider('http').future)
+          .read(packageDetailProvider('http').future)
           .then((_) => null)
           .catchError((_) => null);
 
       final asyncValue = container.read(
-        packageDetailNotifierProvider('http'),
+        packageDetailProvider('http'),
       );
       check(asyncValue.hasError).isTrue();
     });
@@ -90,12 +92,12 @@ void main() {
         ..onGetPackagePublisher = (_) => throw const NetworkException();
 
       await container
-          .read(packageDetailNotifierProvider('http').future)
+          .read(packageDetailProvider('http').future)
           .then((_) => null)
           .catchError((_) => null);
 
       final asyncValue = container.read(
-        packageDetailNotifierProvider('http'),
+        packageDetailProvider('http'),
       );
       check(asyncValue.hasError).isTrue();
     });
@@ -106,7 +108,7 @@ void main() {
         ..onGetPackagePublisher = _publisherCallback;
 
       final state = await container.read(
-        packageDetailNotifierProvider('http').future,
+        packageDetailProvider('http').future,
       );
 
       check(state.sortedVersions).length.equals(2);
@@ -124,12 +126,10 @@ void main() {
         ..onGetPackageDetail = _detailCallback
         ..onGetPackagePublisher = _publisherCallback;
 
-      await container.read(packageDetailNotifierProvider('http').future);
+      await container.read(packageDetailProvider('http').future);
       check(fakeRepository.getPackageDetailCallCount).equals(1);
 
-      await container
-          .read(packageDetailNotifierProvider('http').notifier)
-          .refresh();
+      await container.read(packageDetailProvider('http').notifier).refresh();
       check(fakeRepository.getPackageDetailCallCount).equals(2);
     });
   });

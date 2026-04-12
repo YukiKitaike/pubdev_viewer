@@ -21,6 +21,8 @@ void main() {
   setUp(() {
     fakeRepository = FakePackageListRepository();
     container = ProviderContainer(
+      // Riverpod v3 の自動リトライを無効化。エラー系テストが安定しなくなるため。
+      retry: (_, _) => null,
       overrides: [
         packageListRepositoryProvider.overrideWithValue(fakeRepository),
       ],
@@ -37,7 +39,7 @@ void main() {
           firstPageResponse();
 
       final state = await container.read(
-        packageListNotifierProvider.future,
+        packageListProvider.future,
       );
 
       check(state.packages).length.equals(2);
@@ -55,11 +57,11 @@ void main() {
         return lastPageResponse();
       };
 
-      await container.read(packageListNotifierProvider.future);
+      await container.read(packageListProvider.future);
 
-      await container.read(packageListNotifierProvider.notifier).loadMore();
+      await container.read(packageListProvider.notifier).loadMore();
 
-      final state = container.read(packageListNotifierProvider).valueOrNull;
+      final state = container.read(packageListProvider).value;
       check(state).isNotNull();
       check(state!.packages).length.equals(2);
       check(state.nextUrl).isNull();
@@ -69,9 +71,9 @@ void main() {
       fakeRepository.onGetPackages = ({String? pageUrl}) async =>
           lastPageResponse();
 
-      await container.read(packageListNotifierProvider.future);
+      await container.read(packageListProvider.future);
 
-      await container.read(packageListNotifierProvider.notifier).loadMore();
+      await container.read(packageListProvider.notifier).loadMore();
 
       check(fakeRepository.getPackagesCallCount).equals(1);
     });
@@ -81,11 +83,11 @@ void main() {
           throw const NetworkException();
 
       await container
-          .read(packageListNotifierProvider.future)
+          .read(packageListProvider.future)
           .then((_) => null)
           .catchError((_) => null);
 
-      final asyncValue = container.read(packageListNotifierProvider);
+      final asyncValue = container.read(packageListProvider);
       check(asyncValue.hasError).isTrue();
       check(asyncValue.error).isA<NetworkException>();
     });
@@ -100,11 +102,11 @@ void main() {
         throw const NetworkException();
       };
 
-      await container.read(packageListNotifierProvider.future);
+      await container.read(packageListProvider.future);
 
-      await container.read(packageListNotifierProvider.notifier).loadMore();
+      await container.read(packageListProvider.notifier).loadMore();
 
-      final state = container.read(packageListNotifierProvider).valueOrNull;
+      final state = container.read(packageListProvider).value;
       check(state).isNotNull();
       check(state!.packages).length.equals(2);
       check(state.isLoadingMore).isFalse();
@@ -115,10 +117,10 @@ void main() {
       fakeRepository.onGetPackages = ({String? pageUrl}) async =>
           firstPageResponse();
 
-      await container.read(packageListNotifierProvider.future);
+      await container.read(packageListProvider.future);
       check(fakeRepository.getPackagesCallCount).equals(1);
 
-      await container.read(packageListNotifierProvider.notifier).refresh();
+      await container.read(packageListProvider.notifier).refresh();
       check(fakeRepository.getPackagesCallCount).equals(2);
     });
 
@@ -132,23 +134,23 @@ void main() {
         throw const NetworkException();
       };
 
-      await container.read(packageListNotifierProvider.future);
-      await container.read(packageListNotifierProvider.notifier).loadMore();
+      await container.read(packageListProvider.future);
+      await container.read(packageListProvider.notifier).loadMore();
 
-      final before = container.read(packageListNotifierProvider).valueOrNull;
+      final before = container.read(packageListProvider).value;
       check(before).isNotNull();
       check(before!.loadMoreError).isA<NetworkException>();
 
-      container.read(packageListNotifierProvider.notifier).clearLoadMoreError();
+      container.read(packageListProvider.notifier).clearLoadMoreError();
 
-      final after = container.read(packageListNotifierProvider).valueOrNull;
+      final after = container.read(packageListProvider).value;
       check(after!.loadMoreError).isNull();
     });
 
     test('loadMore 実行中に再度 loadMore を呼んでも無視される', () async {
       fakeRepository.onGetPackages = ({String? pageUrl}) async =>
           firstPageResponse();
-      await container.read(packageListNotifierProvider.future);
+      await container.read(packageListProvider.future);
 
       // Completer で 2 回目の getPackages を保留する
       final completer = Completer<PackageListResponse>();
@@ -156,11 +158,11 @@ void main() {
 
       // 1 回目の loadMore は保留中 — isLoadingMore が true になる
       unawaited(
-        container.read(packageListNotifierProvider.notifier).loadMore(),
+        container.read(packageListProvider.notifier).loadMore(),
       );
 
       // 2 回目は isLoadingMore が true のため no-op
-      await container.read(packageListNotifierProvider.notifier).loadMore();
+      await container.read(packageListProvider.notifier).loadMore();
 
       // callCount: 1 (build) + 1 (first loadMore) = 2
       check(fakeRepository.getPackagesCallCount).equals(2);

@@ -26,14 +26,14 @@ class PackageDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncState = ref.watch(
-      packageDetailNotifierProvider(packageName),
+      packageDetailProvider(packageName),
     );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(packageName),
         actions: [
-          if (asyncState.valueOrNull != null) ...[
+          if (asyncState.value != null) ...[
             _ShareButton(packageName: asyncState.requireValue.detail.name),
             _ExternalLinkButton(
               url:
@@ -47,14 +47,13 @@ class PackageDetailScreen extends ConsumerWidget {
         loading: () => const LoadingView(),
         error: (error, _) => ErrorView(
           error: error,
-          onRetry: () => ref
-              .read(packageDetailNotifierProvider(packageName).notifier)
-              .refresh(),
+          onRetry: () =>
+              ref.read(packageDetailProvider(packageName).notifier).refresh(),
         ),
         data: (state) => RefreshIndicator(
           onRefresh: () => ref
               .read(
-                packageDetailNotifierProvider(packageName).notifier,
+                packageDetailProvider(packageName).notifier,
               )
               .refresh(),
           child: SingleChildScrollView(

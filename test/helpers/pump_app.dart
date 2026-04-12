@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pubdev_viewer/app/theme.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart' show Override;
 
 /// ウィジェットテスト用の共通ヘルパー。
 ///
@@ -20,5 +21,10 @@ Widget createTestApp({
     return app;
   }
 
-  return ProviderScope(overrides: overrides, child: app);
+  // Riverpod v3 の自動リトライを無効化。エラー系テストが安定しなくなるため。
+  return ProviderScope(
+    retry: (_, _) => null,
+    overrides: overrides,
+    child: app,
+  );
 }
