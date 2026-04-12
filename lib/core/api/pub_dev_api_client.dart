@@ -1,22 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../error/app_exception.dart';
+import 'api_client.dart';
 
 part 'pub_dev_api_client.g.dart';
 
-final _logger = Logger('PubDevApiClient');
-
-/// pub.dev API との HTTP 通信を担当するクライアント。
+/// pub.dev API のエンドポイント定義。
 ///
-/// [Dio] を内部で使用し、エラー時は [AppException] サブクラスをスローする。
-class PubDevApiClient {
+/// [ApiClient] を継承し、pub.dev 固有の URL 構築を担当する。
+class PubDevApiClient extends ApiClient {
   /// [Dio] インスタンスを受け取って API クライアントを生成する。
-  PubDevApiClient(this._dio);
-
-  final Dio _dio;
+  PubDevApiClient(super.dio);
 
   static const _baseUrl = 'https://pub.dev';
 
@@ -27,54 +22,21 @@ class PubDevApiClient {
     String? pageUrl,
   }) {
     final url = pageUrl ?? '$_baseUrl/api/packages';
-    return _get(url);
+    return get(url);
   }
 
   /// 指定パッケージの詳細情報を取得する。
   Future<Map<String, dynamic>> getPackageDetail(
     String name,
   ) {
-    return _get('$_baseUrl/api/packages/$name');
+    return get('$_baseUrl/api/packages/$name');
   }
 
   /// 指定パッケージのパブリッシャー情報を取得する。
   Future<Map<String, dynamic>> getPackagePublisher(
     String name,
   ) {
-    return _get('$_baseUrl/api/packages/$name/publisher');
-  }
-
-  Future<Map<String, dynamic>> _get(String url) async {
-    _logger.info('GET $url');
-    try {
-      final response = await _dio.get<Map<String, dynamic>>(url);
-      _logger.info(
-        'GET $url -> ${response.statusCode}',
-      );
-      final data = response.data;
-      if (data == null) {
-        throw const ServerException(500, 'Empty response body');
-      }
-      return data;
-    } on DioException catch (e) {
-      _logger.severe('GET $url failed: $e');
-      switch (e.type) {
-        case DioExceptionType.connectionError:
-        case DioExceptionType.connectionTimeout:
-        case DioExceptionType.receiveTimeout:
-        case DioExceptionType.sendTimeout:
-          throw const NetworkException();
-        case DioExceptionType.badResponse:
-          throw ServerException(
-            e.response?.statusCode ?? 500,
-            'Server returned ${e.response?.statusCode}',
-          );
-        case DioExceptionType.cancel:
-        case DioExceptionType.badCertificate:
-        case DioExceptionType.unknown:
-          throw const NetworkException();
-      }
-    }
+    return get('$_baseUrl/api/packages/$name/publisher');
   }
 }
 
