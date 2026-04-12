@@ -34,7 +34,7 @@ final class PackageListNotifierProvider
 }
 
 String _$packageListNotifierHash() =>
-    r'4b1a5320d5bc82139dfbdfae60bb0503e5086055';
+    r'4ec38182b92d69048589c3703b9266f946c2b9f3';
 
 abstract class _$PackageListNotifier extends $AsyncNotifier<PackageListState> {
   FutureOr<PackageListState> build();
