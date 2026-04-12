@@ -168,11 +168,13 @@ fvm dart format .
 
 | スキル | 用途 |
 |---|---|
-| `pubdev-new-feature` | 新規 feature の追加ステップバイステップガイド |
-| `pubdev-state` | AsyncNotifier パターン・ページネーション・状態管理 |
+| `pubdev-new-feature` | 新規 feature の追加ステップバイステップガイド（各 Step は下記スキルに委譲） |
 | `pubdev-models` | Freezed + json_serializable モデルパターン |
-| `pubdev-testing` | テストパターン（Fake・Notifier・Widget） |
+| `pubdev-api-client` | Dio ベース API クライアント・Repository 層パターン・エラーハンドリング |
+| `pubdev-state` | AsyncNotifier パターン・ページネーション・状態管理 |
 | `pubdev-ui` | デザイントークン・テーマ・Widget パターン |
+| `pubdev-navigation` | GoRouter + go_router_builder 型安全ルーティング |
+| `pubdev-testing` | テストパターン（Fake・package:checks・タグ分類・createTestApp） |
 | `dart-new-syntax` | Dart 3.7+ の新機能リファレンス（Dot shorthands 等） |
 
 ### プラグイン
@@ -194,6 +196,8 @@ fvm dart format .
 | エージェント | 用途 |
 |---|---|
 | `code-reviewer` | CLAUDE.md の Critical Rules に基づくコードレビュー |
+| `pattern-reviewer` | Riverpod・Freezed・テストのパターン準拠をスキル参照でレビュー |
+| `test-reviewer` | `/pubdev-testing` スキルに基づくテストコード専用レビュー |
 
 ### Hooks
 
