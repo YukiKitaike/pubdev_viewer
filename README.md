@@ -50,10 +50,10 @@ fvm dart run build_runner build --delete-conflicting-outputs
 # skills_sync をグローバルインストール
 dart pub global activate skills_sync
 
-# プロジェクトの skills.yaml をグローバル設定にシンボリックリンク
+# プロジェクトの skills.yaml を skills_sync のグローバル設定として使う
 ln -sf "$(pwd)/skills.yaml" ~/.config/skills_sync/skills.yaml
 
-# スキルを同期（~/.claude/skills/ に配置される）
+# skills.yaml に基づきスキルを ~/.agents/skills/ にダウンロード
 skills_sync sync
 ```
 
@@ -158,7 +158,7 @@ fvm dart format .
 
 ### Skills Sync
 
-[skills_sync](https://github.com/mono0926/skills-sync) を使い、GitHub 上の公開スキルリポジトリからプロジェクトに必要なスキルを一括管理しています。`skills.yaml` にソースと取捨選択を宣言し、`skills_sync sync` で `~/.claude/skills/` へグローバル同期します。セットアップ手順は[上記](#claude-code-を使う場合追加セットアップ)を参照してください。
+[skills_sync](https://github.com/mono0926/skills-sync) を使い、GitHub 上の公開スキルリポジトリからプロジェクトに必要なスキルを一括管理しています。`skills.yaml` にソースと取捨選択を宣言し、`skills_sync sync` で `~/.agents/skills/` へグローバル同期します。セットアップ手順は[上記](#claude-code-を使う場合追加セットアップ)を参照してください。
 
 **skills.yaml の構成：**
 
