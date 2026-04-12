@@ -63,6 +63,8 @@ abstract class FeatureNameResponse with _$FeatureNameResponse {
 // lib/features/<feature_name>/models/<feature_name>_state.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../core/error/app_exception.dart';
+
 part '<feature_name>_state.freezed.dart';
 
 @freezed
@@ -71,7 +73,7 @@ abstract class FeatureNameState with _$FeatureNameState {
     @Default([]) List<FeatureNameItem> items,
     String? nextUrl,
     @Default(false) bool isLoadingMore,
-    Object? loadMoreError,
+    AppException? loadMoreError,
   }) = _FeatureNameState;
   // fromJson は書かない
 }

@@ -56,6 +56,7 @@ abstract class PackageListResponse with _$PackageListResponse {
 // lib/features/package_list/models/package_list_state.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../core/error/app_exception.dart';
 import 'package_list_item.dart';
 
 part 'package_list_state.freezed.dart';  // ← .g.dart は不要
@@ -66,7 +67,7 @@ abstract class PackageListState with _$PackageListState {
     @Default([]) List<PackageListItem> packages,
     String? nextUrl,
     @Default(false) bool isLoadingMore,
-    Object? loadMoreError,  // Exception? ではなく Object? で何でもキャッチ
+    AppException? loadMoreError,
   }) = _PackageListState;
   // fromJson は書かない
 }

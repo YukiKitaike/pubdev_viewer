@@ -46,11 +46,9 @@ class PackageListNotifier extends _$PackageListNotifier {
           nextUrl: response.nextUrl,
         ),
       );
-    } on Object catch (e) {
-      // Exception でない Error（StateError 等）も含めてキャッチする
-      final error = e is AppException ? e : NetworkException(e.toString());
+    } on AppException catch (e) {
       state = AsyncData(
-        current.copyWith(isLoadingMore: false, loadMoreError: error),
+        current.copyWith(isLoadingMore: false, loadMoreError: e),
       );
     }
   }

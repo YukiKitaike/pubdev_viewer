@@ -106,7 +106,7 @@ Future<void> loadMore() async {
         nextUrl: response.nextUrl,
       ),
     );
-  } on Exception catch (e) {
+  } on AppException catch (e) {
     // エラー時: 既存データを保持したままエラーを state に格納
     state = AsyncData(current.copyWith(isLoadingMore: false, loadMoreError: e));
   }
@@ -220,5 +220,4 @@ final publisher = await repository.getPublisher(name); // 並列にすべき
 WHY コメントが必要な典型パターン:
 - `ref.read` vs `ref.watch` の使い分け理由
 - エラーを `AsyncData` 内に保持する理由（`AsyncError` にしない理由）
-- `on Object catch` を使う理由
 - `keepAlive: true` の理由
