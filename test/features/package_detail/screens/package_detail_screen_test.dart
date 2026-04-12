@@ -74,7 +74,7 @@ void main() {
   }
 
   group('PackageDetailScreen', () {
-    testWidgets('shows loading indicator initially', (tester) async {
+    testWidgets('初期表示でローディングインジケータが表示される', (tester) async {
       final detailCompleter = Completer<PackageDetailResponse>();
       fakeRepository
         ..getPackageDetailCompleter = detailCompleter
@@ -96,7 +96,7 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('shows overview and versions on success', (tester) async {
+    testWidgets('成功時に概要とバージョンが表示される', (tester) async {
       stubSuccessResponse();
 
       await tester.pumpWidget(createTestWidget());
@@ -118,7 +118,7 @@ void main() {
     });
 
     testWidgets(
-      'shows external link icon when homepage exists',
+      'homepage が存在する場合に外部リンクアイコンが表示される',
       (tester) async {
         stubSuccessResponse();
 
@@ -130,7 +130,7 @@ void main() {
     );
 
     testWidgets(
-      'shows external link icon with repository url when homepage is null',
+      'homepage が null のとき repository URL で外部リンクアイコンが表示される',
       (tester) async {
         fakeRepository
           ..onGetPackageDetail = _detailResponseNoHomepage
@@ -144,7 +144,7 @@ void main() {
     );
 
     testWidgets(
-      'hides external link icon when both homepage and repository are null',
+      'homepage と repository が両方 null のとき外部リンクアイコンが非表示になる',
       (tester) async {
         fakeRepository
           ..onGetPackageDetail = _detailResponseNoUrl
@@ -158,7 +158,7 @@ void main() {
     );
 
     testWidgets(
-      'tapping external link icon launches homepage url',
+      '外部リンクアイコンをタップすると homepage URL が開かれる',
       (tester) async {
         final fakeUrlLauncher = _FakeUrlLauncher();
         UrlLauncherPlatform.instance = fakeUrlLauncher;
@@ -176,8 +176,7 @@ void main() {
     );
 
     testWidgets(
-      'tapping external link icon launches repository url '
-      'when homepage is null',
+      'homepage が null のとき外部リンクアイコンをタップすると repository URL が開かれる',
       (tester) async {
         final fakeUrlLauncher = _FakeUrlLauncher();
         UrlLauncherPlatform.instance = fakeUrlLauncher;
@@ -199,7 +198,7 @@ void main() {
       },
     );
 
-    testWidgets('shows error view on failure', (tester) async {
+    testWidgets('エラー時にエラー画面が表示される', (tester) async {
       fakeRepository.onGetPackageDetail = (name) =>
           throw const NetworkException();
       // ignore: cascade_invocations

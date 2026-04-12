@@ -36,7 +36,7 @@ void main() {
   });
 
   group('PackageListNotifier', () {
-    test('build fetches initial packages', () async {
+    test('build が初期パッケージを取得する', () async {
       fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
 
       final state = await container.read(
@@ -48,7 +48,7 @@ void main() {
       expect(state.nextUrl, isNotNull);
     });
 
-    test('loadMore appends packages', () async {
+    test('loadMore がパッケージを追加する', () async {
       var callCount = 0;
       fakeRepository.onGetPackages = ({String? pageUrl}) async {
         callCount++;
@@ -67,7 +67,7 @@ void main() {
       expect(state?.nextUrl, isNull);
     });
 
-    test('loadMore does nothing when nextUrl is null', () async {
+    test('nextUrl が null のとき loadMore は何もしない', () async {
       fakeRepository.onGetPackages = ({String? pageUrl}) async => _lastPage();
 
       await container.read(packageListNotifierProvider.future);
@@ -78,7 +78,7 @@ void main() {
       expect(fakeRepository.getPackagesCallCount, 1);
     });
 
-    test('build sets AsyncError when repository throws', () async {
+    test('repository が例外を投げると build が AsyncError になる', () async {
       fakeRepository.onGetPackages = ({String? pageUrl}) =>
           throw const NetworkException();
 
@@ -92,7 +92,7 @@ void main() {
       expect(asyncValue.error, isA<NetworkException>());
     });
 
-    test('loadMore preserves existing data on error', () async {
+    test('loadMore はエラー時に既存データを保持する', () async {
       var callCount = 0;
       fakeRepository.onGetPackages = ({String? pageUrl}) async {
         callCount++;
@@ -113,7 +113,7 @@ void main() {
       expect(state.loadMoreError, isA<NetworkException>());
     });
 
-    test('refresh triggers rebuild', () async {
+    test('refresh が再ビルドをトリガーする', () async {
       fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
 
       await container.read(packageListNotifierProvider.future);
@@ -123,7 +123,7 @@ void main() {
       expect(fakeRepository.getPackagesCallCount, 2);
     });
 
-    test('clearLoadMoreError resets loadMoreError to null', () async {
+    test('clearLoadMoreError が loadMoreError を null にリセットする', () async {
       var callCount = 0;
       fakeRepository.onGetPackages = ({String? pageUrl}) async {
         callCount++;
@@ -146,7 +146,7 @@ void main() {
       expect(after!.loadMoreError, isNull);
     });
 
-    test('loadMore is no-op while already loading more', () async {
+    test('loadMore 実行中に再度 loadMore を呼んでも無視される', () async {
       fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
       await container.read(packageListNotifierProvider.future);
 

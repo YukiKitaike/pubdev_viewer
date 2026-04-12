@@ -8,7 +8,7 @@ import 'helpers/fakes.dart';
 import 'helpers/fixtures.dart';
 
 void main() {
-  testWidgets('App renders home screen', (tester) async {
+  testWidgets('アプリがホーム画面を描画する', (tester) async {
     final fakeRepo = FakePackageListRepository()
       ..onGetPackages = ({String? pageUrl}) async =>
           PackageListResponse.fromJson(

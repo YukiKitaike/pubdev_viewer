@@ -34,7 +34,7 @@ void main() {
   }
 
   group('PackageListScreen', () {
-    testWidgets('shows loading indicator initially', (tester) async {
+    testWidgets('初期表示でローディングインジケータが表示される', (tester) async {
       final completer = Completer<PackageListResponse>();
       fakeRepository.getPackagesCompleter = completer;
 
@@ -54,7 +54,7 @@ void main() {
       await tester.pump();
     });
 
-    testWidgets('shows package list when data loads', (tester) async {
+    testWidgets('データ取得後にパッケージ一覧が表示される', (tester) async {
       var callCount = 0;
       fakeRepository.onGetPackages = ({String? pageUrl}) async {
         callCount++;
@@ -78,7 +78,7 @@ void main() {
       expect(find.text('v5.8.0'), findsOneWidget);
     });
 
-    testWidgets('shows error view on failure', (tester) async {
+    testWidgets('エラー時にエラー画面が表示される', (tester) async {
       fakeRepository.onGetPackages = ({String? pageUrl}) =>
           throw const NetworkException();
 
@@ -89,7 +89,7 @@ void main() {
       expect(find.byIcon(Icons.cloud_off_rounded), findsOneWidget);
     });
 
-    testWidgets('retry button refetches data', (tester) async {
+    testWidgets('リトライボタンでデータを再取得する', (tester) async {
       var callCount = 0;
       fakeRepository.onGetPackages = ({String? pageUrl}) async {
         callCount++;

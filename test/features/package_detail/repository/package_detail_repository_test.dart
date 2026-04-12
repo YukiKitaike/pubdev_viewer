@@ -15,7 +15,7 @@ void main() {
   });
 
   group('PackageDetailRepository', () {
-    test('getPackageDetail returns parsed response', () async {
+    test('getPackageDetail がパース済みレスポンスを返す', () async {
       fakeApiClient.onGetPackageDetail = (name) async =>
           Map<String, dynamic>.from(packageDetailResponseJson);
 
@@ -26,7 +26,7 @@ void main() {
       expect(fakeApiClient.getPackageDetailCalls, ['http']);
     });
 
-    test('getPackagePublisher returns parsed response', () async {
+    test('getPackagePublisher がパース済みレスポンスを返す', () async {
       fakeApiClient.onGetPackagePublisher = (name) async =>
           Map<String, dynamic>.from(packagePublisherResponseJson);
 
@@ -36,7 +36,7 @@ void main() {
       expect(fakeApiClient.getPackagePublisherCalls, ['http']);
     });
 
-    test('getPackageDetail rethrows NetworkException', () {
+    test('getPackageDetail が NetworkException を再スローする', () {
       fakeApiClient.onGetPackageDetail = (name) =>
           throw const NetworkException();
 
@@ -46,7 +46,7 @@ void main() {
       );
     });
 
-    test('getPackagePublisher rethrows ServerException', () {
+    test('getPackagePublisher が ServerException を再スローする', () {
       fakeApiClient.onGetPackagePublisher = (name) =>
           throw const ServerException(500);
 

@@ -5,7 +5,7 @@ import '../../../helpers/fixtures.dart';
 
 void main() {
   group('PackageListResponse', () {
-    test('fromJson parses correctly', () {
+    test('fromJson が正しくパースする', () {
       final response = PackageListResponse.fromJson(
         Map<String, dynamic>.from(packageListResponseJson),
       );
@@ -20,7 +20,7 @@ void main() {
       expect(response.packages[1].name, 'dio');
     });
 
-    test('fromJson parses last page with null next_url', () {
+    test('fromJson が next_url null の最終ページをパースする', () {
       final response = PackageListResponse.fromJson(
         Map<String, dynamic>.from(
           packageListResponseLastPageJson,

@@ -17,7 +17,7 @@ void main() {
   });
 
   group('getPackages', () {
-    test('returns parsed JSON on success', () async {
+    test('成功時にパース済み JSON を返す', () async {
       final responseData = <String, dynamic>{
         'next_url': 'https://pub.dev/api/packages?page=2',
         'packages': <dynamic>[],
@@ -34,7 +34,7 @@ void main() {
       expect(fakeDio.getCalls, ['https://pub.dev/api/packages']);
     });
 
-    test('uses pageUrl when provided', () async {
+    test('pageUrl が指定された場合にそれを使用する', () async {
       fakeDio.onGet = <T>(url) async => Response<T>(
         data: <String, dynamic>{'packages': <dynamic>[]} as T,
         statusCode: 200,
@@ -52,8 +52,8 @@ void main() {
     });
   });
 
-  group('error handling', () {
-    test('throws NetworkException on connection error', () {
+  group('エラーハンドリング', () {
+    test('接続エラー時に NetworkException をスローする', () {
       fakeDio.onGet = <T>(url) {
         throw DioException(
           type: DioExceptionType.connectionError,
@@ -67,7 +67,7 @@ void main() {
       );
     });
 
-    test('throws NetworkException on connection timeout', () {
+    test('接続タイムアウト時に NetworkException をスローする', () {
       fakeDio.onGet = <T>(url) {
         throw DioException(
           type: DioExceptionType.connectionTimeout,
@@ -81,7 +81,7 @@ void main() {
       );
     });
 
-    test('throws NetworkException on receive timeout', () {
+    test('受信タイムアウト時に NetworkException をスローする', () {
       fakeDio.onGet = <T>(url) {
         throw DioException(
           type: DioExceptionType.receiveTimeout,
@@ -95,7 +95,7 @@ void main() {
       );
     });
 
-    test('throws NetworkException on send timeout', () {
+    test('送信タイムアウト時に NetworkException をスローする', () {
       fakeDio.onGet = <T>(url) {
         throw DioException(
           type: DioExceptionType.sendTimeout,
@@ -109,7 +109,7 @@ void main() {
       );
     });
 
-    test('throws NetworkException on SocketException', () {
+    test('SocketException 時に NetworkException をスローする', () {
       fakeDio.onGet = <T>(url) {
         throw DioException(
           requestOptions: RequestOptions(),
@@ -123,7 +123,7 @@ void main() {
       );
     });
 
-    test('throws ServerException with status code on server error', () {
+    test('サーバーエラー時にステータスコード付き ServerException をスローする', () {
       fakeDio.onGet = <T>(url) {
         throw DioException(
           type: DioExceptionType.badResponse,
@@ -147,7 +147,7 @@ void main() {
       );
     });
 
-    test('throws ServerException when response data is null', () {
+    test('レスポンスデータが null のとき ServerException をスローする', () {
       fakeDio.onGet = <T>(url) async => Response<T>(
         requestOptions: RequestOptions(),
       );
@@ -160,7 +160,7 @@ void main() {
   });
 
   group('getPackageDetail', () {
-    test('calls correct URL', () async {
+    test('正しい URL を呼び出す', () async {
       fakeDio.onGet = <T>(url) async => Response<T>(
         data: <String, dynamic>{'name': 'http'} as T,
         statusCode: 200,
@@ -177,7 +177,7 @@ void main() {
   });
 
   group('getPackagePublisher', () {
-    test('calls correct URL', () async {
+    test('正しい URL を呼び出す', () async {
       fakeDio.onGet = <T>(url) async => Response<T>(
         data: <String, dynamic>{'publisherId': 'dart.dev'} as T,
         statusCode: 200,

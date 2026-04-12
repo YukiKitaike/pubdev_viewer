@@ -6,7 +6,7 @@ import '../../../helpers/fixtures.dart';
 
 void main() {
   group('PackageDetailResponse', () {
-    test('fromJson parses correctly', () {
+    test('fromJson が正しくパースする', () {
       final response = PackageDetailResponse.fromJson(
         Map<String, dynamic>.from(
           packageDetailResponseJson,
@@ -28,7 +28,7 @@ void main() {
   });
 
   group('PackagePublisherResponse', () {
-    test('fromJson parses with publisherId', () {
+    test('fromJson が publisherId 付きでパースする', () {
       final response = PackagePublisherResponse.fromJson(
         Map<String, dynamic>.from(
           packagePublisherResponseJson,
@@ -38,7 +38,7 @@ void main() {
       expect(response.publisherId, 'dart.dev');
     });
 
-    test('fromJson parses with null publisherId', () {
+    test('fromJson が publisherId null でパースする', () {
       final response = PackagePublisherResponse.fromJson(
         Map<String, dynamic>.from(
           packagePublisherNullResponseJson,

@@ -15,7 +15,7 @@ void main() {
   });
 
   group('PackageListRepository', () {
-    test('getPackages returns parsed response', () async {
+    test('getPackages がパース済みレスポンスを返す', () async {
       fakeApiClient.onGetPackages = ({String? pageUrl}) async =>
           Map<String, dynamic>.from(packageListResponseJson);
 
@@ -26,7 +26,7 @@ void main() {
       expect(fakeApiClient.getPackagesCalls, hasLength(1));
     });
 
-    test('getPackages passes pageUrl to api client', () async {
+    test('getPackages が pageUrl を API クライアントに渡す', () async {
       const url = 'https://pub.dev/api/packages?page=2';
       fakeApiClient.onGetPackages = ({String? pageUrl}) async =>
           Map<String, dynamic>.from(packageListResponseLastPageJson);
@@ -38,7 +38,7 @@ void main() {
       expect(fakeApiClient.getPackagesCalls, [url]);
     });
 
-    test('getPackages rethrows NetworkException', () {
+    test('getPackages が NetworkException を再スローする', () {
       fakeApiClient.onGetPackages = ({String? pageUrl}) =>
           throw const NetworkException();
 
@@ -48,7 +48,7 @@ void main() {
       );
     });
 
-    test('getPackages rethrows ServerException', () {
+    test('getPackages が ServerException を再スローする', () {
       fakeApiClient.onGetPackages = ({String? pageUrl}) =>
           throw const ServerException(500);
 

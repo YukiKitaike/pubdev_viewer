@@ -8,6 +8,26 @@ description: >
 
 # テストパターン（pubdev_viewer）
 
+## テストケース名は日本語で記述する
+
+`test()` / `testWidgets()` の説明文字列は **すべて日本語** で書く。
+`group()` はクラス名をそのまま使うため英語のまま。
+
+```dart
+// ✅ 正しい例
+group('PackageListNotifier', () {
+  test('build が初期パッケージを取得する', () async { ... });
+  test('loadMore がパッケージを追加する', () async { ... });
+});
+
+// ❌ 英語で書かない
+group('PackageListNotifier', () {
+  test('build fetches initial packages', () async { ... });
+});
+```
+
+---
+
 ## ファイル配置ルール
 
 `lib/` の構造を `test/` 配下にそのまま鏡像する:

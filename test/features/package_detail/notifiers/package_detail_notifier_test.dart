@@ -37,7 +37,7 @@ void main() {
   });
 
   group('PackageDetailNotifier', () {
-    test('build fetches detail and publisher in parallel', () async {
+    test('build が detail と publisher を並列取得する', () async {
       fakeRepository
         ..onGetPackageDetail = _detailResponse
         ..onGetPackagePublisher = _publisherResponse;
@@ -52,7 +52,7 @@ void main() {
       expect(fakeRepository.getPackagePublisherCallCount, 1);
     });
 
-    test('handles null publisherId', () async {
+    test('publisherId が null のケースを処理する', () async {
       fakeRepository
         ..onGetPackageDetail = _detailResponse
         ..onGetPackagePublisher = (name) async =>
@@ -67,7 +67,7 @@ void main() {
       expect(state.publisher.publisherId, isNull);
     });
 
-    test('sets AsyncError when getPackageDetail throws', () async {
+    test('getPackageDetail が例外を投げると AsyncError になる', () async {
       fakeRepository.onGetPackageDetail = (_) => throw const NetworkException();
       // ignore: cascade_invocations
       fakeRepository.onGetPackagePublisher = _publisherResponse;
@@ -83,7 +83,7 @@ void main() {
       expect(asyncValue.hasError, isTrue);
     });
 
-    test('refresh triggers rebuild', () async {
+    test('refresh が再ビルドをトリガーする', () async {
       fakeRepository
         ..onGetPackageDetail = _detailResponse
         ..onGetPackagePublisher = _publisherResponse;
