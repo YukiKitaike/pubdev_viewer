@@ -45,17 +45,6 @@
     "marionette"
   ],
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -qE '\\.(g|freezed)\\.dart'; then echo 'BLOCK: generated file — run build_runner instead'; exit 1; fi"
-          }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
