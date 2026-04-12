@@ -28,7 +28,10 @@
       "mcp__marionette__hot_reload",
       "mcp__marionette__get_logs",
       "Bash(marionette --uri *)",
-      "Edit(/.claude/skills/**)"
+      "Edit(/.claude/skills/pubdev-new-feature/**)",
+      "Edit(/.claude/skills/pubdev-state/**)",
+      "Edit(/.claude/skills/pubdev-models/**)",
+      "Edit(/.claude/skills/pubdev-ui/**)"
     ],
     "deny": [
       "Bash(git push:*)",
