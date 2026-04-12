@@ -101,19 +101,10 @@ AsyncNotifier の build/loadMore/refresh/エラーハンドリングは `/pubdev
 
 ---
 
-## Step 5: ルート登録
+## Step 5: ルート登録 → `/pubdev-navigation`
 
-`lib/app/router.dart` に型安全ルートを追加:
-
-```dart
-@TypedGoRoute<FeatureNameRoute>(path: '/feature')
-class FeatureNameRoute extends GoRouteData {
-  const FeatureNameRoute();
-  @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const FeatureNameScreen();
-}
-```
+`lib/app/router.dart` に型安全ルートを追加する。
+TypedGoRoute・GoRouteData・パスパラメータ・遷移方法は `/pubdev-navigation` を参照。
 
 コード生成: `fvm dart run build_runner build -d`
 
