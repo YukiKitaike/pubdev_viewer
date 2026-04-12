@@ -131,12 +131,12 @@ class _PackageHeroHeader extends StatelessWidget {
         AppSpacing.xl,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           Text(
             detail.name,
             style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w700,
+              fontWeight: .w700,
               letterSpacing: _titleLetterSpacing,
             ),
           ),
@@ -145,7 +145,7 @@ class _PackageHeroHeader extends StatelessWidget {
             detail.latest.version,
             style: GoogleFonts.jetBrainsMono(
               fontSize: AppTextSize.mono14,
-              fontWeight: FontWeight.w500,
+              fontWeight: .w500,
               color: primary,
             ),
           ),
@@ -162,7 +162,7 @@ class _PackageHeroHeader extends StatelessWidget {
                   vertical: AppSpacing.xs,
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: .min,
                   children: [
                     Icon(
                       Icons.verified_outlined,
@@ -174,7 +174,7 @@ class _PackageHeroHeader extends StatelessWidget {
                       publisher.publisherId!,
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.onSecondaryContainer,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: .w500,
                       ),
                     ),
                   ],
@@ -223,7 +223,7 @@ class _ExternalLinkButton extends StatelessWidget {
       onPressed: () async {
         final success = await launchUrl(
           Uri.parse(url!),
-          mode: LaunchMode.externalApplication,
+          mode: .externalApplication,
         );
         if (!success && context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

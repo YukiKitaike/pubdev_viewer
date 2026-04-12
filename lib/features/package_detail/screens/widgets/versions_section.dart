@@ -26,7 +26,7 @@ class VersionsSection extends StatelessWidget {
       child: Padding(
         padding: cardTheme.padding,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             const SectionHeader(label: AppStrings.sectionVersions),
             const Divider(height: 20),
@@ -72,7 +72,7 @@ class _VersionTimelineItem extends StatelessWidget {
     // stretch だけでは子の高さが決まらない。
     return IntrinsicHeight(
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: .stretch,
         children: [
           // タイムラインのドット & ライン
           SizedBox(
@@ -87,7 +87,7 @@ class _VersionTimelineItem extends StatelessWidget {
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: isLatest ? primary : lineColor,
-                        shape: BoxShape.circle,
+                        shape: .circle,
                         border: isLatest ? null : Border.all(color: lineColor),
                       ),
                     ),
@@ -119,7 +119,7 @@ class _VersionTimelineItem extends StatelessWidget {
                     version.version,
                     style: GoogleFonts.jetBrainsMono(
                       fontSize: AppTextSize.mono12,
-                      fontWeight: isLatest ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight: isLatest ? .w600 : .w400,
                       color: isLatest
                           ? theme.colorScheme.onSurface
                           : theme.colorScheme.onSurfaceVariant,
@@ -141,7 +141,7 @@ class _VersionTimelineItem extends StatelessWidget {
                           AppStrings.latestBadge,
                           style: GoogleFonts.jetBrainsMono(
                             fontSize: AppTextSize.mono10,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: .w700,
                             color: primary,
                           ),
                         ),

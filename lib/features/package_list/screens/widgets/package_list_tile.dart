@@ -66,7 +66,7 @@ class _PackageListTileState extends State<PackageListTile> {
             border: Border.all(color: tokens.cardBorder),
             boxShadow: cardElevatedShadow(
               theme.colorScheme.primary,
-              isDark: theme.brightness == Brightness.dark,
+              isDark: theme.brightness == .dark,
             ),
           ),
           child: Material(
@@ -84,7 +84,7 @@ class _PackageListTileState extends State<PackageListTile> {
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: .start,
                   children: [
                     SizedBox(
                       width: _avatarSize,
@@ -103,7 +103,7 @@ class _PackageListTileState extends State<PackageListTile> {
                             widget.package.name[0].toUpperCase(),
                             style: theme.textTheme.titleMedium?.copyWith(
                               color: AppColors.avatarText,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: .w700,
                             ),
                           ),
                         ),
@@ -112,7 +112,7 @@ class _PackageListTileState extends State<PackageListTile> {
                     const Gap(AppSpacing.md),
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: .start,
                         children: [
                           Row(
                             children: [
@@ -120,10 +120,10 @@ class _PackageListTileState extends State<PackageListTile> {
                                 child: Text(
                                   widget.package.name,
                                   style: theme.textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: .w600,
                                   ),
                                   maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                  overflow: .ellipsis,
                                 ),
                               ),
                               const Gap(AppSpacing.sm),
@@ -147,7 +147,7 @@ class _PackageListTileState extends State<PackageListTile> {
                                     'v${widget.package.latest.version}',
                                     style: GoogleFonts.jetBrainsMono(
                                       fontSize: AppTextSize.mono10,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: .w600,
                                       color: theme.colorScheme.primary,
                                     ),
                                   ),
@@ -163,7 +163,7 @@ class _PackageListTileState extends State<PackageListTile> {
                               height: _descriptionLineHeight,
                             ),
                             maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                            overflow: .ellipsis,
                           ),
                         ],
                       ),

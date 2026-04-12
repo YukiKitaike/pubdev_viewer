@@ -33,7 +33,7 @@ class SectionHeader extends StatelessWidget {
         Text(
           label,
           style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w700,
+            fontWeight: .w700,
             letterSpacing: _letterSpacing,
           ),
         ),

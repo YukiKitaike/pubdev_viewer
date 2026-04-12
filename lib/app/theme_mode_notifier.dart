@@ -9,17 +9,17 @@ part 'theme_mode_notifier.g.dart';
 @Riverpod(keepAlive: true)
 class ThemeModeNotifier extends _$ThemeModeNotifier {
   @override
-  ThemeMode build() => ThemeMode.system;
+  ThemeMode build() => .system;
 
   void toggle() {
     state = switch (state) {
-      ThemeMode.dark => ThemeMode.light,
-      ThemeMode.light => ThemeMode.dark,
+      .dark => .light,
+      .light => .dark,
       // system モードの「今の明暗」は PlatformDispatcher で確認し、逆に切り替える。
-      ThemeMode.system =>
-        PlatformDispatcher.instance.platformBrightness == Brightness.dark
-            ? ThemeMode.light
-            : ThemeMode.dark,
+      .system =>
+        PlatformDispatcher.instance.platformBrightness == .dark
+            ? .light
+            : .dark,
     };
   }
 }

@@ -25,7 +25,7 @@ class OverviewSection extends StatelessWidget {
       child: Padding(
         padding: cardTheme.padding,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             const SectionHeader(label: AppStrings.sectionOverview),
             const Divider(height: 20),

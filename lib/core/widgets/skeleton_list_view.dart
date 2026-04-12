@@ -47,72 +47,90 @@ class SkeletonTile extends StatelessWidget {
         horizontal: AppSpacing.lg,
         vertical: AppSpacing.xs,
       ),
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: AppColors.shimmerPlaceholder,
           borderRadius: BorderRadius.circular(AppRadius.card),
         ),
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: AppColors.shimmerPlaceholder,
-                borderRadius: BorderRadius.circular(AppRadius.avatar),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Row(
+            crossAxisAlignment: .start,
+            children: [
+              SizedBox(
+                width: 44,
+                height: 44,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: AppColors.shimmerPlaceholder,
+                    borderRadius: BorderRadius.circular(AppRadius.avatar),
+                  ),
+                ),
               ),
-            ),
-            const Gap(AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 14,
-                          decoration: BoxDecoration(
-                            color: AppColors.shimmerPlaceholder,
-                            borderRadius: BorderRadius.circular(
-                              AppRadius.skeleton,
+              const Gap(AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 14,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: AppColors.shimmerPlaceholder,
+                                borderRadius: BorderRadius.circular(
+                                  AppRadius.skeleton,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const Gap(AppSpacing.sm),
-                      Container(
-                        width: 48,
-                        height: 20,
+                        const Gap(AppSpacing.sm),
+                        SizedBox(
+                          width: 48,
+                          height: 20,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: AppColors.shimmerPlaceholder,
+                              borderRadius: BorderRadius.circular(
+                                AppRadius.full,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(AppSpacing.sm),
+                    SizedBox(
+                      height: 12,
+                      child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: AppColors.shimmerPlaceholder,
-                          borderRadius: BorderRadius.circular(AppRadius.full),
+                          borderRadius: BorderRadius.circular(
+                            AppRadius.skeleton,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                  const Gap(AppSpacing.sm),
-                  Container(
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: AppColors.shimmerPlaceholder,
-                      borderRadius: BorderRadius.circular(AppRadius.skeleton),
                     ),
-                  ),
-                  const Gap(AppSpacing.xs),
-                  Container(
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: AppColors.shimmerPlaceholder,
-                      borderRadius: BorderRadius.circular(AppRadius.skeleton),
+                    const Gap(AppSpacing.xs),
+                    SizedBox(
+                      height: 12,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: AppColors.shimmerPlaceholder,
+                          borderRadius: BorderRadius.circular(
+                            AppRadius.skeleton,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

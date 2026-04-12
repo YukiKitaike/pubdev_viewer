@@ -35,7 +35,7 @@ class ErrorView extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xxxl),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             SizedBox(
               width: 80,
@@ -43,7 +43,7 @@ class ErrorView extends StatelessWidget {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surfaceContainerHighest,
-                  shape: BoxShape.circle,
+                  shape: .circle,
                 ),
                 child: Icon(
                   Icons.cloud_off_rounded,
@@ -56,13 +56,13 @@ class ErrorView extends StatelessWidget {
             Text(
               _title,
               style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
+                fontWeight: .w700,
               ),
             ),
             const Gap(AppSpacing.sm),
             Text(
               _message,
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 height: 1.6,

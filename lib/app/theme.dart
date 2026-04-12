@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
 
-final ThemeData appLightTheme = _buildTheme(Brightness.light);
-final ThemeData appDarkTheme = _buildTheme(Brightness.dark);
+final ThemeData appLightTheme = _buildTheme(.light);
+final ThemeData appDarkTheme = _buildTheme(.dark);
 
 ThemeData _buildTheme(Brightness brightness) {
-  final isLight = brightness == Brightness.light;
+  final isLight = brightness == .light;
   final colorScheme = ColorScheme.fromSeed(
     seedColor: AppColors.pubBlue,
     brightness: brightness,
@@ -44,7 +44,7 @@ ThemeData _buildTheme(Brightness brightness) {
       foregroundColor: colorScheme.onSurface,
       titleTextStyle: GoogleFonts.notoSansJp(
         fontSize: 20,
-        fontWeight: FontWeight.w700,
+        fontWeight: .w700,
         color: colorScheme.onSurface,
       ),
       // M3 デフォルトの surfaceTint（スクロール時に紫がかる挙動）を無効化。
