@@ -168,6 +168,8 @@ class PackageListScreen extends HookConsumerWidget {
 一時的なローカル状態（スクロール・アニメーション）は Hooks で管理。
 Riverpod に上げない。
 
+ref.listen の副作用パターン（Snackbar 表示・エラークリア等）は `/pubdev-state` を参照。
+
 ---
 
 ## プライベート Widget クラス（ヘルパーメソッドではなくクラス）

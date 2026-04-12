@@ -159,6 +159,8 @@ class PackageListScreen extends HookConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('追加読み込みに失敗しました')),
         );
+        // エラーを即座にクリアする。クリアしないと state が変わるたびに
+        // ref.listen が再発火し、同じ Snackbar が繰り返し表示される。
         ref.read(packageListNotifierProvider.notifier).clearLoadMoreError();
       }
     });

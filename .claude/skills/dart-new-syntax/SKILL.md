@@ -134,6 +134,36 @@ for (final _ in list) { count++; }
 
 ---
 
+## プロジェクトでの活用例
+
+このアプリで実際に Dot Shorthand が使われている箇所:
+
+```dart
+// lib/features/package_list/screens/package_list_screen.dart
+// テーマモード切り替えアイコンの選択
+icon: Icon(
+  switch (themeMode) {
+    .dark => Icons.light_mode_outlined,
+    _ => Icons.dark_mode_outlined,
+  },
+),
+```
+
+```dart
+// lib/features/package_detail/screens/package_detail_screen.dart
+// プラットフォーム別の ScrollPhysics 切り替え
+physics: switch (Theme.of(context).platform) {
+  .iOS => const BouncingScrollPhysics(
+    parent: AlwaysScrollableScrollPhysics(),
+  ),
+  _ => const ClampingScrollPhysics(
+    parent: AlwaysScrollableScrollPhysics(),
+  ),
+},
+```
+
+---
+
 ## バージョン別機能マトリクス
 
 | 機能 | 導入バージョン | 概要 |

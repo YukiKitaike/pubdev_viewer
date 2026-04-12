@@ -37,6 +37,8 @@ lib/features/package_list/repository/package_list_repository.dart
 
 `@GenerateMocks` + mockito の Mock は使わない。
 `Fake` + `implements` でテストダブルを作り、コールバックプロパティで挙動を設定する。
+Fake は挙動が明示的で、Completer による非同期制御が可能。mockito の `when`/`verify`
+よりテストコードの可読性が高く、実行時型エラーも起きにくい。
 
 ```dart
 // test/helpers/fakes.dart の実際のパターン
@@ -287,3 +289,12 @@ tearDown(() {
 fakeRepository.onGetPackages = ({_}) async =>
     PackageListResponse.fromJson({'next_url': null, 'packages': []}); // fixtures を使う
 ```
+
+---
+
+### WHY コメントの典型例
+
+- `Map<String, dynamic>.from()` でコピーする理由（const マップを直接渡すと内部変換で UnmodifiableMapError）
+- `tearDown` で `container.dispose()` する理由（provider のリソースリーク防止）
+- Completer でテスト終了前に `complete()` する理由（未完了 future が残ると dispose エラー）
+- Fake にコールバックプロパティを使う理由（テストごとに挙動を差し替え可能にする）

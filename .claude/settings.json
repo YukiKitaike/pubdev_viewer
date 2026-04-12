@@ -31,7 +31,8 @@
       "Edit(/.claude/skills/pubdev-new-feature/**)",
       "Edit(/.claude/skills/pubdev-state/**)",
       "Edit(/.claude/skills/pubdev-models/**)",
-      "Edit(/.claude/skills/pubdev-ui/**)"
+      "Edit(/.claude/skills/pubdev-ui/**)",
+      "Edit(/.claude/skills/pubdev-api-client/**)"
     ],
     "deny": [
       "Bash(git push:*)",

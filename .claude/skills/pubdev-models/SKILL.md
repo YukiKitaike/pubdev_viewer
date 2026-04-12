@@ -22,6 +22,7 @@ Entity クラスや Domain クラスを別に作らない。API の形状と UI 
 ## API Response モデル
 
 `part *.g.dart` を含む。`fromJson` ファクトリを定義する。
+snake_case → camelCase の一括変換には `@JsonSerializable(fieldRename: FieldRename.snake)` を使う。
 
 ```dart
 // lib/features/package_list/models/package_list_response.dart
@@ -34,8 +35,9 @@ part 'package_list_response.g.dart';  // ← json_serializable が生成
 
 @freezed
 abstract class PackageListResponse with _$PackageListResponse {
+  @JsonSerializable(fieldRename: FieldRename.snake) // snake_case 一括変換
   const factory PackageListResponse({
-    @JsonKey(name: 'next_url') String? nextUrl,  // snake_case → camelCase
+    String? nextUrl,                          // next_url → nextUrl に自動変換
     required List<PackageListItem> packages,
   }) = _PackageListResponse;
 
@@ -77,13 +79,39 @@ abstract class PackageListState with _$PackageListState {
 
 ---
 
-## `@JsonKey` の使い方
+## snake_case マッピング
 
-JSON キーが Dart フィールド名と異なる場合のみ使用する。
+API が返す snake_case キーを camelCase フィールドに変換するには、
+ファクトリコンストラクタに `@JsonSerializable(fieldRename: FieldRename.snake)` を付けて一括変換する。
 
 ```dart
-@JsonKey(name: 'published_at') DateTime? publishedAt,  // ✅ 必要な場合のみ
-String? version,                                        // ✅ 同名なら不要
+@freezed
+abstract class PackageListVersion with _$PackageListVersion {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory PackageListVersion({
+    required String version,
+    String? archiveUrl,    // archive_url → archiveUrl に自動変換
+  }) = _PackageListVersion;
+
+  factory PackageListVersion.fromJson(Map<String, dynamic> json) =>
+      _$PackageListVersionFromJson(json);
+}
+```
+
+## `@JsonKey` の使い方（例外ケースのみ）
+
+`fieldRename: FieldRename.snake` で対応できない場合にのみ `@JsonKey` を使う:
+
+```dart
+// ✅ fieldRename では変換できない特殊なキー名
+@JsonKey(name: 'pub_sub_topic') String? pubSubTopic,
+
+// ✅ DateTime の変換（共有コンバーターを使う）
+@JsonKey(fromJson: dateTimeFromIso8601, toJson: dateTimeToIso8601)
+required DateTime published,
+
+// ✅ API がフィールドを省略する可能性がある場合のデフォルト値
+@JsonKey(defaultValue: <String>[]) List<String> topics,
 ```
 
 ### DateTime フィールドの JSON 変換
@@ -149,9 +177,8 @@ fvm dart run build_runner build -d
 // ❌ State モデルに fromJson を書く
 factory PackageListState.fromJson(Map<String, dynamic> json) => ...
 
-// ❌ @JsonSerializable を直接使う（@freezed が内部で呼ぶので不要）
-@JsonSerializable()
-class MyModel { ... }
+// ❌ @JsonKey(name: 'next_url') を個別に書く（fieldRename で一括変換する）
+@JsonKey(name: 'next_url') String? nextUrl,
 
 // ❌ 不要な toJson を定義する（ローカル保存などで実際に必要になるまで書かない）
 Map<String, dynamic> toJson() => _$MyModelToJson(this);
