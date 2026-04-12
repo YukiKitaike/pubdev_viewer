@@ -24,7 +24,7 @@ class ApiClient {
     } on DioException catch (e) {
       // DioException を AppException に変換。ErrorView がユーザー向けメッセージを
       // 出し分けるためにネットワーク系とサーバー系を分類する。
-      _logger.severe('GET $url failed: $e');
+      _logger.severe('GET $url failed', e);
       switch (e.type) {
         case DioExceptionType.connectionError:
         case DioExceptionType.connectionTimeout:
