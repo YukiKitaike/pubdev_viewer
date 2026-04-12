@@ -1,0 +1,73 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:pubdev_viewer/core/error/app_exception.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
+import 'package:pubdev_viewer/core/widgets/error_view.dart';
+
+void main() {
+  Widget buildSubject({
+    required Object error,
+    required VoidCallback onRetry,
+  }) {
+    return MaterialApp(
+      home: Scaffold(
+        body: ErrorView(error: error, onRetry: onRetry),
+      ),
+    );
+  }
+
+  group('ErrorView', () {
+    testWidgets('NetworkException でネットワークエラーのタイトルとメッセージが表示される', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        buildSubject(error: const NetworkException(), onRetry: () {}),
+      );
+
+      expect(find.text(AppStrings.networkErrorTitle), findsOneWidget);
+      expect(find.text(AppStrings.networkErrorMessage), findsOneWidget);
+    });
+
+    testWidgets('ServerException でサーバーエラーのタイトルとメッセージが表示される', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        buildSubject(error: const ServerException(500), onRetry: () {}),
+      );
+
+      expect(find.text(AppStrings.serverErrorTitle), findsOneWidget);
+      expect(find.text(AppStrings.serverErrorMessage), findsOneWidget);
+    });
+
+    testWidgets('未知の例外で予期しないエラーのタイトルとメッセージが表示される', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        buildSubject(error: Exception('unknown'), onRetry: () {}),
+      );
+
+      expect(find.text(AppStrings.unexpectedErrorTitle), findsOneWidget);
+      expect(find.text(AppStrings.unexpectedErrorMessage), findsOneWidget);
+    });
+
+    testWidgets('リトライボタンをタップすると onRetry が呼ばれる', (WidgetTester tester) async {
+      var retryCount = 0;
+
+      await tester.pumpWidget(
+        buildSubject(
+          error: const NetworkException(),
+          onRetry: () => retryCount++,
+        ),
+      );
+
+      await tester.tap(find.text(AppStrings.retry));
+      expect(retryCount, 1);
+    });
+
+    testWidgets('cloud_off_rounded アイコンが表示される', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        buildSubject(error: const NetworkException(), onRetry: () {}),
+      );
+
+      expect(find.byIcon(Icons.cloud_off_rounded), findsOneWidget);
+    });
+  });
+}

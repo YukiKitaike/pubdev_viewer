@@ -147,6 +147,34 @@ void main() {
       );
     });
 
+    test('キャンセル時に NetworkException をスローする', () {
+      fakeDio.onGet = <T>(url) {
+        throw DioException(
+          type: DioExceptionType.cancel,
+          requestOptions: RequestOptions(),
+        );
+      };
+
+      expect(
+        () => apiClient.getPackages(),
+        throwsA(isA<NetworkException>()),
+      );
+    });
+
+    test('不正な証明書時に NetworkException をスローする', () {
+      fakeDio.onGet = <T>(url) {
+        throw DioException(
+          type: DioExceptionType.badCertificate,
+          requestOptions: RequestOptions(),
+        );
+      };
+
+      expect(
+        () => apiClient.getPackages(),
+        throwsA(isA<NetworkException>()),
+      );
+    });
+
     test('レスポンスデータが null のとき ServerException をスローする', () {
       fakeDio.onGet = <T>(url) async => Response<T>(
         requestOptions: RequestOptions(),

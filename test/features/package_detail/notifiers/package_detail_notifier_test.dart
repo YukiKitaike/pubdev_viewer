@@ -83,6 +83,42 @@ void main() {
       expect(asyncValue.hasError, isTrue);
     });
 
+    test('getPackagePublisher が例外を投げると AsyncError になる', () async {
+      fakeRepository
+        ..onGetPackageDetail = _detailResponse
+        ..onGetPackagePublisher = (_) => throw const NetworkException();
+
+      await container
+          .read(packageDetailNotifierProvider('http').future)
+          .then((_) => null)
+          .catchError((_) => null);
+
+      final asyncValue = container.read(
+        packageDetailNotifierProvider('http'),
+      );
+      expect(asyncValue.hasError, isTrue);
+    });
+
+    test('sortedVersions が published 降順で並んでいる', () async {
+      fakeRepository
+        ..onGetPackageDetail = _detailResponse
+        ..onGetPackagePublisher = _publisherResponse;
+
+      final state = await container.read(
+        packageDetailNotifierProvider('http').future,
+      );
+
+      expect(state.sortedVersions.length, 2);
+      expect(state.sortedVersions[0].version, '1.6.0');
+      expect(state.sortedVersions[1].version, '1.5.0');
+      expect(
+        state.sortedVersions[0].published.isAfter(
+          state.sortedVersions[1].published,
+        ),
+        isTrue,
+      );
+    });
+
     test('refresh が再ビルドをトリガーする', () async {
       fakeRepository
         ..onGetPackageDetail = _detailResponse
