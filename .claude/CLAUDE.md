@@ -1,56 +1,60 @@
-# pubdev_viewer
-
-pub.dev のパッケージ情報を閲覧する Flutter アプリ。
+# pubdev_viewer — pub.dev パッケージ閲覧アプリ
 
 ## Commands
 
-- `fvm flutter` / `fvm dart` — FVM 管理。`flutter` / `dart` 直接呼び出し禁止
-- `fvm dart run build_runner build -d` — コード生成（freezed/riverpod/json/go_router）
-- `fvm dart analyze` / `fvm flutter test` — 解析 / テスト
-- `fvm dart format .` — フォーマット（PostToolUse hook で自動実行済み）
+- `fvm flutter` / `fvm dart` — FVM 必須。`flutter`/`dart` 直接呼び出し禁止
+- `fvm dart run build_runner build -d` — コード生成。freezed/riverpod モデル変更後は必須
+- `fvm dart analyze` — エラー・警告ゼロを維持
+- `fvm flutter test [path]` — テスト（パス省略で全体実行）
 
 ## Architecture
 
 Feature-First + Riverpod。依存方向: `screens/` → `notifiers/` → `repository/` → `models/`
 
-- feature 間の直接依存は禁止。共通処理は `core/` に置く。
-- 新しい feature を追加するときは `/pubdev-new-feature` スキルを参照。
+```
+lib/
+├── app/               # MaterialApp、GoRouter、テーマ
+├── core/
+│   ├── api/           # Dio ベース API クライアント
+│   ├── design_system/ # デザイントークン
+│   ├── error/         # sealed AppException
+│   ├── models/        # 共有モデル（Pubspec）
+│   ├── strings/       # AppStrings 定数
+│   ├── utils/         # ユーティリティ
+│   └── widgets/       # ErrorView、LoadingView、SkeletonListView
+└── features/
+    ├── package_list/  # 一覧・ページネーション
+    └── package_detail/# 詳細・バージョン・パブリッシャー
+```
+
+feature 間の直接依存禁止。共通処理は `core/`。新規は `/pubdev-new-feature` 参照
 
 ## Critical Rules
 
-**No interfaces.** Repository は具象クラスのみ。`abstract class XxxRepository` は作らない。
-テストは `FakeXxxRepository extends Fake implements XxxRepository` で対応。
-
-**No UseCase.** Notifier から Repository を直接呼ぶ。中間クラスなし。
-
-**No Either.** エラーは例外で表現し try/catch で処理する。`Result<T>` / `Either<F,T>` 禁止。
-
-**No Entity split.** `fromJson`/`toJson` を持つ 1 クラスで完結。API 形状と UI が実際に異なる場合のみ変換クラスを作る。
-
-**No premature core promotion.** feature 固有モデルは 2 feature で共有されてから `core/` に昇格させる。
-
-**No hardcoded colors/spacing.** Widget 内に `Colors.red` や `fontSize: 24` 直書き禁止。
-
-**No hardcoded strings.** UI に表示するラベル・メッセージは `AppStrings` 定数を使う。`Text('LATEST')` のような直書き禁止。
-
-**No relative imports.** `import '../../../...'` 禁止。常に `package:pubdev_viewer/...` 形式の絶対パスを使う。
-
-**Zero Linter errors.** `fvm dart analyze` でエラー・警告ゼロを維持する。コード変更後は必ず確認。
-
-## Comments
-
-**WHY only.** コメントは「なぜこの実装か」を書く。コードから読める WHAT は書かない。
-
-- `/// XxxResponse のデータクラス。` のようなクラス名の言い換え禁止
-- マジックナンバー・設計判断・トレードオフ・外部制約に WHY コメントを付ける
-- 1〜2 行、日本語で簡潔に
-- 自明なコードにはコメント不要
+- **No interfaces** — Repository は具象クラスのみ。テストは `Fake implements XxxRepository`
+- **No UseCase** — Notifier → Repository 直接。中間クラスなし
+- **No Either** — エラーは例外 + try/catch
+- **No Entity split** — `fromJson`/`toJson` 持ちの 1 クラスで完結
+- **No premature core promotion** — 2 feature で共有されてから `core/` 昇格
+- **No hardcoded values** — 色・余白はデザイントークン、文字列は `AppStrings`
+- **No relative imports** — `package:pubdev_viewer/...` 形式のみ
+- **WHY comments only** — WHAT 禁止。設計判断に 1〜2 行の日本語コメント
+- **Zero Linter errors** — `fvm dart analyze` でゼロ維持
 
 ## Design System
 
-デザイントークン（AppSpacing・AppRadius・AppThemeTokens）は `/pubdev-ui` スキル参照。
+```dart
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
+// AppSpacing.xs/sm/md/lg/xl/xxl/xxxl (4dp grid)
+// AppRadius.skeleton/avatar/button/card/full
+// context.tokens → AppThemeTokens (light/dark semantic colors)
+```
+
+## Testing
+
+- Mock 禁止。`Fake implements XxxRepository`。フィクスチャ: `test/helpers/fixtures.dart`
+- Notifier テスト: `ProviderContainer` + `tearDown` で `dispose()`
 
 ## Git
 
-Conventional Commits 形式、日本語メッセージ。論理単位ごとにコミット。
-`feat` / `fix` / `refactor` / `docs` / `chore`
+Conventional Commits（日本語）。`feat`/`fix`/`refactor`/`docs`/`chore`
