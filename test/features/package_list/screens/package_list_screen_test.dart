@@ -187,10 +187,8 @@ void main() {
       await tester.pump();
 
       // notifier を直接呼び出して loadMore の UI 反映を検証する
-      final element = tester.element(find.byType(PackageListScreen));
-      final container = ProviderScope.containerOf(element);
       unawaited(
-        container.read(packageListProvider.notifier).loadMore(),
+        tester.container().read(packageListProvider.notifier).loadMore(),
       );
       await tester.pump();
 
@@ -215,9 +213,7 @@ void main() {
       await tester.pump();
 
       // nextUrl が null なので loadMore は何もしない
-      final element = tester.element(find.byType(PackageListScreen));
-      final container = ProviderScope.containerOf(element);
-      await container.read(packageListProvider.notifier).loadMore();
+      await tester.container().read(packageListProvider.notifier).loadMore();
       await tester.pump();
 
       check(fakeRepository.getPackagesCallCount).equals(1);
@@ -242,9 +238,7 @@ void main() {
       await tester.pump();
 
       // notifier を直接呼び出して loadMore エラー → SnackBar 表示を検証する
-      final element = tester.element(find.byType(PackageListScreen));
-      final container = ProviderScope.containerOf(element);
-      await container.read(packageListProvider.notifier).loadMore();
+      await tester.container().read(packageListProvider.notifier).loadMore();
       await tester.pump();
 
       expect(find.text(AppStrings.loadMoreFailed), findsOneWidget);
@@ -266,9 +260,7 @@ void main() {
       check(fakeRepository.getPackagesCallCount).equals(1);
 
       // notifier 経由で refresh を呼び出し、RefreshIndicator の接続先と同じ処理を検証する
-      final element = tester.element(find.byType(PackageListScreen));
-      final container = ProviderScope.containerOf(element);
-      await container.read(packageListProvider.notifier).refresh();
+      await tester.container().read(packageListProvider.notifier).refresh();
       await tester.pump();
 
       check(fakeRepository.getPackagesCallCount).equals(2);

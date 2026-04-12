@@ -261,9 +261,10 @@ void main() {
       expect(find.byType(RefreshIndicator), findsOneWidget);
       check(fakeRepository.getPackageDetailCallCount).equals(1);
 
-      final element = tester.element(find.byType(PackageDetailScreen));
-      final container = ProviderScope.containerOf(element);
-      await container.read(packageDetailProvider('http').notifier).refresh();
+      await tester
+          .container()
+          .read(packageDetailProvider('http').notifier)
+          .refresh();
       await tester.pump();
 
       check(fakeRepository.getPackageDetailCallCount).equals(2);

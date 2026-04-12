@@ -20,17 +20,13 @@ void main() {
 
   setUp(() {
     fakeRepository = FakePackageListRepository();
-    container = ProviderContainer(
+    container = ProviderContainer.test(
       // Riverpod v3 の自動リトライを無効化。エラー系テストが安定しなくなるため。
       retry: (_, _) => null,
       overrides: [
         packageListRepositoryProvider.overrideWithValue(fakeRepository),
       ],
     );
-  });
-
-  tearDown(() {
-    container.dispose();
   });
 
   group('PackageListNotifier', () {

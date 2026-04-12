@@ -37,6 +37,10 @@ class PackageListNotifier extends _$PackageListNotifier {
       final response = await repository.getPackages(
         pageUrl: current.nextUrl,
       );
+      // async gap 後にプロバイダが破棄されていれば state 更新をスキップする。
+      if (!ref.mounted) {
+        return;
+      }
       state = AsyncData(
         PackageListState(
           packages: [
