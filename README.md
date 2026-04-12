@@ -83,12 +83,7 @@ lib/
     └── package_detail/# 詳細画面 — 情報・バージョン・パブリッシャー
 ```
 
-各 feature は `models/`、`repository/`、`notifiers/`、`screens/` で独立しています。feature 間の直接依存は禁止で、共通処理は `core/` に置きます。feature 間を直接参照すると変更の影響範囲が広がり循環依存のリスクも生じるため、共有が必要になった時点で `core/` に昇格させます。
-
-**feature 内の依存方向：**
-```
-screens → notifiers → repository → models
-```
+**feature 内の依存方向：** `screens → notifiers → repository → models`
 
 ## 技術スタック
 
