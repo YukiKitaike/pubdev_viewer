@@ -182,6 +182,7 @@ void main() {
     testWidgets('エラー時にエラー画面が表示される', (tester) async {
       fakeRepository.onGetPackageDetail = (name) =>
           throw const NetworkException();
+      // throw 式を含むアロー関数では cascade が使えないため個別代入する
       // ignore: cascade_invocations
       fakeRepository.onGetPackagePublisher = _publisherCallback;
 
