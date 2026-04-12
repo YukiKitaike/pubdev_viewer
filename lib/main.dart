@@ -7,6 +7,7 @@ import 'package:marionette_logging/marionette_logging.dart';
 
 import 'package:pubdev_viewer/app/app.dart';
 import 'package:pubdev_viewer/core/utils/app_retry.dart';
+import 'package:pubdev_viewer/core/utils/provider_logger.dart';
 
 void main() {
   if (kDebugMode) {
@@ -21,6 +22,10 @@ void main() {
     debugPrint('${record.level.name}: ${record.loggerName}: ${record.message}');
   });
   runApp(
-    const ProviderScope(retry: appRetry, child: PubDevViewerApp()),
+    ProviderScope(
+      retry: appRetry,
+      observers: [ProviderLogger()],
+      child: const PubDevViewerApp(),
+    ),
   );
 }
