@@ -156,7 +156,7 @@ fvm dart format .
 | `pubdev-ui` | デザイントークン・テーマ・Widget パターン |
 | `pubdev-navigation` | GoRouter + go_router_builder 型安全ルーティング |
 | `pubdev-testing` | テストパターン（Fake・package:checks・タグ分類・createTestApp） |
-| `dart-new-syntax` | Dart 3.7+ の新機能リファレンス（Dot shorthands 等） |
+| `flutter-tips` | Flutter/Dart 実践 Tips とコーディング規約（Dart 3.10+ dot shorthand・パターンマッチング等） |
 
 ### プラグイン
 
@@ -186,6 +186,5 @@ fvm dart format .
 
 | イベント | 内容 |
 |---|---|
-| PreToolUse | `.g.dart` / `.freezed.dart` の直接編集をブロック（`build_runner` で生成するため） |
 | PostToolUse | ファイル編集後に `fvm dart format .` を自動実行 |
 | PostToolUse | ファイル編集後に `fvm dart analyze` を自動実行（エラー・警告ゼロを維持） |
