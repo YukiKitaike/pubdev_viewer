@@ -157,28 +157,11 @@ fvm dart format .
 
 [skills_sync](https://github.com/mono0926/skills-sync) を使い、GitHub 上の公開スキルリポジトリからプロジェクトに必要なスキルを一括管理しています。`skills.yaml` にソースと取捨選択を宣言し、`skills_sync sync` で `~/.agents/skills/` へグローバル同期します。セットアップ手順は[上記](#claude-code-を使う場合追加セットアップ)を参照してください。
 
-**skills.yaml の構成：**
-
-| ソース | 内容 |
-|---|---|
-| `kevmoo/dash_skills` | Dart 言語のベストプラクティス・テスト・CLI・パッケージメンテナンス |
-| `flutter/skills` | Flutter 公式スキル（UI・ナビゲーション・国際化・ネットワーク等） |
-| `VeryGoodOpenSource/very_good_ai_flutter_plugin` | Flutter セキュリティ静的解析 |
-| `juparave/dotfiles` | Riverpod エキスパート |
-| `jeffallan/claude-skills` | Flutter エキスパート |
-| `affaan-m/everything-claude-code` | Flutter/Dart コードレビュー |
-| `madteacher/mad-agents-skills` | Flutter 各種実装パターン（フォーム・アニメーション・状態管理等） |
-| `rodydavis/skills` | Flutter 操作・スクリーンショット |
-| `obra/superpowers` | ブレインストーミング・TDD・検証フロー |
-| `wshobson/agents` | デザインシステム・モバイルデザイン・レスポンシブ |
-| `anthropics/skills` | フロントエンドデザイン・スキル作成・PDF |
-| その他 | UI/UX・プロンプトレビュー・README 作成等 |
-
-プロジェクトのアーキテクチャと重複するスキル（`flutter-architecture`、`flutter-state-management` 等）は `!` プレフィックスで除外し、macOS 環境に不要な Linux/Windows セットアップスキルも除外しています。
+グローバルスキルには Flutter / Dart のベストプラクティス、デザインシステム、コードレビュー、テスト手法などが含まれています。プロジェクトのアーキテクチャと重複するスキル（`flutter-architecture`、`flutter-state-management` 等）は `!` プレフィックスで除外し、macOS 環境に不要な Linux/Windows セットアップスキルも除外しています。詳細は [skills.yaml](skills.yaml) を参照してください。
 
 ### カスタムスキル
 
-`.claude/skills/` にプロジェクト固有のスキルが定義されています：
+上記のグローバルスキルとは別に、`.claude/skills/` にプロジェクト固有のスキルが定義されています：
 
 | スキル | 用途 |
 |---|---|
