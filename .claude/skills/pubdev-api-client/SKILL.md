@@ -240,6 +240,41 @@ test('throws NetworkException on connection error', () {
 
 ---
 
+## Repository 層パターン
+
+Repository は `PubDevApiClient` を DI で受け取り、`fromJson` でパースする薄いレイヤー。
+具象クラスのみ（No interfaces ルール）。Provider はファイル末尾に `@riverpod` 関数で定義。
+
+```dart
+// lib/features/<feature_name>/repository/<feature_name>_repository.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import 'package:pubdev_viewer/core/api/pub_dev_api_client.dart';
+import '../models/<feature_name>_response.dart';
+
+part '<feature_name>_repository.g.dart';
+
+class FeatureNameRepository {
+  FeatureNameRepository(this._apiClient);
+  final PubDevApiClient _apiClient;
+
+  Future<FeatureNameResponse> getFeature({String? pageUrl}) async {
+    final json = await _apiClient.getFeature(pageUrl: pageUrl);
+    return FeatureNameResponse.fromJson(json);
+  }
+}
+
+@riverpod
+FeatureNameRepository featureNameRepository(Ref ref) {
+  return FeatureNameRepository(ref.watch(pubDevApiClientProvider));
+}
+```
+
+コード生成: `fvm dart run build_runner build -d`
+
+---
+
 ## エンドポイント追加手順
 
 新しい pub.dev API エンドポイントを追加する場合:
