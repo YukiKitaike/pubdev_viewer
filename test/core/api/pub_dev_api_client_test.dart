@@ -1,5 +1,9 @@
+@Tags(['unit'])
+library;
+
 import 'dart:io';
 
+import 'package:checks/checks.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/core/api/pub_dev_api_client.dart';
@@ -30,8 +34,8 @@ void main() {
 
       final result = await apiClient.getPackages();
 
-      expect(result, responseData);
-      expect(fakeDio.getCalls, ['https://pub.dev/api/packages']);
+      check(result).deepEquals(responseData);
+      check(fakeDio.getCalls).deepEquals(['https://pub.dev/api/packages']);
     });
 
     test('pageUrl が指定された場合にそれを使用する', () async {
@@ -45,14 +49,14 @@ void main() {
         pageUrl: 'https://pub.dev/api/packages?page=3',
       );
 
-      expect(
+      check(
         fakeDio.getCalls,
-        ['https://pub.dev/api/packages?page=3'],
-      );
+      ).deepEquals(['https://pub.dev/api/packages?page=3']);
     });
   });
 
   group('エラーハンドリング', () {
+    // throwsA は async Future 対応のため expect を維持
     test('接続エラー時に NetworkException をスローする', () {
       fakeDio.onGet = <T>(url) {
         throw DioException(
@@ -197,10 +201,7 @@ void main() {
 
       await apiClient.getPackageDetail('http');
 
-      expect(
-        fakeDio.getCalls,
-        ['https://pub.dev/api/packages/http'],
-      );
+      check(fakeDio.getCalls).deepEquals(['https://pub.dev/api/packages/http']);
     });
   });
 
@@ -214,10 +215,9 @@ void main() {
 
       await apiClient.getPackagePublisher('http');
 
-      expect(
+      check(
         fakeDio.getCalls,
-        ['https://pub.dev/api/packages/http/publisher'],
-      );
+      ).deepEquals(['https://pub.dev/api/packages/http/publisher']);
     });
   });
 }

@@ -1,3 +1,7 @@
+@Tags(['unit'])
+library;
+
+import 'package:checks/checks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/features/package_detail/repository/package_detail_repository.dart';
@@ -21,9 +25,9 @@ void main() {
 
       final response = await repository.getPackageDetail('http');
 
-      expect(response.name, 'http');
-      expect(response.versions, hasLength(2));
-      expect(fakeApiClient.getPackageDetailCalls, ['http']);
+      check(response.name).equals('http');
+      check(response.versions).length.equals(2);
+      check(fakeApiClient.getPackageDetailCalls).deepEquals(['http']);
     });
 
     test('getPackagePublisher がパース済みレスポンスを返す', () async {
@@ -32,28 +36,26 @@ void main() {
 
       final response = await repository.getPackagePublisher('http');
 
-      expect(response.publisherId, 'dart.dev');
-      expect(fakeApiClient.getPackagePublisherCalls, ['http']);
+      check(response.publisherId).equals('dart.dev');
+      check(fakeApiClient.getPackagePublisherCalls).deepEquals(['http']);
     });
 
-    test('getPackageDetail が NetworkException を再スローする', () {
+    test('getPackageDetail が NetworkException を再スローする', () async {
       fakeApiClient.onGetPackageDetail = (name) =>
           throw const NetworkException();
 
-      expect(
-        () => repository.getPackageDetail('http'),
-        throwsA(isA<NetworkException>()),
-      );
+      await check(
+        repository.getPackageDetail('http'),
+      ).throws<NetworkException>();
     });
 
-    test('getPackagePublisher が ServerException を再スローする', () {
+    test('getPackagePublisher が ServerException を再スローする', () async {
       fakeApiClient.onGetPackagePublisher = (name) =>
           throw const ServerException(500);
 
-      expect(
-        () => repository.getPackagePublisher('http'),
-        throwsA(isA<ServerException>()),
-      );
+      await check(
+        repository.getPackagePublisher('http'),
+      ).throws<ServerException>();
     });
   });
 }

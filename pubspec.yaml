@@ -42,6 +42,7 @@ dev_dependencies:
   url_launcher_platform_interface: ^2.3.0
   riverpod_generator: ^2.6.5
   riverpod_lint: ^2.6.5
+  checks: ^0.3.1
 
 flutter:
   uses-material-design: true

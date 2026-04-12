@@ -1,9 +1,12 @@
+@Tags(['widget'])
+library;
+
 import 'dart:async';
 
+import 'package:checks/checks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pubdev_viewer/app/theme.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:pubdev_viewer/core/widgets/skeleton_list_view.dart';
@@ -15,6 +18,7 @@ import 'package:pubdev_viewer/features/package_list/screens/widgets/package_list
 
 import '../../../helpers/fakes.dart';
 import '../../../helpers/fixtures.dart';
+import '../../../helpers/pump_app.dart';
 
 void main() {
   late FakePackageListRepository fakeRepository;
@@ -24,14 +28,11 @@ void main() {
   });
 
   Widget createTestWidget() {
-    return ProviderScope(
+    return createTestApp(
+      home: const PackageListScreen(),
       overrides: [
         packageListRepositoryProvider.overrideWithValue(fakeRepository),
       ],
-      child: MaterialApp(
-        theme: appLightTheme,
-        home: const PackageListScreen(),
-      ),
     );
   }
 
@@ -219,7 +220,7 @@ void main() {
       await container.read(packageListNotifierProvider.notifier).loadMore();
       await tester.pump();
 
-      expect(fakeRepository.getPackagesCallCount, 1);
+      check(fakeRepository.getPackagesCallCount).equals(1);
     });
   });
 
@@ -262,7 +263,7 @@ void main() {
       await tester.pump();
 
       expect(find.byType(RefreshIndicator), findsOneWidget);
-      expect(fakeRepository.getPackagesCallCount, 1);
+      check(fakeRepository.getPackagesCallCount).equals(1);
 
       // notifier 経由で refresh を呼び出し、RefreshIndicator の接続先と同じ処理を検証する
       final element = tester.element(find.byType(PackageListScreen));
@@ -270,7 +271,7 @@ void main() {
       await container.read(packageListNotifierProvider.notifier).refresh();
       await tester.pump();
 
-      expect(fakeRepository.getPackagesCallCount, 2);
+      check(fakeRepository.getPackagesCallCount).equals(2);
     });
   });
 }

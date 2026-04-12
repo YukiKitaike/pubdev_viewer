@@ -1,5 +1,9 @@
+@Tags(['unit'])
+library;
+
 import 'dart:async';
 
+import 'package:checks/checks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
@@ -9,14 +13,6 @@ import 'package:pubdev_viewer/features/package_list/repository/package_list_repo
 
 import '../../../helpers/fakes.dart';
 import '../../../helpers/fixtures.dart';
-
-PackageListResponse _firstPage() => PackageListResponse.fromJson(
-  Map<String, dynamic>.from(packageListResponseJson),
-);
-
-PackageListResponse _lastPage() => PackageListResponse.fromJson(
-  Map<String, dynamic>.from(packageListResponseLastPageJson),
-);
 
 void main() {
   late FakePackageListRepository fakeRepository;
@@ -37,15 +33,16 @@ void main() {
 
   group('PackageListNotifier', () {
     test('build が初期パッケージを取得する', () async {
-      fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
+      fakeRepository.onGetPackages = ({String? pageUrl}) async =>
+          firstPageResponse();
 
       final state = await container.read(
         packageListNotifierProvider.future,
       );
 
-      expect(state.packages, hasLength(2));
-      expect(state.packages[0].name, 'http');
-      expect(state.nextUrl, isNotNull);
+      check(state.packages).length.equals(2);
+      check(state.packages[0].name).equals('http');
+      check(state.nextUrl).isNotNull();
     });
 
     test('loadMore がパッケージを追加する', () async {
@@ -53,9 +50,9 @@ void main() {
       fakeRepository.onGetPackages = ({String? pageUrl}) async {
         callCount++;
         if (callCount == 1) {
-          return _firstPage();
+          return firstPageResponse();
         }
-        return _lastPage();
+        return lastPageResponse();
       };
 
       await container.read(packageListNotifierProvider.future);
@@ -63,19 +60,20 @@ void main() {
       await container.read(packageListNotifierProvider.notifier).loadMore();
 
       final state = container.read(packageListNotifierProvider).valueOrNull;
-      expect(state?.packages, hasLength(2));
-      expect(state?.nextUrl, isNull);
+      check(state).isNotNull();
+      check(state!.packages).length.equals(2);
+      check(state.nextUrl).isNull();
     });
 
     test('nextUrl が null のとき loadMore は何もしない', () async {
-      fakeRepository.onGetPackages = ({String? pageUrl}) async => _lastPage();
+      fakeRepository.onGetPackages = ({String? pageUrl}) async =>
+          lastPageResponse();
 
       await container.read(packageListNotifierProvider.future);
 
       await container.read(packageListNotifierProvider.notifier).loadMore();
 
-      // Only 1 call: the initial build
-      expect(fakeRepository.getPackagesCallCount, 1);
+      check(fakeRepository.getPackagesCallCount).equals(1);
     });
 
     test('repository が例外を投げると build が AsyncError になる', () async {
@@ -88,8 +86,8 @@ void main() {
           .catchError((_) => null);
 
       final asyncValue = container.read(packageListNotifierProvider);
-      expect(asyncValue.hasError, isTrue);
-      expect(asyncValue.error, isA<NetworkException>());
+      check(asyncValue.hasError).isTrue();
+      check(asyncValue.error).isA<NetworkException>();
     });
 
     test('loadMore はエラー時に既存データを保持する', () async {
@@ -97,7 +95,7 @@ void main() {
       fakeRepository.onGetPackages = ({String? pageUrl}) async {
         callCount++;
         if (callCount == 1) {
-          return _firstPage();
+          return firstPageResponse();
         }
         throw const NetworkException();
       };
@@ -107,20 +105,21 @@ void main() {
       await container.read(packageListNotifierProvider.notifier).loadMore();
 
       final state = container.read(packageListNotifierProvider).valueOrNull;
-      expect(state, isNotNull);
-      expect(state!.packages, hasLength(2));
-      expect(state.isLoadingMore, isFalse);
-      expect(state.loadMoreError, isA<NetworkException>());
+      check(state).isNotNull();
+      check(state!.packages).length.equals(2);
+      check(state.isLoadingMore).isFalse();
+      check(state.loadMoreError).isA<NetworkException>();
     });
 
     test('refresh が再ビルドをトリガーする', () async {
-      fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
+      fakeRepository.onGetPackages = ({String? pageUrl}) async =>
+          firstPageResponse();
 
       await container.read(packageListNotifierProvider.future);
-      expect(fakeRepository.getPackagesCallCount, 1);
+      check(fakeRepository.getPackagesCallCount).equals(1);
 
       await container.read(packageListNotifierProvider.notifier).refresh();
-      expect(fakeRepository.getPackagesCallCount, 2);
+      check(fakeRepository.getPackagesCallCount).equals(2);
     });
 
     test('clearLoadMoreError が loadMoreError を null にリセットする', () async {
@@ -128,7 +127,7 @@ void main() {
       fakeRepository.onGetPackages = ({String? pageUrl}) async {
         callCount++;
         if (callCount == 1) {
-          return _firstPage();
+          return firstPageResponse();
         }
         throw const NetworkException();
       };
@@ -137,35 +136,36 @@ void main() {
       await container.read(packageListNotifierProvider.notifier).loadMore();
 
       final before = container.read(packageListNotifierProvider).valueOrNull;
-      expect(before, isNotNull);
-      expect(before!.loadMoreError, isA<NetworkException>());
+      check(before).isNotNull();
+      check(before!.loadMoreError).isA<NetworkException>();
 
       container.read(packageListNotifierProvider.notifier).clearLoadMoreError();
 
       final after = container.read(packageListNotifierProvider).valueOrNull;
-      expect(after!.loadMoreError, isNull);
+      check(after!.loadMoreError).isNull();
     });
 
     test('loadMore 実行中に再度 loadMore を呼んでも無視される', () async {
-      fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
+      fakeRepository.onGetPackages = ({String? pageUrl}) async =>
+          firstPageResponse();
       await container.read(packageListNotifierProvider.future);
 
-      // Suspend the second getPackages call via Completer
+      // Completer で 2 回目の getPackages を保留する
       final completer = Completer<PackageListResponse>();
       fakeRepository.getPackagesCompleter = completer;
 
-      // First loadMore starts but is suspended — isLoadingMore becomes true
+      // 1 回目の loadMore は保留中 — isLoadingMore が true になる
       unawaited(
         container.read(packageListNotifierProvider.notifier).loadMore(),
       );
 
-      // Second call must be a no-op because isLoadingMore is already true
+      // 2 回目は isLoadingMore が true のため no-op
       await container.read(packageListNotifierProvider.notifier).loadMore();
 
-      // callCount: 1 (build) + 1 (first loadMore) = 2; second loadMore is no-op
-      expect(fakeRepository.getPackagesCallCount, 2);
+      // callCount: 1 (build) + 1 (first loadMore) = 2
+      check(fakeRepository.getPackagesCallCount).equals(2);
 
-      completer.complete(_lastPage());
+      completer.complete(lastPageResponse());
     });
   });
 }

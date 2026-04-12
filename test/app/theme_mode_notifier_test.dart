@@ -1,3 +1,7 @@
+@Tags(['unit'])
+library;
+
+import 'package:checks/checks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,25 +22,25 @@ void main() {
     test('初期状態が ThemeMode.system である', () {
       final state = container.read(themeModeNotifierProvider);
 
-      expect(state, ThemeMode.system);
+      check(state).equals(ThemeMode.system);
     });
 
     test('system からトグルするとプラットフォームの逆になる', () {
       // Flutter テスト環境のデフォルトは Brightness.light → ThemeMode.dark
       container.read(themeModeNotifierProvider.notifier).toggle();
 
-      expect(container.read(themeModeNotifierProvider), ThemeMode.dark);
+      check(container.read(themeModeNotifierProvider)).equals(ThemeMode.dark);
     });
 
     test('dark から light にトグルする', () {
       final notifier = container.read(themeModeNotifierProvider.notifier)
         // system → dark
         ..toggle();
-      expect(container.read(themeModeNotifierProvider), ThemeMode.dark);
+      check(container.read(themeModeNotifierProvider)).equals(ThemeMode.dark);
 
       // dark → light
       notifier.toggle();
-      expect(container.read(themeModeNotifierProvider), ThemeMode.light);
+      check(container.read(themeModeNotifierProvider)).equals(ThemeMode.light);
     });
 
     test('light から dark にトグルする', () {
@@ -44,11 +48,11 @@ void main() {
         // system → dark → light
         ..toggle()
         ..toggle();
-      expect(container.read(themeModeNotifierProvider), ThemeMode.light);
+      check(container.read(themeModeNotifierProvider)).equals(ThemeMode.light);
 
       // light → dark
       notifier.toggle();
-      expect(container.read(themeModeNotifierProvider), ThemeMode.dark);
+      check(container.read(themeModeNotifierProvider)).equals(ThemeMode.dark);
     });
   });
 }

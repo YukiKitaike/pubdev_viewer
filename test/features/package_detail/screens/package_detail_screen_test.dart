@@ -1,10 +1,12 @@
+@Tags(['widget'])
+library;
+
 import 'dart:async';
 
+import 'package:checks/checks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:pubdev_viewer/app/theme.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
@@ -16,39 +18,20 @@ import 'package:url_launcher_platform_interface/url_launcher_platform_interface.
 
 import '../../../helpers/fakes.dart';
 import '../../../helpers/fixtures.dart';
+import '../../../helpers/pump_app.dart';
 
-Future<PackageDetailResponse> _detailResponse(String _) async =>
-    PackageDetailResponse.fromJson(
-      Map<String, dynamic>.from(packageDetailResponseJson),
-    );
+// Fake のコールバック型に合わせるためのラッパー
+Future<PackageDetailResponse> _detailCallback(String _) async =>
+    detailResponse();
 
-Future<PackageDetailResponse> _detailResponseNoHomepage(String _) async =>
-    PackageDetailResponse.fromJson(
-      Map<String, dynamic>.from(packageDetailResponseNoHomepageJson),
-    );
+Future<PackageDetailResponse> _detailCallbackNoHomepage(String _) async =>
+    detailResponseNoHomepage();
 
-Future<PackageDetailResponse> _detailResponseNoUrl(String _) async =>
-    PackageDetailResponse.fromJson(
-      Map<String, dynamic>.from(packageDetailResponseNoUrlJson),
-    );
+Future<PackageDetailResponse> _detailCallbackNoUrl(String _) async =>
+    detailResponseNoUrl();
 
-Future<PackagePublisherResponse> _publisherResponse(String _) async =>
-    PackagePublisherResponse.fromJson(
-      Map<String, dynamic>.from(packagePublisherResponseJson),
-    );
-
-class _FakeUrlLauncher extends Fake
-    with MockPlatformInterfaceMixin
-    implements UrlLauncherPlatform {
-  final List<String> launchedUrls = [];
-  bool shouldSucceed = true;
-
-  @override
-  Future<bool> launchUrl(String url, LaunchOptions options) async {
-    launchedUrls.add(url);
-    return shouldSucceed;
-  }
-}
+Future<PackagePublisherResponse> _publisherCallback(String _) async =>
+    publisherResponse();
 
 void main() {
   late FakePackageDetailRepository fakeRepository;
@@ -58,21 +41,18 @@ void main() {
   });
 
   Widget createTestWidget({String packageName = 'http'}) {
-    return ProviderScope(
+    return createTestApp(
+      home: PackageDetailScreen(packageName: packageName),
       overrides: [
         packageDetailRepositoryProvider.overrideWithValue(fakeRepository),
       ],
-      child: MaterialApp(
-        theme: appLightTheme,
-        home: PackageDetailScreen(packageName: packageName),
-      ),
     );
   }
 
   void stubSuccessResponse() {
     fakeRepository
-      ..onGetPackageDetail = _detailResponse
-      ..onGetPackagePublisher = _publisherResponse;
+      ..onGetPackageDetail = _detailCallback
+      ..onGetPackagePublisher = _publisherCallback;
   }
 
   group('PackageDetailScreen', () {
@@ -80,7 +60,7 @@ void main() {
       final detailCompleter = Completer<PackageDetailResponse>();
       fakeRepository
         ..getPackageDetailCompleter = detailCompleter
-        ..onGetPackagePublisher = _publisherResponse;
+        ..onGetPackagePublisher = _publisherCallback;
 
       await tester.pumpWidget(createTestWidget());
       await tester.pump();
@@ -135,8 +115,8 @@ void main() {
       'homepage が null のとき repository URL で外部リンクアイコンが表示される',
       (tester) async {
         fakeRepository
-          ..onGetPackageDetail = _detailResponseNoHomepage
-          ..onGetPackagePublisher = _publisherResponse;
+          ..onGetPackageDetail = _detailCallbackNoHomepage
+          ..onGetPackagePublisher = _publisherCallback;
 
         await tester.pumpWidget(createTestWidget());
         await tester.pumpAndSettle();
@@ -149,8 +129,8 @@ void main() {
       'homepage と repository が両方 null のとき外部リンクアイコンが非表示になる',
       (tester) async {
         fakeRepository
-          ..onGetPackageDetail = _detailResponseNoUrl
-          ..onGetPackagePublisher = _publisherResponse;
+          ..onGetPackageDetail = _detailCallbackNoUrl
+          ..onGetPackagePublisher = _publisherCallback;
 
         await tester.pumpWidget(createTestWidget());
         await tester.pumpAndSettle();
@@ -162,7 +142,7 @@ void main() {
     testWidgets(
       '外部リンクアイコンをタップすると homepage URL が開かれる',
       (tester) async {
-        final fakeUrlLauncher = _FakeUrlLauncher();
+        final fakeUrlLauncher = FakeUrlLauncher();
         UrlLauncherPlatform.instance = fakeUrlLauncher;
 
         stubSuccessResponse();
@@ -173,19 +153,19 @@ void main() {
         await tester.tap(find.byIcon(Icons.open_in_new));
         await tester.pumpAndSettle();
 
-        expect(fakeUrlLauncher.launchedUrls, ['https://example.com']);
+        check(fakeUrlLauncher.launchedUrls).deepEquals(['https://example.com']);
       },
     );
 
     testWidgets(
       'homepage が null のとき外部リンクアイコンをタップすると repository URL が開かれる',
       (tester) async {
-        final fakeUrlLauncher = _FakeUrlLauncher();
+        final fakeUrlLauncher = FakeUrlLauncher();
         UrlLauncherPlatform.instance = fakeUrlLauncher;
 
         fakeRepository
-          ..onGetPackageDetail = _detailResponseNoHomepage
-          ..onGetPackagePublisher = _publisherResponse;
+          ..onGetPackageDetail = _detailCallbackNoHomepage
+          ..onGetPackagePublisher = _publisherCallback;
 
         await tester.pumpWidget(createTestWidget());
         await tester.pumpAndSettle();
@@ -193,10 +173,9 @@ void main() {
         await tester.tap(find.byIcon(Icons.open_in_new));
         await tester.pumpAndSettle();
 
-        expect(
+        check(
           fakeUrlLauncher.launchedUrls,
-          ['https://github.com/dart-lang/http'],
-        );
+        ).deepEquals(['https://github.com/dart-lang/http']);
       },
     );
 
@@ -204,7 +183,7 @@ void main() {
       fakeRepository.onGetPackageDetail = (name) =>
           throw const NetworkException();
       // ignore: cascade_invocations
-      fakeRepository.onGetPackagePublisher = _publisherResponse;
+      fakeRepository.onGetPackagePublisher = _publisherCallback;
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
@@ -214,7 +193,7 @@ void main() {
 
     testWidgets('publisherId が null のとき認証アイコンが非表示になる', (tester) async {
       fakeRepository
-        ..onGetPackageDetail = _detailResponse
+        ..onGetPackageDetail = _detailCallback
         ..onGetPackagePublisher = (name) async =>
             PackagePublisherResponse.fromJson(
               Map<String, dynamic>.from(packagePublisherNullResponseJson),
@@ -246,7 +225,7 @@ void main() {
     });
 
     testWidgets('外部リンクオープン失敗時に SnackBar が表示される', (tester) async {
-      final fakeUrlLauncher = _FakeUrlLauncher()..shouldSucceed = false;
+      final fakeUrlLauncher = FakeUrlLauncher()..shouldSucceed = false;
       UrlLauncherPlatform.instance = fakeUrlLauncher;
 
       stubSuccessResponse();
@@ -270,7 +249,7 @@ void main() {
       final version160 = tester.getTopLeft(find.text('1.6.0').last);
       final version150 = tester.getTopLeft(find.text('1.5.0'));
 
-      expect(version160.dy, lessThan(version150.dy));
+      check(version160.dy).isLessThan(version150.dy);
     });
 
     testWidgets('リフレッシュでデータが再取得される', (tester) async {
@@ -280,7 +259,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(RefreshIndicator), findsOneWidget);
-      expect(fakeRepository.getPackageDetailCallCount, 1);
+      check(fakeRepository.getPackageDetailCallCount).equals(1);
 
       final element = tester.element(find.byType(PackageDetailScreen));
       final container = ProviderScope.containerOf(element);
@@ -289,7 +268,7 @@ void main() {
           .refresh();
       await tester.pump();
 
-      expect(fakeRepository.getPackageDetailCallCount, 2);
+      check(fakeRepository.getPackageDetailCallCount).equals(2);
     });
   });
 }

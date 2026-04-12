@@ -1,3 +1,7 @@
+@Tags(['unit'])
+library;
+
+import 'package:checks/checks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
@@ -13,17 +17,13 @@ void main() {
         ),
       );
 
-      expect(response.name, 'http');
-      expect(response.latest.version, '1.6.0');
-      expect(
+      check(response.name).equals('http');
+      check(response.latest.version).equals('1.6.0');
+      check(
         response.latest.pubspec.description,
-        'A composable API for HTTP requests.',
-      );
-      expect(
-        response.latest.pubspec.homepage,
-        'https://example.com',
-      );
-      expect(response.versions, hasLength(2));
+      ).equals('A composable API for HTTP requests.');
+      check(response.latest.pubspec.homepage).equals('https://example.com');
+      check(response.versions).length.equals(2);
     });
   });
 
@@ -35,7 +35,7 @@ void main() {
         ),
       );
 
-      expect(response.publisherId, 'dart.dev');
+      check(response.publisherId).equals('dart.dev');
     });
 
     test('fromJson が publisherId null でパースする', () {
@@ -45,7 +45,7 @@ void main() {
         ),
       );
 
-      expect(response.publisherId, isNull);
+      check(response.publisherId).isNull();
     });
   });
 }

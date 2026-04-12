@@ -1,13 +1,16 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:mockito/mockito.dart';
+// MockPlatformInterfaceMixin が内部で mockito の Mock に依存するため維持
+import 'package:mockito/mockito.dart' show Fake;
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:pubdev_viewer/core/api/pub_dev_api_client.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
 import 'package:pubdev_viewer/features/package_detail/repository/package_detail_repository.dart';
 import 'package:pubdev_viewer/features/package_list/models/package_list_response.dart';
 import 'package:pubdev_viewer/features/package_list/repository/package_list_repository.dart';
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 /// [Dio] の Fake 実装。
 ///
@@ -106,5 +109,22 @@ class FakePackageDetailRepository extends Fake
   Future<PackagePublisherResponse> getPackagePublisher(String name) {
     getPackagePublisherCallCount++;
     return onGetPackagePublisher!(name);
+  }
+}
+
+/// [UrlLauncherPlatform] の Fake 実装。
+///
+/// [launchedUrls] で開かれた URL を検証可能。
+/// [shouldSucceed] で成功・失敗を切り替える。
+class FakeUrlLauncher extends Fake
+    with MockPlatformInterfaceMixin
+    implements UrlLauncherPlatform {
+  final List<String> launchedUrls = [];
+  bool shouldSucceed = true;
+
+  @override
+  Future<bool> launchUrl(String url, LaunchOptions options) async {
+    launchedUrls.add(url);
+    return shouldSucceed;
   }
 }

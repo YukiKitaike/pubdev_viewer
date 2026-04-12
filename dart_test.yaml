@@ -1,0 +1,8 @@
+tags:
+  unit:
+    description: "ユニットテスト（models, repositories, notifiers, utils）"
+  widget:
+    description: "ウィジェットテスト（screens, components）"
+    timeout: 2x
+
+retry: 0

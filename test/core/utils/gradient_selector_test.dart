@@ -1,3 +1,7 @@
+@Tags(['unit'])
+library;
+
+import 'package:checks/checks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
@@ -9,27 +13,27 @@ void main() {
       final first = selectGradientByName('http');
       final second = selectGradientByName('http');
 
-      expect(first, second);
+      check(first).deepEquals(second);
     });
 
     test('異なる名前で異なるグラデーションを返す可能性がある', () {
       final httpGradient = selectGradientByName('http');
       final dioGradient = selectGradientByName('dio');
 
-      expect(httpGradient, isNot(equals(dioGradient)));
+      check(httpGradient).not((it) => it.deepEquals(dioGradient));
     });
 
     test('空文字列でもクラッシュしない', () {
       final result = selectGradientByName('');
 
-      expect(result, isA<List<Color>>());
-      expect(result, isNotEmpty);
+      check(result).isA<List<Color>>();
+      check(result).isNotEmpty();
     });
 
     test('結果が AppColors.avatarGradients に含まれる', () {
       final result = selectGradientByName('http');
 
-      expect(AppColors.avatarGradients, contains(result));
+      check(AppColors.avatarGradients).contains(result);
     });
 
     test('長い名前でもインデックス範囲内に収まる', () {
@@ -37,8 +41,8 @@ void main() {
         'very_long_package_name_that_exceeds_normal_length',
       );
 
-      expect(result, isA<List<Color>>());
-      expect(AppColors.avatarGradients, contains(result));
+      check(result).isA<List<Color>>();
+      check(AppColors.avatarGradients).contains(result);
     });
   });
 }

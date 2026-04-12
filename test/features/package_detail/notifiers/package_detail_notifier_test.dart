@@ -1,3 +1,7 @@
+@Tags(['unit'])
+library;
+
+import 'package:checks/checks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
@@ -9,15 +13,12 @@ import 'package:pubdev_viewer/features/package_detail/repository/package_detail_
 import '../../../helpers/fakes.dart';
 import '../../../helpers/fixtures.dart';
 
-Future<PackageDetailResponse> _detailResponse(String _) async =>
-    PackageDetailResponse.fromJson(
-      Map<String, dynamic>.from(packageDetailResponseJson),
-    );
+// Fake のコールバック型に合わせるためのラッパー
+Future<PackageDetailResponse> _detailCallback(String _) async =>
+    detailResponse();
 
-Future<PackagePublisherResponse> _publisherResponse(String _) async =>
-    PackagePublisherResponse.fromJson(
-      Map<String, dynamic>.from(packagePublisherResponseJson),
-    );
+Future<PackagePublisherResponse> _publisherCallback(String _) async =>
+    publisherResponse();
 
 void main() {
   late FakePackageDetailRepository fakeRepository;
@@ -39,22 +40,22 @@ void main() {
   group('PackageDetailNotifier', () {
     test('build が detail と publisher を並列取得する', () async {
       fakeRepository
-        ..onGetPackageDetail = _detailResponse
-        ..onGetPackagePublisher = _publisherResponse;
+        ..onGetPackageDetail = _detailCallback
+        ..onGetPackagePublisher = _publisherCallback;
 
       final state = await container.read(
         packageDetailNotifierProvider('http').future,
       );
 
-      expect(state.detail.name, 'http');
-      expect(state.publisher.publisherId, 'dart.dev');
-      expect(fakeRepository.getPackageDetailCallCount, 1);
-      expect(fakeRepository.getPackagePublisherCallCount, 1);
+      check(state.detail.name).equals('http');
+      check(state.publisher.publisherId).equals('dart.dev');
+      check(fakeRepository.getPackageDetailCallCount).equals(1);
+      check(fakeRepository.getPackagePublisherCallCount).equals(1);
     });
 
     test('publisherId が null のケースを処理する', () async {
       fakeRepository
-        ..onGetPackageDetail = _detailResponse
+        ..onGetPackageDetail = _detailCallback
         ..onGetPackagePublisher = (name) async =>
             PackagePublisherResponse.fromJson(
               Map<String, dynamic>.from(packagePublisherNullResponseJson),
@@ -64,13 +65,13 @@ void main() {
         packageDetailNotifierProvider('http').future,
       );
 
-      expect(state.publisher.publisherId, isNull);
+      check(state.publisher.publisherId).isNull();
     });
 
     test('getPackageDetail が例外を投げると AsyncError になる', () async {
       fakeRepository.onGetPackageDetail = (_) => throw const NetworkException();
       // ignore: cascade_invocations
-      fakeRepository.onGetPackagePublisher = _publisherResponse;
+      fakeRepository.onGetPackagePublisher = _publisherCallback;
 
       await container
           .read(packageDetailNotifierProvider('http').future)
@@ -80,12 +81,12 @@ void main() {
       final asyncValue = container.read(
         packageDetailNotifierProvider('http'),
       );
-      expect(asyncValue.hasError, isTrue);
+      check(asyncValue.hasError).isTrue();
     });
 
     test('getPackagePublisher が例外を投げると AsyncError になる', () async {
       fakeRepository
-        ..onGetPackageDetail = _detailResponse
+        ..onGetPackageDetail = _detailCallback
         ..onGetPackagePublisher = (_) => throw const NetworkException();
 
       await container
@@ -96,41 +97,40 @@ void main() {
       final asyncValue = container.read(
         packageDetailNotifierProvider('http'),
       );
-      expect(asyncValue.hasError, isTrue);
+      check(asyncValue.hasError).isTrue();
     });
 
     test('sortedVersions が published 降順で並んでいる', () async {
       fakeRepository
-        ..onGetPackageDetail = _detailResponse
-        ..onGetPackagePublisher = _publisherResponse;
+        ..onGetPackageDetail = _detailCallback
+        ..onGetPackagePublisher = _publisherCallback;
 
       final state = await container.read(
         packageDetailNotifierProvider('http').future,
       );
 
-      expect(state.sortedVersions.length, 2);
-      expect(state.sortedVersions[0].version, '1.6.0');
-      expect(state.sortedVersions[1].version, '1.5.0');
-      expect(
+      check(state.sortedVersions).length.equals(2);
+      check(state.sortedVersions[0].version).equals('1.6.0');
+      check(state.sortedVersions[1].version).equals('1.5.0');
+      check(
         state.sortedVersions[0].published.isAfter(
           state.sortedVersions[1].published,
         ),
-        isTrue,
-      );
+      ).isTrue();
     });
 
     test('refresh が再ビルドをトリガーする', () async {
       fakeRepository
-        ..onGetPackageDetail = _detailResponse
-        ..onGetPackagePublisher = _publisherResponse;
+        ..onGetPackageDetail = _detailCallback
+        ..onGetPackagePublisher = _publisherCallback;
 
       await container.read(packageDetailNotifierProvider('http').future);
-      expect(fakeRepository.getPackageDetailCallCount, 1);
+      check(fakeRepository.getPackageDetailCallCount).equals(1);
 
       await container
           .read(packageDetailNotifierProvider('http').notifier)
           .refresh();
-      expect(fakeRepository.getPackageDetailCallCount, 2);
+      check(fakeRepository.getPackageDetailCallCount).equals(2);
     });
   });
 }

@@ -1,15 +1,20 @@
+@Tags(['widget'])
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:pubdev_viewer/core/widgets/error_view.dart';
 
+import '../../helpers/pump_app.dart';
+
 void main() {
   Widget buildSubject({
     required Object error,
     required VoidCallback onRetry,
   }) {
-    return MaterialApp(
+    return createTestApp(
       home: Scaffold(
         body: ErrorView(error: error, onRetry: onRetry),
       ),
