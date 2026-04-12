@@ -30,71 +30,22 @@ lib/features/<feature_name>/
 
 ---
 
-## Step 1: モデル作成
+## Step 1: モデル作成 → `/pubdev-models`
 
-詳細パターンは `/pubdev-models` スキルを参照。
-
-**APIレスポンスモデル**（`fromJson` あり、`part *.g.dart` あり）:
-```dart
-// lib/features/<feature_name>/models/<feature_name>_response.dart
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part '<feature_name>_response.freezed.dart';
-part '<feature_name>_response.g.dart';
-
-@freezed
-abstract class FeatureNameResponse with _$FeatureNameResponse {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory FeatureNameResponse({
-    String? nextUrl,
-    required List<FeatureNameItem> items,
-  }) = _FeatureNameResponse;
-
-  factory FeatureNameResponse.fromJson(Map<String, dynamic> json) =>
-      _$FeatureNameResponseFromJson(json);
-}
-```
-
-> **snake_case マッピング**: `@JsonKey(name: 'snake_case')` を個別に書くのではなく、
-> ファクトリコンストラクタに `@JsonSerializable(fieldRename: FieldRename.snake)` を付けて一括変換する。
-
-**UI ステートモデル**（`fromJson` なし、`part *.g.dart` なし）:
-```dart
-// lib/features/<feature_name>/models/<feature_name>_state.dart
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../core/error/app_exception.dart';
-
-part '<feature_name>_state.freezed.dart';
-
-@freezed
-abstract class FeatureNameState with _$FeatureNameState {
-  const factory FeatureNameState({
-    @Default([]) List<FeatureNameItem> items,
-    String? nextUrl,
-    @Default(false) bool isLoadingMore,
-    AppException? loadMoreError,
-  }) = _FeatureNameState;
-  // fromJson は書かない
-}
-```
+Response モデル（`fromJson` あり）と State モデル（`fromJson` なし）を作成する。
+Freezed + json_serializable のパターン・命名規約・snake_case マッピングは `/pubdev-models` を参照。
 
 コード生成: `fvm dart run build_runner build -d`
 
 ---
 
-## Step 2: Repository 作成
+## Step 2: Repository 作成 → `/pubdev-api-client`
 
 具象クラスのみ（CLAUDE.md の No interfaces ルール参照）。
+API クライアントの継承パターン・新エンドポイント追加は `/pubdev-api-client` を参照。
 
 ```dart
 // lib/features/<feature_name>/repository/<feature_name>_repository.dart
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../../core/api/pub_dev_api_client.dart';
-import '../models/<feature_name>_response.dart';
-
 part '<feature_name>_repository.g.dart';
 
 class FeatureNameRepository {
@@ -107,7 +58,6 @@ class FeatureNameRepository {
   }
 }
 
-// Provider はファイル末尾に関数形式で定義
 @riverpod
 FeatureNameRepository featureNameRepository(Ref ref) {
   return FeatureNameRepository(ref.watch(pubDevApiClientProvider));
@@ -118,123 +68,36 @@ FeatureNameRepository featureNameRepository(Ref ref) {
 
 ---
 
-## Step 3: Notifier 作成
+## Step 3: Notifier 作成 → `/pubdev-state`
 
-詳細パターンは `/pubdev-state` スキルを参照。
-
-```dart
-// lib/features/<feature_name>/notifiers/<feature_name>_notifier.dart
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../models/<feature_name>_state.dart';
-import '../repository/<feature_name>_repository.dart';
-
-part '<feature_name>_notifier.g.dart';
-
-@riverpod
-class FeatureNameNotifier extends _$FeatureNameNotifier {
-  @override
-  Future<FeatureNameState> build() async {
-    final repository = ref.watch(featureNameRepositoryProvider); // build() 内は watch
-    final response = await repository.getFeature();
-    return FeatureNameState(items: response.items, nextUrl: response.nextUrl);
-  }
-
-  Future<void> refresh() async {
-    ref.invalidateSelf();
-    await future;
-  }
-}
-```
+AsyncNotifier の build/loadMore/refresh/エラーハンドリングは `/pubdev-state` を参照。
 
 コード生成: `fvm dart run build_runner build -d`
 
 ---
 
-## Step 4: Screen 作成
+## Step 4: Screen 作成 → `/pubdev-ui`
 
-```dart
-// lib/features/<feature_name>/screens/<feature_name>_screen.dart
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../core/widgets/error_view.dart';
-import '../../../core/widgets/loading_view.dart';
-import '../notifiers/<feature_name>_notifier.dart';
-
-class FeatureNameScreen extends HookConsumerWidget {
-  const FeatureNameScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final asyncState = ref.watch(featureNameNotifierProvider);
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Feature')),
-      body: asyncState.when(
-        loading: () => const LoadingView(),
-        error: (error, _) => ErrorView(
-          error: error,
-          onRetry: () => ref.invalidate(featureNameNotifierProvider),
-        ),
-        data: (state) => ListView.builder(
-          padding: EdgeInsets.only(
-            top: 8,
-            bottom: 16 + MediaQuery.paddingOf(context).bottom,
-          ),
-          itemCount: state.items.length,
-          itemBuilder: (context, index) =>
-              _ItemTile(item: state.items[index]),
-        ),
-      ),
-    );
-  }
-}
-
-class _ItemTile extends StatelessWidget {
-  const _ItemTile({required this.item});
-  final FeatureNameItem item;
-
-  @override
-  Widget build(BuildContext context) {
-    // UI 実装
-    return const SizedBox.shrink();
-  }
-}
-```
-
-UI トークンの使い方は `/pubdev-ui` スキルを参照。
+`HookConsumerWidget` + `asyncState.when` で loading/error/data を分岐する。
+デザイントークン（AppSpacing・AppRadius・context.tokens）は `/pubdev-ui` を参照。
 
 ### 文字列定数
 
 画面に表示するラベル・エラーメッセージ等は `lib/core/strings/app_strings.dart` に定義する。
-別画面で似た文言を重複定義しない（表記揺れ防止）。
 
 - 新しい文言を追加する前に、既存の `AppStrings` に同じ意味の定数がないか確認する
 - 変数名は文言の意味をそのまま使う（例: `retry`, `share`, `networkErrorTitle`）
-  - `label` / `error` / `message` 等のプレフィックスは付けない
 
----
+### Core Utils
 
-## Core Utils の活用
-
-`lib/core/utils/` に汎用ユーティリティ関数がある。feature 内で同等の処理を再実装せず、既存の util を使う。
+`lib/core/utils/` に汎用ユーティリティ関数がある。feature 内で同等の処理を再実装しない。
 
 | ファイル | 関数 | 用途 |
 |----------|------|------|
 | `date_formatter.dart` | `formatDate(DateTime)` | `yyyy-MM-dd` 形式の日付表示 |
 | `json_converters.dart` | `dateTimeFromIso8601` / `dateTimeToIso8601` | `@JsonKey` 用 ISO 8601 DateTime 変換 |
-| `gradient_selector.dart` | `selectGradientByName(String)` | 文字列ハッシュによるアバターグラデーション選択 |
+| `gradient_selector.dart` | `selectGradientByName(String)` | アバターグラデーション選択 |
 | `url_utils.dart` | `pubDevPackageUrl(String)` / `isHttpUrl(String?)` | pub.dev URL 構築・HTTP URL バリデーション |
-
-```dart
-import 'package:pubdev_viewer/core/utils/date_formatter.dart';
-import 'package:pubdev_viewer/core/utils/json_converters.dart';
-import 'package:pubdev_viewer/core/utils/gradient_selector.dart';
-import 'package:pubdev_viewer/core/utils/url_utils.dart';
-```
-
-新しい汎用関数が必要な場合は `core/utils/` に追加する。feature 固有のヘルパーは feature 内に留める。
 
 ---
 
@@ -256,18 +119,15 @@ class FeatureNameRoute extends GoRouteData {
 
 ---
 
-## Step 6: テスト作成
+## Step 6: テスト作成 → `/pubdev-testing`
 
-テストは `/pubdev-testing` スキルを参照。
+Fake パターン・フィクスチャビルダー・createTestApp・package:checks・タグ分類は `/pubdev-testing` を参照。
 `test/features/<feature_name>/` 配下に `lib/` と同じ階層構造でテストを配置。
 
 テスト準備:
-1. `test/helpers/fakes.dart` に新 feature の Fake クラスを追加（`FakeFeatureNameRepository`）
-2. `test/helpers/fixtures.dart` に API レスポンスの const JSON マップ + 型付きビルダー関数を追加
-3. ユニットテストファイルに `@Tags(['unit'])`、ウィジェットテストに `@Tags(['widget'])` を付与
-4. アサーションは `package:checks` の `check()` を使用（finder 系のみ `expect`）
-5. ウィジェットテストは `test/helpers/pump_app.dart` の `createTestApp()` を使用
-6. Notifier テスト → Repository テスト → Screen ウィジェットテストの順で作成
+1. `test/helpers/fakes.dart` に Fake クラスを追加
+2. `test/helpers/fixtures.dart` に const JSON マップ + 型付きビルダー関数を追加
+3. Notifier テスト → Repository テスト → Screen ウィジェットテストの順で作成
 
 ---
 
@@ -293,16 +153,12 @@ class FeatureNameScreen extends HookConsumerWidget {
 
 ## チェックリスト
 
-- [ ] models/ に Response モデル（fromJson あり）と State モデル（fromJson なし）を作成
-- [ ] repository/ に具象クラス + `@riverpod` 関数を作成（インターフェース不要）
-- [ ] notifiers/ に `@riverpod class` を作成（build() で初期ロード）
-- [ ] screens/ に `HookConsumerWidget` を作成
+- [ ] models/ に Response + State モデルを作成（`/pubdev-models` 準拠）
+- [ ] repository/ に具象クラス + `@riverpod` 関数を作成
+- [ ] notifiers/ に `@riverpod class` を作成（`/pubdev-state` 準拠）
+- [ ] screens/ に `HookConsumerWidget` を作成（`/pubdev-ui` 準拠）
 - [ ] router.dart にルート追加
-- [ ] `test/helpers/fakes.dart` に Fake クラスを追加
-- [ ] `test/helpers/fixtures.dart` に API レスポンスの const JSON マップ + 型付きビルダー関数を追加
-- [ ] テストファイルに `@Tags(['unit'])` / `@Tags(['widget'])` を付与
-- [ ] ウィジェットテストは `createTestApp()` を使用、アサーションは `check()` を使用
+- [ ] テスト作成（`/pubdev-testing` 準拠）
 - [ ] 各レイヤー追加後に `fvm dart run build_runner build -d` 実行
 - [ ] `fvm dart analyze` でエラー 0 件確認
 - [ ] `fvm flutter test` で既存テスト PASS 確認
-
