@@ -53,7 +53,7 @@ import 'package:pubdev_viewer/core/design_system/design_system.dart';
 ## Testing
 
 - Mock 禁止。`Fake implements XxxRepository`。フィクスチャ: `test/helpers/fixtures.dart`
-- Notifier テスト: `ProviderContainer` + `tearDown` で `dispose()`
+- Notifier テスト: `ProviderContainer.test()` で自動クリーンアップ
 - アサーション: `package:checks`（値検証） + `expect`（finder 系）。新規テストは `check()` 優先
 - テストタグ: `@Tags(['unit'])` / `@Tags(['widget'])` を全ファイルに付与済み
 - 選択実行: `fvm flutter test -t unit` / `fvm flutter test -t widget`

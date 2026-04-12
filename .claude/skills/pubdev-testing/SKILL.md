@@ -200,15 +200,13 @@ void main() {
 
   setUp(() {
     fakeRepository = FakePackageListRepository();
-    container = ProviderContainer(
+    container = ProviderContainer.test(
+      // Riverpod v3 の自動リトライを無効化。エラー系テストが安定しなくなるため。
+      retry: (_, _) => null,
       overrides: [
         packageListRepositoryProvider.overrideWithValue(fakeRepository),
       ],
     );
-  });
-
-  tearDown(() {
-    container.dispose(); // 必ず dispose する
   });
 
   group('PackageListNotifier', () {
@@ -216,7 +214,7 @@ void main() {
       fakeRepository.onGetPackages = ({String? pageUrl}) async =>
           firstPageResponse();
 
-      final state = await container.read(packageListNotifierProvider.future);
+      final state = await container.read(packageListProvider.future);
 
       check(state.packages).length.equals(2);
       check(state.packages[0].name).equals('http');
@@ -237,11 +235,11 @@ test('build は repository が例外を投げると AsyncError になる', () as
 
   // future を await してエラーを握り潰す（テストクラッシュ回避）
   await container
-      .read(packageListNotifierProvider.future)
+      .read(packageListProvider.future)
       .then((_) => null)
       .catchError((_) => null);
 
-  final asyncValue = container.read(packageListNotifierProvider);
+  final asyncValue = container.read(packageListProvider);
   check(asyncValue.hasError).isTrue();
   check(asyncValue.error).isA<NetworkException>();
 });
@@ -260,10 +258,10 @@ test('loadMore はエラー時に既存データを保持する', () async {
     throw const NetworkException();
   };
 
-  await container.read(packageListNotifierProvider.future);
-  await container.read(packageListNotifierProvider.notifier).loadMore();
+  await container.read(packageListProvider.future);
+  await container.read(packageListProvider.notifier).loadMore();
 
-  final state = container.read(packageListNotifierProvider).valueOrNull;
+  final state = container.read(packageListProvider).value;
   check(state).isNotNull();
   check(state!.packages).length.equals(2);
   check(state.isLoadingMore).isFalse();
@@ -393,10 +391,8 @@ PackageListResponse.fromJson(packageListResponseJson)
 @GenerateMocks([PackageListRepository])
 void main() { ... }
 
-// ❌ tearDown で dispose を忘れる（メモリリーク）
-tearDown(() {
-  // container.dispose() を書かない
-});
+// ❌ ProviderContainer() を直接使う（ProviderContainer.test() を使う）
+container = ProviderContainer(overrides: [...]); // → ProviderContainer.test() で自動 dispose
 
 // ❌ テストごとにインラインで JSON を定義する（fixtures のビルダーを使う）
 fakeRepository.onGetPackages = ({_}) async =>
@@ -417,7 +413,7 @@ Widget createTestWidget() => MaterialApp(theme: appLightTheme, home: ...);
 ### WHY コメントの典型例
 
 - `Map<String, dynamic>.from()` でコピーする理由（const マップを直接渡すと内部変換で UnmodifiableMapError）
-- `tearDown` で `container.dispose()` する理由（provider のリソースリーク防止）
+- `ProviderContainer.test()` を使う理由（自動 dispose でリソースリーク防止）
 - Completer でテスト終了前に `complete()` する理由（未完了 future が残ると dispose エラー）
 - Fake にコールバックプロパティを使う理由（テストごとに挙動を差し替え可能にする）
 - ダブル `pump()` の理由（Riverpod AsyncNotifier のマイクロタスク解決サイクル）

@@ -58,7 +58,7 @@ class PackageDetailNotifier extends _$PackageDetailNotifier {
   }
 }
 
-// 使用側: ref.watch(packageDetailNotifierProvider('riverpod'))
+// 使用側: ref.watch(packageDetailProvider('riverpod'))
 ```
 
 ---
@@ -88,7 +88,7 @@ Future<PackageDetailState> build(String packageName) async {
 
 ```dart
 Future<void> loadMore() async {
-  final current = state.valueOrNull;
+  final current = state.value;
   // Guard: null状態・ロード中・次ページなし の3つを必ずチェック
   if (current == null || current.isLoadingMore || current.nextUrl == null) {
     return;
@@ -100,6 +100,10 @@ Future<void> loadMore() async {
   try {
     final repository = ref.read(packageListRepositoryProvider); // メソッド内は read
     final response = await repository.getPackages(pageUrl: current.nextUrl);
+    // async gap 後にプロバイダが破棄されていれば state 更新をスキップする。
+    if (!ref.mounted) {
+      return;
+    }
     state = AsyncData(
       PackageListState(
         packages: [...current.packages, ...response.packages], // 結合
@@ -135,7 +139,7 @@ Future<void> refresh() async {
 
 ```dart
 void clearLoadMoreError() {
-  final current = state.valueOrNull;
+  final current = state.value;
   if (current == null) return;
   state = AsyncData(current.copyWith(loadMoreError: null));
 }
@@ -150,18 +154,18 @@ class PackageListScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 状態の購読
-    final asyncState = ref.watch(packageListNotifierProvider);
+    final asyncState = ref.watch(packageListProvider);
 
     // 副作用（Snackbar・ナビゲーション）は ref.listen で
-    ref.listen(packageListNotifierProvider, (previous, next) {
-      final error = next.valueOrNull?.loadMoreError;
+    ref.listen(packageListProvider, (_, next) {
+      final error = next.value?.loadMoreError;
       if (error != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('追加読み込みに失敗しました')),
         );
         // エラーを即座にクリアする。クリアしないと state が変わるたびに
         // ref.listen が再発火し、同じ Snackbar が繰り返し表示される。
-        ref.read(packageListNotifierProvider.notifier).clearLoadMoreError();
+        ref.read(packageListProvider.notifier).clearLoadMoreError();
       }
     });
 
@@ -170,11 +174,11 @@ class PackageListScreen extends HookConsumerWidget {
         loading: () => const SkeletonListView(),  // 初回ロード
         error: (error, _) => ErrorView(
           error: error,
-          onRetry: () => ref.invalidate(packageListNotifierProvider),
+          onRetry: () => ref.read(packageListProvider.notifier).refresh(),
         ),
         data: (state) => RefreshIndicator(
           onRefresh: () =>
-              ref.read(packageListNotifierProvider.notifier).refresh(),
+              ref.read(packageListProvider.notifier).refresh(),
           child: ListView.builder(/* ... */),
         ),
       ),

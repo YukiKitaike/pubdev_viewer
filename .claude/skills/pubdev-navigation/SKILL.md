@@ -34,7 +34,7 @@ part 'router.g.dart';
   ],
 )
 @immutable
-class PackageListRoute extends GoRouteData with _$PackageListRoute {
+class PackageListRoute extends GoRouteData with $PackageListRoute {
   const PackageListRoute();
 
   @override
@@ -45,7 +45,7 @@ class PackageListRoute extends GoRouteData with _$PackageListRoute {
 
 // パスパラメータは final フィールド + required コンストラクタ引数で受け取る
 @immutable
-class PackageDetailRoute extends GoRouteData with _$PackageDetailRoute {
+class PackageDetailRoute extends GoRouteData with $PackageDetailRoute {
   const PackageDetailRoute({required this.name});
 
   final String name;
@@ -71,13 +71,13 @@ final router = GoRouter(
 1. `router.dart` に `GoRouteData` サブクラスを追加
 2. 親ルートの `@TypedGoRoute` の `routes` リストにネスト定義を追加（トップレベルなら新しい `@TypedGoRoute` を追加）
 3. `fvm dart run build_runner build -d` で `router.g.dart` を再生成
-4. `with _$RouteName` mixin が自動生成される
+4. `with $RouteName` mixin が自動生成される
 
 ```dart
 // 例: 設定画面を追加する場合
 @TypedGoRoute<SettingsRoute>(path: '/settings')
 @immutable
-class SettingsRoute extends GoRouteData with _$SettingsRoute {
+class SettingsRoute extends GoRouteData with $SettingsRoute {
   const SettingsRoute();
 
   @override
@@ -140,7 +140,7 @@ GoRouter _createTestRouter(
 ```dart
 // ❌ GoRouteData に mixin を忘れる（コード生成が効かない）
 class MyRoute extends GoRouteData {
-  // with _$MyRoute が必要
+  // with $MyRoute が必要
 }
 
 // ❌ パスパラメータ名とフィールド名が不一致

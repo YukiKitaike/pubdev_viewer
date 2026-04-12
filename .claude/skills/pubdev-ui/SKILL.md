@@ -14,7 +14,7 @@ description: >
 全トークンは1つのバレルファイルからインポートする:
 
 ```dart
-import '../../../core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
 // AppSpacing, AppRadius, AppColors, AppThemeTokens,
 // AppCardTheme, defaultCardTheme, cardElevatedShadow が使用可能
 ```
@@ -153,7 +153,7 @@ class PackageListScreen extends HookConsumerWidget {
       void onScroll() {
         if (scrollController.position.pixels >=
             scrollController.position.maxScrollExtent - 200) {
-          ref.read(packageListNotifierProvider.notifier).loadMore();
+          ref.read(packageListProvider.notifier).loadMore();
         }
       }
       scrollController.addListener(onScroll);
