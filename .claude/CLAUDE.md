@@ -37,7 +37,7 @@ feature 間の直接依存禁止。共通処理は `core/`。新規は `/pubdev-
 - **No Entity split** — `fromJson`/`toJson` 持ちの 1 クラスで完結
 - **No premature core promotion** — 2 feature で共有されてから `core/` 昇格
 - **No hardcoded values** — 色・余白はデザイントークン、文字列は `AppStrings`
-- **No relative imports** — `package:pubdev_viewer/...` 形式のみ
+- **No relative imports** — `package:pubdev_viewer/...` 形式のみ（`test/` ヘルパー間の相対 import は許容）
 - **WHY comments only** — WHAT 禁止。設計判断に 1〜2 行の日本語コメント
 - **Zero Linter errors** — `fvm dart analyze` でゼロ維持
 
@@ -54,6 +54,11 @@ import 'package:pubdev_viewer/core/design_system/design_system.dart';
 
 - Mock 禁止。`Fake implements XxxRepository`。フィクスチャ: `test/helpers/fixtures.dart`
 - Notifier テスト: `ProviderContainer` + `tearDown` で `dispose()`
+- アサーション: `package:checks`（値検証） + `expect`（finder 系）。新規テストは `check()` 優先
+- テストタグ: `@Tags(['unit'])` / `@Tags(['widget'])` を全ファイルに付与済み
+- 選択実行: `fvm flutter test -t unit` / `fvm flutter test -t widget`
+- 共有ヘルパー: `test/helpers/` — `fakes.dart`(Fake 群), `fixtures.dart`(JSON + ビルダー), `pump_app.dart`(createTestApp)
+- 新機能の TDD フロー: Red（失敗テスト） → Green（最小実装） → Refactor（整理）
 
 ## Git
 

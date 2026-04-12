@@ -263,8 +263,11 @@ class FeatureNameRoute extends GoRouteData {
 
 テスト準備:
 1. `test/helpers/fakes.dart` に新 feature の Fake クラスを追加（`FakeFeatureNameRepository`）
-2. `test/helpers/fixtures.dart` に API レスポンスの const JSON マップを追加
-3. Notifier テスト → Repository テスト → Screen ウィジェットテストの順で作成
+2. `test/helpers/fixtures.dart` に API レスポンスの const JSON マップ + 型付きビルダー関数を追加
+3. ユニットテストファイルに `@Tags(['unit'])`、ウィジェットテストに `@Tags(['widget'])` を付与
+4. アサーションは `package:checks` の `check()` を使用（finder 系のみ `expect`）
+5. ウィジェットテストは `test/helpers/pump_app.dart` の `createTestApp()` を使用
+6. Notifier テスト → Repository テスト → Screen ウィジェットテストの順で作成
 
 ---
 
@@ -296,7 +299,9 @@ class FeatureNameScreen extends HookConsumerWidget {
 - [ ] screens/ に `HookConsumerWidget` を作成
 - [ ] router.dart にルート追加
 - [ ] `test/helpers/fakes.dart` に Fake クラスを追加
-- [ ] `test/helpers/fixtures.dart` に API レスポンスの const JSON マップを追加
+- [ ] `test/helpers/fixtures.dart` に API レスポンスの const JSON マップ + 型付きビルダー関数を追加
+- [ ] テストファイルに `@Tags(['unit'])` / `@Tags(['widget'])` を付与
+- [ ] ウィジェットテストは `createTestApp()` を使用、アサーションは `check()` を使用
 - [ ] 各レイヤー追加後に `fvm dart run build_runner build -d` 実行
 - [ ] `fvm dart analyze` でエラー 0 件確認
 - [ ] `fvm flutter test` で既存テスト PASS 確認

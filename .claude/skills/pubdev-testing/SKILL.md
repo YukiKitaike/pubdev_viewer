@@ -3,7 +3,8 @@ name: pubdev-testing
 description: >
   pubdev_viewer のテストパターン。ユニットテスト（notifier・repository）・
   ウィジェットテストを書く際に使用。Fake パターン・ProviderContainer・
-  フィクスチャ・Completer を使ったテクニックを実際のコードから提供する。
+  フィクスチャビルダー・Completer・package:checks・テストタグを
+  実際のコードから提供する。
 ---
 
 # テストパターン（pubdev_viewer）
@@ -28,6 +29,74 @@ group('PackageListNotifier', () {
 
 ---
 
+## テストタグ
+
+全テストファイルに `@Tags` を付与し、選択実行を可能にする。
+`dart_test.yaml` でタグ定義済み。
+
+```dart
+// ユニットテスト（models, repositories, notifiers, utils）
+@Tags(['unit'])
+library;
+
+import 'package:flutter_test/flutter_test.dart';
+// ...
+```
+
+```dart
+// ウィジェットテスト（screens, components）
+@Tags(['widget'])
+library;
+
+import 'package:flutter_test/flutter_test.dart';
+// ...
+```
+
+選択実行:
+```bash
+fvm flutter test -t unit    # ユニットテストのみ
+fvm flutter test -t widget   # ウィジェットテストのみ
+```
+
+---
+
+## アサーション: package:checks 優先
+
+値アサーションは `package:checks` の `check()` を使う。
+Flutter の finder 系アサーション（`find.*` / `findsOneWidget`）のみ `expect` を維持。
+
+```dart
+import 'package:checks/checks.dart';
+
+// ✅ 値アサーション → check()
+check(state.packages).length.equals(2);
+check(state.packages[0].name).equals('http');
+check(state.nextUrl).isNotNull();
+check(response.publisherId).isNull();
+check(asyncValue.hasError).isTrue();
+check(asyncValue.error).isA<NetworkException>();
+check(fakeRepository.getPackagesCallCount).equals(1);
+check(fakeDio.getCalls).deepEquals(['https://pub.dev/api/packages']);
+
+// ✅ finder 系 → expect（package:checks 非対応）
+expect(find.text('http'), findsOneWidget);
+expect(find.byType(CircularProgressIndicator), findsOneWidget);
+expect(find.byIcon(Icons.share), findsOneWidget);
+
+// ✅ async throws → await check(future).throws<T>()
+await check(repository.getPackages()).throws<NetworkException>();
+
+// ✅ throwsA + having → expect 維持（async Future + プロパティ検証）
+expect(
+  () => apiClient.getPackages(),
+  throwsA(
+    isA<ServerException>().having((e) => e.statusCode, 'statusCode', 404),
+  ),
+);
+```
+
+---
+
 ## ファイル配置ルール
 
 `lib/` の構造を `test/` 配下にそのまま鏡像する:
@@ -35,21 +104,57 @@ group('PackageListNotifier', () {
 ```
 lib/features/package_list/notifiers/package_list_notifier.dart
 → test/features/package_list/notifiers/package_list_notifier_test.dart
-
-lib/features/package_list/repository/package_list_repository.dart
-→ test/features/package_list/repository/package_list_repository_test.dart
 ```
 
 ---
 
 ## 共有テストヘルパー
 
-`test/helpers/` に 2 ファイルが存在する:
+`test/helpers/` に 3 ファイルが存在する:
 
-- [test/helpers/fakes.dart]— Fake クラスの定義
-- [test/helpers/fixtures.dart] — const JSON マップ（フィクスチャ）
+- `test/helpers/fakes.dart` — Fake クラスの定義（FakeDio, FakePubDevApiClient, FakePackageListRepository, FakePackageDetailRepository, FakeUrlLauncher）
+- `test/helpers/fixtures.dart` — const JSON マップ + 型付きビルダー関数
+- `test/helpers/pump_app.dart` — `createTestApp()` ウィジェットテストヘルパー
 
-テストファイル内にインラインで JSON を書かない。必ず共有フィクスチャを使う。
+テストファイル内にインラインで JSON やヘルパー関数を書かない。必ず共有ヘルパーを使う。
+
+---
+
+## フィクスチャビルダー
+
+`test/helpers/fixtures.dart` には const JSON マップに加え、型付きビルダー関数がある:
+
+```dart
+// const JSON マップ（パース前のデータ）
+packageListResponseJson
+packageListResponseLastPageJson
+packageDetailResponseJson
+packageDetailResponseNoHomepageJson
+packageDetailResponseNoUrlJson
+packagePublisherResponseJson
+packagePublisherNullResponseJson
+
+// 型付きビルダー関数（パース済みモデルを返す）
+PackageListResponse firstPageResponse()
+PackageListResponse lastPageResponse()
+PackageDetailResponse detailResponse()
+PackageDetailResponse detailResponseNoHomepage()
+PackageDetailResponse detailResponseNoUrl()
+PackagePublisherResponse publisherResponse()
+PackagePublisherResponse publisherNullResponse()
+PackageListItem httpPackageItem()
+PackageListItem dioPackageItem()
+List<PackageDetailVersion> sortedVersions()
+```
+
+```dart
+// ✅ ビルダー関数を使う
+fakeRepository.onGetPackages = ({String? pageUrl}) async => firstPageResponse();
+
+// ❌ 各テストで Map.from + fromJson を書かない
+fakeRepository.onGetPackages = ({String? pageUrl}) async =>
+    PackageListResponse.fromJson(Map<String, dynamic>.from(packageListResponseJson));
+```
 
 ---
 
@@ -57,8 +162,6 @@ lib/features/package_list/repository/package_list_repository.dart
 
 `@GenerateMocks` + mockito の Mock は使わない。
 `Fake` + `implements` でテストダブルを作り、コールバックプロパティで挙動を設定する。
-Fake は挙動が明示的で、Completer による非同期制御が可能。mockito の `when`/`verify`
-よりテストコードの可読性が高く、実行時型エラーも起きにくい。
 
 ```dart
 // test/helpers/fakes.dart の実際のパターン
@@ -81,21 +184,15 @@ class FakePackageListRepository extends Fake implements PackageListRepository {
 ## Notifier ユニットテスト（ProviderContainer）
 
 ```dart
-// test/features/package_list/notifiers/package_list_notifier_test.dart
+@Tags(['unit'])
+library;
+
+import 'package:checks/checks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pubdev_viewer/features/package_list/models/package_list_response.dart';
-import 'package:pubdev_viewer/features/package_list/notifiers/package_list_notifier.dart';
-import 'package:pubdev_viewer/features/package_list/repository/package_list_repository.dart';
 
 import '../../../helpers/fakes.dart';
 import '../../../helpers/fixtures.dart';
-
-// フィクスチャからモデルを生成するヘルパー
-// Map<String, dynamic>.from(...) でコピー — const マップを破壊しないため必須
-PackageListResponse _firstPage() => PackageListResponse.fromJson(
-  Map<String, dynamic>.from(packageListResponseJson),
-);
 
 void main() {
   late FakePackageListRepository fakeRepository;
@@ -115,20 +212,19 @@ void main() {
   });
 
   group('PackageListNotifier', () {
-    test('build は初期パッケージを取得する', () async {
-      fakeRepository.onGetPackages = ({String? pageUrl}) async => _firstPage();
+    test('build が初期パッケージを取得する', () async {
+      fakeRepository.onGetPackages = ({String? pageUrl}) async =>
+          firstPageResponse();
 
       final state = await container.read(packageListNotifierProvider.future);
 
-      expect(state.packages, hasLength(2));
-      expect(state.packages[0].name, 'http');
-      expect(state.nextUrl, isNotNull);
+      check(state.packages).length.equals(2);
+      check(state.packages[0].name).equals('http');
+      check(state.nextUrl).isNotNull();
     });
   });
 }
 ```
-
-実際のファイル: [test/features/package_list/notifiers/package_list_notifier_test.dart]
 
 ---
 
@@ -146,8 +242,8 @@ test('build は repository が例外を投げると AsyncError になる', () as
       .catchError((_) => null);
 
   final asyncValue = container.read(packageListNotifierProvider);
-  expect(asyncValue.hasError, isTrue);
-  expect(asyncValue.error, isA<NetworkException>());
+  check(asyncValue.hasError).isTrue();
+  check(asyncValue.error).isA<NetworkException>();
 });
 ```
 
@@ -160,18 +256,18 @@ test('loadMore はエラー時に既存データを保持する', () async {
   var callCount = 0;
   fakeRepository.onGetPackages = ({String? pageUrl}) async {
     callCount++;
-    if (callCount == 1) return _firstPage();
-    throw const NetworkException(); // 2回目はエラー
+    if (callCount == 1) return firstPageResponse();
+    throw const NetworkException();
   };
 
   await container.read(packageListNotifierProvider.future);
   await container.read(packageListNotifierProvider.notifier).loadMore();
 
   final state = container.read(packageListNotifierProvider).valueOrNull;
-  expect(state, isNotNull);
-  expect(state!.packages, hasLength(2));   // 既存データは保持
-  expect(state.isLoadingMore, isFalse);
-  expect(state.loadMoreError, isA<NetworkException>());
+  check(state).isNotNull();
+  check(state!.packages).length.equals(2);
+  check(state.isLoadingMore).isFalse();
+  check(state.loadMoreError).isA<NetworkException>();
 });
 ```
 
@@ -182,9 +278,9 @@ test('loadMore はエラー時に既存データを保持する', () async {
 `Completer` で future を保留し、ローディング中の状態を検証する:
 
 ```dart
-test('ローディング中は SkeletonListView が表示される', (tester) async {
+testWidgets('ローディング中は SkeletonListView が表示される', (tester) async {
   final completer = Completer<PackageListResponse>();
-  fakeRepository.getPackagesCompleter = completer; // future を保留
+  fakeRepository.getPackagesCompleter = completer;
 
   await tester.pumpWidget(createTestWidget());
   await tester.pump();
@@ -192,44 +288,59 @@ test('ローディング中は SkeletonListView が表示される', (tester) as
   expect(find.byType(SkeletonListView), findsOneWidget);
 
   // テスト終了前に complete して dispose エラーを防ぐ
-  completer.complete(PackageListResponse.fromJson(
-    Map<String, dynamic>.from(packageListResponseJson),
-  ));
+  completer.complete(lastPageResponse());
   await tester.pump();
 });
 ```
 
 ---
 
-## ウィジェットテスト（Screen レベル）
+## ウィジェットテスト（createTestApp）
+
+`test/helpers/pump_app.dart` の `createTestApp()` で MaterialApp + テーマ + ProviderScope を共通化:
 
 ```dart
+@Tags(['widget'])
+library;
+
+import 'package:checks/checks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Widget createTestWidget() {
-  return ProviderScope(
-    overrides: [
-      packageListRepositoryProvider.overrideWithValue(fakeRepository),
-    ],
-    child: const MaterialApp(home: PackageListScreen()),
-  );
-  // GoRouter は不要（ウィジェット単体テストには MaterialApp で十分）
+import '../../../helpers/fakes.dart';
+import '../../../helpers/fixtures.dart';
+import '../../../helpers/pump_app.dart';
+
+void main() {
+  late FakePackageListRepository fakeRepository;
+
+  setUp(() {
+    fakeRepository = FakePackageListRepository();
+  });
+
+  // createTestApp で ProviderScope + MaterialApp(appLightTheme) をラップ
+  Widget createTestWidget() {
+    return createTestApp(
+      home: const PackageListScreen(),
+      overrides: [
+        packageListRepositoryProvider.overrideWithValue(fakeRepository),
+      ],
+    );
+  }
+
+  testWidgets('データ取得後にパッケージ名が表示される', (tester) async {
+    fakeRepository.onGetPackages = ({String? pageUrl}) async =>
+        firstPageResponse();
+
+    await tester.pumpWidget(createTestWidget());
+    // Riverpod AsyncNotifier のマイクロタスク解決に 2 回 pump が必要
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('http'), findsOneWidget);
+  });
 }
-
-testWidgets('データ取得後にパッケージ名が表示される', (tester) async {
-  fakeRepository.onGetPackages = ({String? pageUrl}) async =>
-      PackageListResponse.fromJson(
-        Map<String, dynamic>.from(packageListResponseJson),
-      );
-
-  await tester.pumpWidget(createTestWidget());
-  await tester.pump(); // async 発火
-  await tester.pump(); // settle
-
-  expect(find.text('http'), findsOneWidget);
-});
 ```
 
 ---
@@ -239,44 +350,23 @@ testWidgets('データ取得後にパッケージ名が表示される', (tester
 Repository は `FakePubDevApiClient` を使って直接テストする:
 
 ```dart
-void main() {
-  late FakePubDevApiClient fakeApiClient;
-  late PackageListRepository repository;
+test('getPackages がパース済みレスポンスを返す', () async {
+  fakeApiClient.onGetPackages = ({String? pageUrl}) async =>
+      Map<String, dynamic>.from(packageListResponseJson);
 
-  setUp(() {
-    fakeApiClient = FakePubDevApiClient();
-    repository = PackageListRepository(fakeApiClient); // 直接インスタンス化
-  });
+  final response = await repository.getPackages();
 
-  test('getPackages はパース済みレスポンスを返す', () async {
-    fakeApiClient.onGetPackages = ({String? pageUrl}) async =>
-        Map<String, dynamic>.from(packageListResponseJson);
+  check(response.packages).length.equals(2);
+  check(response.packages[0].name).equals('http');
+  check(fakeApiClient.getPackagesCalls).length.equals(1);
+});
 
-    final response = await repository.getPackages();
+test('getPackages が NetworkException を再スローする', () async {
+  fakeApiClient.onGetPackages = ({String? pageUrl}) =>
+      throw const NetworkException();
 
-    expect(response.packages, hasLength(2));
-    expect(fakeApiClient.getPackagesCalls, hasLength(1));
-  });
-
-  test('getPackages は NetworkException を再スローする', () {
-    fakeApiClient.onGetPackages = ({String? pageUrl}) =>
-        throw const NetworkException();
-
-    expect(() => repository.getPackages(), throwsA(isA<NetworkException>()));
-  });
-
-  test('ServerException の statusCode を検証する', () {
-    fakeApiClient.onGetPackages = ({String? pageUrl}) =>
-        throw const ServerException(500);
-
-    expect(
-      () => repository.getPackages(),
-      throwsA(
-        isA<ServerException>().having((e) => e.statusCode, 'statusCode', 500),
-      ),
-    );
-  });
-}
+  await check(repository.getPackages()).throws<NetworkException>();
+});
 ```
 
 ---
@@ -287,7 +377,10 @@ void main() {
 // ✅ 常に Map<String, dynamic>.from() でコピーしてから fromJson に渡す
 PackageListResponse.fromJson(Map<String, dynamic>.from(packageListResponseJson))
 
-// ❌ const マップを直接渡すと fromJson 内部の変換で UnmodifiableMapError が出る場合がある
+// ✅ またはビルダー関数を使う（内部で Map.from 済み）
+firstPageResponse()
+
+// ❌ const マップを直接渡すと内部変換で UnmodifiableMapError が出る場合がある
 PackageListResponse.fromJson(packageListResponseJson)
 ```
 
@@ -305,9 +398,18 @@ tearDown(() {
   // container.dispose() を書かない
 });
 
-// ❌ テストごとにインラインで JSON を定義する
+// ❌ テストごとにインラインで JSON を定義する（fixtures のビルダーを使う）
 fakeRepository.onGetPackages = ({_}) async =>
-    PackageListResponse.fromJson({'next_url': null, 'packages': []}); // fixtures を使う
+    PackageListResponse.fromJson({'next_url': null, 'packages': []});
+
+// ❌ @Tags を書かない（選択実行が効かない）
+// ファイル先頭に @Tags(['unit']) または @Tags(['widget']) を必ず付ける
+
+// ❌ 値アサーションに expect を使う（package:checks 優先）
+expect(state.packages, hasLength(2)); // → check(state.packages).length.equals(2);
+
+// ❌ ローカルに createTestWidget を定義する（createTestApp を使う）
+Widget createTestWidget() => MaterialApp(theme: appLightTheme, home: ...);
 ```
 
 ---
@@ -318,3 +420,4 @@ fakeRepository.onGetPackages = ({_}) async =>
 - `tearDown` で `container.dispose()` する理由（provider のリソースリーク防止）
 - Completer でテスト終了前に `complete()` する理由（未完了 future が残ると dispose エラー）
 - Fake にコールバックプロパティを使う理由（テストごとに挙動を差し替え可能にする）
+- ダブル `pump()` の理由（Riverpod AsyncNotifier のマイクロタスク解決サイクル）

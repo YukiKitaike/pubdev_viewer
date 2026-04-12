@@ -14,7 +14,7 @@ CLAUDE.md の Critical Rules に基づいて、変更されたコードをレビ
 - **No Entity split** — 同一データに対して DTO/Entity が分離されていないか
 - **No premature core promotion** — 1 feature でしか使われていないモデルが `core/` にないか
 - **No hardcoded values** — `Colors.xxx` / `fontSize:` / ハードコード文字列がないか
-- **No relative imports** — `import '../` パターンがないか
+- **No relative imports** — `lib/` 内で `import '../` パターンがないか（`test/` ヘルパー間の相対 import は許容）
 - **WHY comments only** — WHAT コメントが追加されていないか
 
 ## 出力形式
