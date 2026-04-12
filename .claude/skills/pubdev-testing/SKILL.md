@@ -196,11 +196,15 @@ Widget createTestWidget() => MaterialApp(theme: appLightTheme, home: ...);
 
 ## テスト実装例
 
-具体的なテストコードの実装例は [examples.md](references/examples.md) を参照:
+具体的なテストコードの実装例はトピック別に参照:
 
+### [ユニットテスト例](references/unit_test_examples.md)
 - Fake パターンの定義方法
 - Notifier ユニットテスト（ProviderContainer）
-- AsyncError / loadMore エラー / ローディング状態のテスト
-- ウィジェットテスト（createTestApp）
+- AsyncError / loadMore エラーのテスト
 - Repository ユニットテスト
 - フィクスチャのコピーが必要な理由
+
+### [ウィジェットテスト例](references/widget_test_examples.md)
+- ローディング状態のテスト（Completer）
+- ウィジェットテスト（createTestApp）

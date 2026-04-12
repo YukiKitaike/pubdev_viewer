@@ -1,4 +1,4 @@
-# テスト実装例（pubdev_viewer）
+# ユニットテスト実装例（pubdev_viewer）
 
 ## Fake パターン（Mock より優先）
 
@@ -113,78 +113,6 @@ test('loadMore はエラー時に既存データを保持する', () async {
 
 ---
 
-## ローディング状態のテスト（Completer）
-
-`Completer` で future を保留し、ローディング中の状態を検証する:
-
-```dart
-testWidgets('ローディング中は SkeletonListView が表示される', (tester) async {
-  final completer = Completer<PackageListResponse>();
-  fakeRepository.getPackagesCompleter = completer;
-
-  await tester.pumpWidget(createTestWidget());
-  await tester.pump();
-
-  expect(find.byType(SkeletonListView), findsOneWidget);
-
-  // テスト終了前に complete して dispose エラーを防ぐ
-  completer.complete(lastPageResponse());
-  await tester.pump();
-});
-```
-
----
-
-## ウィジェットテスト（createTestApp）
-
-`test/helpers/pump_app.dart` の `createTestApp()` で MaterialApp + テーマ + ProviderScope を共通化:
-
-```dart
-@Tags(['widget'])
-library;
-
-import 'package:checks/checks.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-
-import '../../../helpers/fakes.dart';
-import '../../../helpers/fixtures.dart';
-import '../../../helpers/pump_app.dart';
-
-void main() {
-  late FakePackageListRepository fakeRepository;
-
-  setUp(() {
-    fakeRepository = FakePackageListRepository();
-  });
-
-  // createTestApp で ProviderScope + MaterialApp(appLightTheme) をラップ
-  Widget createTestWidget() {
-    return createTestApp(
-      home: const PackageListScreen(),
-      overrides: [
-        packageListRepositoryProvider.overrideWithValue(fakeRepository),
-      ],
-    );
-  }
-
-  testWidgets('データ取得後にパッケージ名が表示される', (tester) async {
-    fakeRepository.onGetPackages = ({String? pageUrl}) async =>
-        firstPageResponse();
-
-    await tester.pumpWidget(createTestWidget());
-    // Riverpod AsyncNotifier のマイクロタスク解決に 2 回 pump が必要
-    await tester.pump();
-    await tester.pump();
-
-    expect(find.text('http'), findsOneWidget);
-  });
-}
-```
-
----
-
 ## Repository ユニットテスト
 
 Repository は `FakePubDevApiClient` を使って直接テストする:
@@ -214,12 +142,12 @@ test('getPackages が NetworkException を再スローする', () async {
 ## フィクスチャのコピーが必要な理由
 
 ```dart
-// ✅ 常に Map<String, dynamic>.from() でコピーしてから fromJson に渡す
+// 常に Map<String, dynamic>.from() でコピーしてから fromJson に渡す
 PackageListResponse.fromJson(Map<String, dynamic>.from(packageListResponseJson))
 
-// ✅ またはビルダー関数を使う（内部で Map.from 済み）
+// またはビルダー関数を使う（内部で Map.from 済み）
 firstPageResponse()
 
-// ❌ const マップを直接渡すと内部変換で UnmodifiableMapError が出る場合がある
+// NG: const マップを直接渡すと内部変換で UnmodifiableMapError が出る場合がある
 PackageListResponse.fromJson(packageListResponseJson)
 ```
