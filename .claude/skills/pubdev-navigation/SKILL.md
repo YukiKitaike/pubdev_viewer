@@ -43,7 +43,8 @@ class PackageListRoute extends GoRouteData with $PackageListRoute {
   }
 }
 
-// パスパラメータは final フィールド + required コンストラクタ引数で受け取る
+// パスパラメータは ProviderScope.overrides で詳細画面サブツリーに注入する。
+// Screen はコンストラクタ引数を持たず、ref.watch(currentPackageNameProvider) で取得。
 @immutable
 class PackageDetailRoute extends GoRouteData with $PackageDetailRoute {
   const PackageDetailRoute({required this.name});
@@ -52,7 +53,12 @@ class PackageDetailRoute extends GoRouteData with $PackageDetailRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return PackageDetailScreen(packageName: name);
+    return ProviderScope(
+      overrides: [
+        currentPackageNameProvider.overrideWithValue(name),
+      ],
+      child: const PackageDetailScreen(),
+    );
   }
 }
 

@@ -8,6 +8,7 @@ import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
 import 'package:pubdev_viewer/features/package_detail/notifiers/package_detail_notifier.dart';
+import 'package:pubdev_viewer/features/package_detail/providers/current_package_name_provider.dart';
 import 'package:pubdev_viewer/features/package_detail/repository/package_detail_repository.dart';
 
 import '../../../helpers/fakes.dart';
@@ -30,6 +31,7 @@ void main() {
       // Riverpod v3 の自動リトライを無効化。エラー系テストが安定しなくなるため。
       retry: (_, _) => null,
       overrides: [
+        currentPackageNameProvider.overrideWithValue('http'),
         packageDetailRepositoryProvider.overrideWithValue(fakeRepository),
       ],
     );
@@ -42,7 +44,7 @@ void main() {
         ..onGetPackagePublisher = _publisherCallback;
 
       final state = await container.read(
-        packageDetailProvider('http').future,
+        packageDetailProvider.future,
       );
 
       check(state.detail.name).equals('http');
@@ -60,7 +62,7 @@ void main() {
             );
 
       final state = await container.read(
-        packageDetailProvider('http').future,
+        packageDetailProvider.future,
       );
 
       check(state.publisher.publisherId).isNull();
@@ -73,12 +75,12 @@ void main() {
       fakeRepository.onGetPackagePublisher = _publisherCallback;
 
       await container
-          .read(packageDetailProvider('http').future)
+          .read(packageDetailProvider.future)
           .then((_) => null)
           .catchError((_) => null);
 
       final asyncValue = container.read(
-        packageDetailProvider('http'),
+        packageDetailProvider,
       );
       check(asyncValue.hasError).isTrue();
     });
@@ -89,12 +91,12 @@ void main() {
         ..onGetPackagePublisher = (_) => throw const NetworkException();
 
       await container
-          .read(packageDetailProvider('http').future)
+          .read(packageDetailProvider.future)
           .then((_) => null)
           .catchError((_) => null);
 
       final asyncValue = container.read(
-        packageDetailProvider('http'),
+        packageDetailProvider,
       );
       check(asyncValue.hasError).isTrue();
     });
@@ -105,7 +107,7 @@ void main() {
         ..onGetPackagePublisher = _publisherCallback;
 
       final state = await container.read(
-        packageDetailProvider('http').future,
+        packageDetailProvider.future,
       );
 
       check(state.sortedVersions).length.equals(2);
@@ -123,10 +125,10 @@ void main() {
         ..onGetPackageDetail = _detailCallback
         ..onGetPackagePublisher = _publisherCallback;
 
-      await container.read(packageDetailProvider('http').future);
+      await container.read(packageDetailProvider.future);
       check(fakeRepository.getPackageDetailCallCount).equals(1);
 
-      await container.read(packageDetailProvider('http').notifier).refresh();
+      await container.read(packageDetailProvider.notifier).refresh();
       check(fakeRepository.getPackageDetailCallCount).equals(2);
     });
   });

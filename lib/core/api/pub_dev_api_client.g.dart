@@ -49,4 +49,4 @@ final class PubDevApiClientProvider
   }
 }
 
-String _$pubDevApiClientHash() => r'a8b6f911d98f24f0cd14246e89d2f9f7a8d98f3b';
+String _$pubDevApiClientHash() => r'a2ea57c0c9913b87ffe141ded0459718e32bb137';

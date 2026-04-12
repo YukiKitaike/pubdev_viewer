@@ -1,13 +1,17 @@
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_state.dart';
+import 'package:pubdev_viewer/features/package_detail/providers/current_package_name_provider.dart';
 import 'package:pubdev_viewer/features/package_detail/repository/package_detail_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'package_detail_notifier.g.dart';
 
-@riverpod
+// currentPackageName が ProviderScope.overrides でスコープされるため、
+// dependencies に宣言して同じスコープに自動追従させる。
+@Riverpod(dependencies: [currentPackageName])
 class PackageDetailNotifier extends _$PackageDetailNotifier {
   @override
-  Future<PackageDetailState> build(String packageName) async {
+  Future<PackageDetailState> build() async {
+    final packageName = ref.watch(currentPackageNameProvider);
     final repository = ref.watch(
       packageDetailRepositoryProvider,
     );

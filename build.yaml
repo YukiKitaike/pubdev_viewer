@@ -17,6 +17,7 @@ targets:
             - lib/app/*.dart
             - lib/core/api/*.dart
             - lib/features/**/notifiers/*.dart
+            - lib/features/**/providers/*.dart
             - lib/features/**/repository/*.dart
       go_router_builder:
         generate_for:

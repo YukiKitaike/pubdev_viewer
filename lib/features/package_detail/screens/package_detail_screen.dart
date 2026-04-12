@@ -10,24 +10,19 @@ import 'package:pubdev_viewer/core/widgets/loading_view.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
 import 'package:pubdev_viewer/features/package_detail/notifiers/package_detail_notifier.dart';
+import 'package:pubdev_viewer/features/package_detail/providers/current_package_name_provider.dart';
 import 'package:pubdev_viewer/features/package_detail/screens/widgets/overview_section.dart';
 import 'package:pubdev_viewer/features/package_detail/screens/widgets/versions_section.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PackageDetailScreen extends ConsumerWidget {
-  const PackageDetailScreen({
-    required this.packageName,
-    super.key,
-  });
-
-  final String packageName;
+  const PackageDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncState = ref.watch(
-      packageDetailProvider(packageName),
-    );
+    final packageName = ref.watch(currentPackageNameProvider);
+    final asyncState = ref.watch(packageDetailProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -47,13 +42,12 @@ class PackageDetailScreen extends ConsumerWidget {
         loading: () => const LoadingView(),
         error: (error, _) => ErrorView(
           error: error,
-          onRetry: () =>
-              ref.read(packageDetailProvider(packageName).notifier).refresh(),
+          onRetry: () => ref.read(packageDetailProvider.notifier).refresh(),
         ),
         data: (state) => RefreshIndicator(
           onRefresh: () => ref
               .read(
-                packageDetailProvider(packageName).notifier,
+                packageDetailProvider.notifier,
               )
               .refresh(),
           child: SingleChildScrollView(
