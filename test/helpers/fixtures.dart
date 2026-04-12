@@ -78,6 +78,65 @@ const Map<String, dynamic> packageDetailResponseJson = {
   ],
 };
 
+/// homepage なし・repository ありのフィクスチャ
+const Map<String, dynamic> packageDetailResponseNoHomepageJson = {
+  'name': 'http',
+  'latest': {
+    'version': '1.6.0',
+    'pubspec': {
+      'name': 'http',
+      'version': '1.6.0',
+      'description': 'A composable API for HTTP requests.',
+      'repository': 'https://github.com/dart-lang/http',
+    },
+    'archive_url': 'https://pub.dev/api/archives/http-1.6.0.tar.gz',
+    'archive_sha256': 'abc123',
+    'published': '2025-11-10T18:27:56.434747Z',
+  },
+  'versions': [
+    {
+      'version': '1.6.0',
+      'pubspec': {
+        'name': 'http',
+        'version': '1.6.0',
+        'description': 'A composable API for HTTP requests.',
+      },
+      'archive_url': 'https://pub.dev/api/archives/http-1.6.0.tar.gz',
+      'archive_sha256': 'abc123',
+      'published': '2025-11-10T18:27:56.434747Z',
+    },
+  ],
+};
+
+/// homepage・repository 両方なしのフィクスチャ
+const Map<String, dynamic> packageDetailResponseNoUrlJson = {
+  'name': 'http',
+  'latest': {
+    'version': '1.6.0',
+    'pubspec': {
+      'name': 'http',
+      'version': '1.6.0',
+      'description': 'A composable API for HTTP requests.',
+    },
+    'archive_url': 'https://pub.dev/api/archives/http-1.6.0.tar.gz',
+    'archive_sha256': 'abc123',
+    'published': '2025-11-10T18:27:56.434747Z',
+  },
+  'versions': [
+    {
+      'version': '1.6.0',
+      'pubspec': {
+        'name': 'http',
+        'version': '1.6.0',
+        'description': 'A composable API for HTTP requests.',
+      },
+      'archive_url': 'https://pub.dev/api/archives/http-1.6.0.tar.gz',
+      'archive_sha256': 'abc123',
+      'published': '2025-11-10T18:27:56.434747Z',
+    },
+  ],
+};
+
 const packagePublisherResponseJson = {
   'publisherId': 'dart.dev',
 };
