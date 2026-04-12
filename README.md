@@ -74,7 +74,10 @@ lib/
 │   ├── api/           #   Dio ベースの pub.dev API クライアント
 │   ├── design_system/ #   デザイントークン（色、余白、角丸、影）
 │   ├── error/         #   sealed AppException 階層
-│   └── widgets/       #   共通ウィジェット（ErrorView、SkeletonListView）
+│   ├── models/        #   共有モデル（Pubspec）
+│   ├── strings/       #   UI 文字列定数（AppStrings）
+│   ├── utils/         #   ユーティリティ（日付フォーマット、グラデーション選択、URL）
+│   └── widgets/       #   共通ウィジェット（ErrorView、LoadingView、SkeletonListView）
 └── features/
     ├── package_list/  # ホーム画面 — 一覧・ページネーション・状態管理
     └── package_detail/# 詳細画面 — 情報・バージョン・パブリッシャー
@@ -177,4 +180,10 @@ fvm dart format .
 
 ## API
 
-pub.dev の公開 REST API からデータを取得します。エンドポイントの詳細は [docs/openapi.yaml](docs/openapi.yaml) を参照してください。
+pub.dev の公開 REST API（`https://pub.dev`）からデータを取得します。
+
+| メソッド | エンドポイント | 用途 |
+|---|---|---|
+| GET | `/api/packages` | パッケージ一覧（ページネーション対応） |
+| GET | `/api/packages/{name}` | パッケージ詳細 |
+| GET | `/api/packages/{name}/publisher` | パブリッシャー情報 |

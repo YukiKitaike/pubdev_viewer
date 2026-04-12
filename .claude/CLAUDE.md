@@ -14,7 +14,6 @@ pub.dev のパッケージ情報を閲覧する Flutter アプリ。
 Feature-First + Riverpod。依存方向: `screens/` → `notifiers/` → `repository/` → `models/`
 
 - feature 間の直接依存は禁止。共通処理は `core/` に置く。
-- API スキーマは `docs/openapi.yaml` を参照。画面仕様は `docs/overview.md` を参照。
 - 新しい feature を追加するときは `/pubdev-new-feature` スキルを参照。
 
 ## Critical Rules
