@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -10,11 +12,15 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   ThemeMode build() => ThemeMode.system;
 
   /// ライト ↔ ダークをトグルする。
-  /// システムモードのときはダークに切り替える。
+  /// システムモードのときは端末の実際のテーマの逆に切り替える。
   void toggle() {
     state = switch (state) {
       ThemeMode.dark => ThemeMode.light,
-      _ => ThemeMode.dark,
+      ThemeMode.light => ThemeMode.dark,
+      ThemeMode.system =>
+        PlatformDispatcher.instance.platformBrightness == Brightness.dark
+            ? ThemeMode.light
+            : ThemeMode.dark,
     };
   }
 }
