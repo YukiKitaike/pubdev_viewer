@@ -238,6 +238,11 @@ padding: const EdgeInsets.all(16)  // AppSpacing.lg を使う
 color: Theme.of(context).brightness == Brightness.light
     ? const Color(0xFFFFFFFF)
     : const Color(0xFF1A1A2E)  // context.tokens.surface を使う
+
+// ❌ ハードコード文字列
+Text('LATEST')              // AppStrings.latestBadge を使う
+SectionHeader(label: 'Overview')  // AppStrings.sectionOverview を使う
+// → UI 表示ラベル・メッセージは lib/core/strings/app_strings.dart に定義
 ```
 
 ---

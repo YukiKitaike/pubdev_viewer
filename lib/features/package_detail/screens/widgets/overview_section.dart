@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/design_system/design_system.dart';
+import '../../../../core/strings/app_strings.dart';
 import '../../models/package_detail_response.dart';
 import 'section_header.dart';
 
@@ -26,7 +27,7 @@ class OverviewSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionHeader(label: 'Overview'),
+            const SectionHeader(label: AppStrings.sectionOverview),
             const Divider(height: 20),
             Text(
               detail.latest.pubspec.description,

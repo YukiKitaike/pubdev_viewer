@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/design_system/design_system.dart';
+import '../../../../core/strings/app_strings.dart';
 import '../../models/package_detail_version.dart';
 import 'section_header.dart';
 
@@ -30,7 +31,7 @@ class VersionsSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionHeader(label: 'Versions'),
+            const SectionHeader(label: AppStrings.sectionVersions),
             const Divider(height: 20),
             // .indexed で index を取得。先頭の LATEST 判定と末尾の線描画制御に必要。
             ...versions.indexed.map((entry) {
@@ -133,7 +134,7 @@ class _VersionTimelineItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(AppRadius.full),
                       ),
                       child: Text(
-                        'LATEST',
+                        AppStrings.latestBadge,
                         style: GoogleFonts.jetBrainsMono(
                           fontSize: AppTextSize.mono10,
                           fontWeight: FontWeight.w700,

@@ -61,18 +61,18 @@ class PackageListScreen extends HookConsumerWidget {
             style: theme.textTheme.titleLarge,
             children: [
               TextSpan(
-                text: 'pub',
+                text: AppStrings.appTitlePub,
                 style: TextStyle(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const TextSpan(
-                text: '.dev',
+                text: AppStrings.appTitleDotDev,
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
               TextSpan(
-                text: ' Viewer',
+                text: AppStrings.appTitleViewer,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: theme.colorScheme.onSurfaceVariant,

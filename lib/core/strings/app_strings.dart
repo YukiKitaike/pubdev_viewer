@@ -13,6 +13,17 @@ class AppStrings {
   static const String loadMoreFailed = '追加読み込みに失敗しました';
   static const String linkOpenFailed = 'リンクを開けませんでした';
 
+  // セクション見出し
+  static const String sectionOverview = 'Overview';
+  static const String sectionVersions = 'Versions';
+  static const String latestBadge = 'LATEST';
+
+  // アプリタイトル
+  static const String appTitle = 'pub.dev Viewer';
+  static const String appTitlePub = 'pub';
+  static const String appTitleDotDev = '.dev';
+  static const String appTitleViewer = ' Viewer';
+
   // ラベル・アクション
   static const String retry = '再試行';
   static const String share = '共有';

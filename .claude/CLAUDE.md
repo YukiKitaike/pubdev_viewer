@@ -32,6 +32,8 @@ Feature-First + Riverpod。依存方向: `screens/` → `notifiers/` → `reposi
 
 **No hardcoded colors/spacing.** Widget 内に `Colors.red` や `fontSize: 24` 直書き禁止。
 
+**No hardcoded strings.** UI に表示するラベル・メッセージは `AppStrings` 定数を使う。`Text('LATEST')` のような直書き禁止。
+
 ## Comments
 
 **WHY only.** コメントは「なぜこの実装か」を書く。コードから読める WHAT は書かない。
