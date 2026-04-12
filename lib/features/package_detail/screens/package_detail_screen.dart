@@ -15,9 +15,6 @@ import '../notifiers/package_detail_notifier.dart';
 import 'widgets/overview_section.dart';
 import 'widgets/versions_section.dart';
 
-/// パッケージ詳細画面。
-///
-/// パッケージの概要、バージョン一覧、パブリッシャー情報を表示する。
 class PackageDetailScreen extends ConsumerWidget {
   const PackageDetailScreen({
     required this.packageName,
@@ -61,6 +58,8 @@ class PackageDetailScreen extends ConsumerWidget {
               )
               .refresh(),
           child: SingleChildScrollView(
+            // iOS は BouncingScrollPhysics、他は ClampingScrollPhysics でプラットフォーム標準に合わせる。
+            // AlwaysScrollableScrollPhysics を parent にし RefreshIndicator を常に有効にする。
             physics: switch (Theme.of(context).platform) {
               .iOS => const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),

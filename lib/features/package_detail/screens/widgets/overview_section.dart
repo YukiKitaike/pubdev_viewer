@@ -4,9 +4,7 @@ import '../../../../core/design_system/design_system.dart';
 import '../../models/package_detail_response.dart';
 import 'section_header.dart';
 
-/// パッケージの概要情報（説明文）を表示するセクション。
-///
-/// パブリッシャー情報はヒーローヘッダーに表示するためここでは省略。
+// パブリッシャー情報はヒーローヘッダーに表示するためここでは省略。
 class OverviewSection extends StatelessWidget {
   const OverviewSection({
     required this.detail,

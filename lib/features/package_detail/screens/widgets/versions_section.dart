@@ -7,7 +7,6 @@ import '../../../../core/design_system/design_system.dart';
 import '../../models/package_detail_version.dart';
 import 'section_header.dart';
 
-/// パッケージのバージョン一覧を公開日の降順でタイムライン形式で表示するセクション。
 class VersionsSection extends StatelessWidget {
   const VersionsSection({
     required this.versions,
@@ -16,6 +15,7 @@ class VersionsSection extends StatelessWidget {
 
   final List<PackageDetailVersion> versions;
 
+  // DateFormat の生成コストを避けるため static で再利用する。
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
   @override
@@ -32,6 +32,7 @@ class VersionsSection extends StatelessWidget {
           children: [
             const SectionHeader(label: 'Versions'),
             const Divider(height: 20),
+            // .indexed で index を取得。先頭の LATEST 判定と末尾の線描画制御に必要。
             ...versions.indexed.map((entry) {
               final (index, v) = entry;
               return _VersionTimelineItem(
@@ -69,6 +70,8 @@ class _VersionTimelineItem extends StatelessWidget {
     final primary = theme.colorScheme.primary;
     final lineColor = context.tokens.cardBorder;
 
+    // IntrinsicHeight でタイムラインの縦線を隣のコンテンツ高さに合わせる。
+    // stretch だけでは子の高さが決まらない。
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,

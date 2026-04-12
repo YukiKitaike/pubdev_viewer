@@ -7,7 +7,6 @@ import '../../../../app/router.dart';
 import '../../../../core/design_system/design_system.dart';
 import '../../models/package_list_item.dart';
 
-/// パッケージ一覧の各行をカード形式で表示する Widget。
 class PackageListTile extends StatefulWidget {
   const PackageListTile({
     required this.package,
@@ -24,6 +23,7 @@ class _PackageListTileState extends State<PackageListTile> {
   bool _pressed = false;
   late List<Color> _gradient;
 
+  // パッケージ名のハッシュでグラデーション選択。同じ名前は常に同じ色になり視覚的に区別しやすい。
   static List<Color> _computeGradient(String name) {
     final hash = name.codeUnits.fold(0, (a, b) => a + b);
     return AppColors.avatarGradients[hash % AppColors.avatarGradients.length];
@@ -35,6 +35,7 @@ class _PackageListTileState extends State<PackageListTile> {
     _gradient = _computeGradient(widget.package.name);
   }
 
+  // ListView のリサイクルで別パッケージが割り当てられた場合にグラデーションを再計算する。
   @override
   void didUpdateWidget(PackageListTile oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -73,6 +74,7 @@ class _PackageListTileState extends State<PackageListTile> {
             child: InkWell(
               borderRadius: BorderRadius.circular(AppRadius.card),
               onTap: () {
+                // 画面遷移という重要な操作に触覚フィードバックで応答性を伝える。
                 HapticFeedback.lightImpact();
                 PackageDetailRoute(name: widget.package.name).go(context);
               },

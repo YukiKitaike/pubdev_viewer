@@ -5,9 +5,6 @@ import '../repository/package_detail_repository.dart';
 
 part 'package_detail_notifier.g.dart';
 
-/// パッケージ詳細の状態管理を担当する Notifier。
-///
-/// 詳細情報とパブリッシャー情報を並列に取得する。
 @riverpod
 class PackageDetailNotifier extends _$PackageDetailNotifier {
   @override
@@ -15,10 +12,12 @@ class PackageDetailNotifier extends _$PackageDetailNotifier {
     final repository = ref.watch(
       packageDetailRepositoryProvider,
     );
+    // detail と publisher は独立した API。Records + .wait で並列取得し応答時間を短縮する。
     final (detail, publisher) = await (
       repository.getPackageDetail(packageName),
       repository.getPackagePublisher(packageName),
     ).wait;
+    // バージョンを build() 内で一度だけソート。リビルドごとの再計算を避けるため state に保持する。
     final sortedVersions = [...detail.versions]
       ..sort((a, b) => b.published.compareTo(a.published));
     return PackageDetailState(

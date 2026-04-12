@@ -10,9 +10,6 @@ import '../../../core/widgets/skeleton_list_view.dart';
 import '../notifiers/package_list_notifier.dart';
 import 'widgets/package_list_tile.dart';
 
-/// パッケージ一覧画面。
-///
-/// pub.dev API からパッケージ一覧を取得し、無限スクロールで表示する。
 class PackageListScreen extends HookConsumerWidget {
   const PackageListScreen({super.key});
 
@@ -24,6 +21,7 @@ class PackageListScreen extends HookConsumerWidget {
     useEffect(
       () {
         void onScroll() {
+          // 底辺 200px 手前で発火。スクロール慣性で底に達する前にロード開始し待ち時間を感じさせない。
           if (scrollController.position.pixels >=
               scrollController.position.maxScrollExtent - 200) {
             ref.read(packageListNotifierProvider.notifier).loadMore();
@@ -36,6 +34,8 @@ class PackageListScreen extends HookConsumerWidget {
       [scrollController],
     );
 
+    // loadMoreError は state に一時保持 → SnackBar 表示 → 即クリア。
+    // クリアしないと再構築のたびに再表示される。
     ref.listen(
       packageListNotifierProvider,
       (_, next) {

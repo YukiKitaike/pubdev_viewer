@@ -6,9 +6,6 @@ import '../repository/package_list_repository.dart';
 
 part 'package_list_notifier.g.dart';
 
-/// パッケージ一覧の状態管理を担当する Notifier。
-///
-/// 初回読み込み、ページネーション、リフレッシュを管理する。
 @riverpod
 class PackageListNotifier extends _$PackageListNotifier {
   @override
@@ -27,11 +24,14 @@ class PackageListNotifier extends _$PackageListNotifier {
       return;
     }
 
+    // エラー時も既存一覧を保持するため AsyncData 内で isLoadingMore を管理する。
+    // AsyncError にすると一覧データが消え画面全体がエラー表示になる。
     state = AsyncData(
       current.copyWith(isLoadingMore: true),
     );
 
     try {
+      // build() 以外では ref.read。watch にすると loadMore 中にリポジトリが再生成され途中結果が消える。
       final repository = ref.read(
         packageListRepositoryProvider,
       );

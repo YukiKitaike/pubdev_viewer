@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 
 import '../../../../core/design_system/design_system.dart';
 
-/// パッケージ詳細画面の各セクション共通ヘッダー（左ボーダーアクセント + ラベル）。
 class SectionHeader extends StatelessWidget {
   const SectionHeader({required this.label, super.key});
 
