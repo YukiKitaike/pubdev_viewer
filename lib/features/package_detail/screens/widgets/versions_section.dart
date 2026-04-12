@@ -119,7 +119,7 @@ class _VersionTimelineItem extends StatelessWidget {
                     ),
                   ),
                   if (isLatest) ...[
-                    const SizedBox(width: AppSpacing.sm),
+                    const Gap(AppSpacing.sm),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.sm,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../core/design_system/design_system.dart';
 
@@ -26,7 +27,7 @@ class SectionHeader extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadius.sectionAccent),
           ),
         ),
-        const SizedBox(width: AppSpacing.sm),
+        const Gap(AppSpacing.sm),
         Text(
           label,
           style: theme.textTheme.titleSmall?.copyWith(

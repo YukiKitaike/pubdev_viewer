@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../app/router.dart';
@@ -103,7 +104,7 @@ class _PackageListTileState extends State<PackageListTile> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.md),
+                    const Gap(AppSpacing.md),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +121,7 @@ class _PackageListTileState extends State<PackageListTile> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              const SizedBox(width: AppSpacing.sm),
+                              const Gap(AppSpacing.sm),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: AppSpacing.sm,
@@ -147,7 +148,7 @@ class _PackageListTileState extends State<PackageListTile> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: AppSpacing.xs),
+                          const Gap(AppSpacing.xs),
                           Text(
                             widget.package.latest.pubspec.description,
                             style: theme.textTheme.bodySmall?.copyWith(
@@ -160,7 +161,7 @@ class _PackageListTileState extends State<PackageListTile> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
+                    const Gap(AppSpacing.sm),
                     Icon(
                       Icons.chevron_right,
                       size: 16,

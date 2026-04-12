@@ -81,8 +81,8 @@ class PackageDetailScreen extends ConsumerWidget {
                 VersionsSection(
                   versions: state.sortedVersions,
                 ),
-                SizedBox(
-                  height: AppSpacing.lg + MediaQuery.paddingOf(context).bottom,
+                Gap(
+                  AppSpacing.lg + MediaQuery.paddingOf(context).bottom,
                 ),
               ],
             ),

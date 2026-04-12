@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../design_system/design_system.dart';
@@ -54,7 +55,7 @@ class _SkeletonTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppRadius.avatar),
               ),
             ),
-            const SizedBox(width: AppSpacing.md),
+            const Gap(AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +73,7 @@ class _SkeletonTile extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: AppSpacing.sm),
+                      const Gap(AppSpacing.sm),
                       Container(
                         width: 48,
                         height: 20,
@@ -83,7 +84,7 @@ class _SkeletonTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: AppSpacing.sm),
+                  const Gap(AppSpacing.sm),
                   Container(
                     height: 12,
                     decoration: BoxDecoration(
@@ -91,7 +92,7 @@ class _SkeletonTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppRadius.skeleton),
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xs),
+                  const Gap(AppSpacing.xs),
                   Container(
                     height: 12,
                     decoration: BoxDecoration(
