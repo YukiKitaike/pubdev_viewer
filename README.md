@@ -160,15 +160,7 @@ fvm dart format .
 
 ### プラグイン
 
-[公式マーケットプレイス](https://claude.com/plugins)からインストール済みのプラグイン：
-
-| プラグイン | 用途 |
-|---|---|
-| `claude-md-management` | CLAUDE.md の監査・改善・セッション学習の反映 |
-| `claude-code-setup` | コードベース解析による自動化推奨 |
-| `skill-creator` | スキルの新規作成・改善・パフォーマンス計測 |
-| `plugin-dev` | プラグイン開発ツールキット |
-| `hookify` | 会話パターンからカスタム hook を生成 |
+`.claude/settings.json` の `enabledPlugins` を参照。
 
 ### サブエージェント
 
