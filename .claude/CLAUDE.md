@@ -34,6 +34,10 @@ Feature-First + Riverpod。依存方向: `screens/` → `notifiers/` → `reposi
 
 **No hardcoded strings.** UI に表示するラベル・メッセージは `AppStrings` 定数を使う。`Text('LATEST')` のような直書き禁止。
 
+**No relative imports.** `import '../../../...'` 禁止。常に `package:pubdev_viewer/...` 形式の絶対パスを使う。
+
+**Zero Linter errors.** `fvm dart analyze` でエラー・警告ゼロを維持する。コード変更後は必ず確認。
+
 ## Comments
 
 **WHY only.** コメントは「なぜこの実装か」を書く。コードから読める WHAT は書かない。
@@ -46,7 +50,7 @@ Feature-First + Riverpod。依存方向: `screens/` → `notifiers/` → `reposi
 ## Design System
 
 ```dart
-import '../../../core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/design_system/design_system.dart';
 // AppSpacing.xs/sm/md/lg/xl/xxl/xxxl (4dp grid)
 // AppRadius.skeleton/avatar/button/card/full
 // context.tokens → AppThemeTokens (light/dark aware semantic colors)
