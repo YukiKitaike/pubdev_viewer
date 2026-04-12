@@ -48,13 +48,7 @@ Feature-First + Riverpod。依存方向: `screens/` → `notifiers/` → `reposi
 
 ## Design System
 
-```dart
-import 'package:pubdev_viewer/core/design_system/design_system.dart';
-// AppSpacing.xs/sm/md/lg/xl/xxl/xxxl (4dp grid)
-// AppRadius.skeleton/avatar/button/card/full
-// context.tokens → AppThemeTokens (light/dark aware semantic colors)
-// cardElevatedShadow(colorScheme.primary, isDark: ...)
-```
+デザイントークン（AppSpacing・AppRadius・AppThemeTokens）は `/pubdev-ui` スキル参照。
 
 ## Git
 

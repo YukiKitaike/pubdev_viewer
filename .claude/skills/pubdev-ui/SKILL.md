@@ -271,11 +271,8 @@ SectionHeader(label: 'Overview')  // AppStrings.sectionOverview を使う
 
 ---
 
-## コメントルール
+### WHY コメントの典型例
 
-`/// パッケージ一覧画面。` のような WHAT docstring は不要。
-
-WHY コメントが必要な典型パターン:
 - マジックナンバー（スクロール閾値・itemCount 等）の根拠
 - プラットフォーム固有の処理を分岐する理由
 - HapticFeedback を入れる理由

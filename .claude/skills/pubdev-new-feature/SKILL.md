@@ -85,7 +85,7 @@ abstract class FeatureNameState with _$FeatureNameState {
 
 ## Step 2: Repository 作成
 
-**ルール: インターフェース（abstract class）は作らない。具象クラスのみ。**
+具象クラスのみ（CLAUDE.md の No interfaces ルール参照）。
 
 ```dart
 // lib/features/<feature_name>/repository/<feature_name>_repository.dart
@@ -274,9 +274,3 @@ class FeatureNameRoute extends GoRouteData {
 - [ ] `fvm dart analyze` でエラー 0 件確認
 - [ ] `fvm flutter test` で既存テスト PASS 確認
 
----
-
-## コメントルール
-
-新 feature のコード生成時、`///` docstring にクラス名・メソッド名の言い換えを書かない。
-設計判断が非自明な箇所にのみ WHY コメントを付ける。詳細は CLAUDE.md の Comments セクションを参照。

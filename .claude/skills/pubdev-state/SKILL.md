@@ -213,11 +213,8 @@ final publisher = await repository.getPublisher(name); // 並列にすべき
 
 ---
 
-## コメントルール
+### WHY コメントの典型例
 
-クラスの `///` docstring に WHAT（「パッケージ一覧の状態管理を担当する Notifier。」等）は書かない。
-
-WHY コメントが必要な典型パターン:
 - `ref.read` vs `ref.watch` の使い分け理由
 - エラーを `AsyncData` 内に保持する理由（`AsyncError` にしない理由）
 - `keepAlive: true` の理由
