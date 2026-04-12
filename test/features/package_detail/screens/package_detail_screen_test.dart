@@ -9,6 +9,7 @@ import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
+import 'package:pubdev_viewer/features/package_detail/notifiers/package_detail_notifier.dart';
 import 'package:pubdev_viewer/features/package_detail/repository/package_detail_repository.dart';
 import 'package:pubdev_viewer/features/package_detail/screens/package_detail_screen.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
@@ -40,11 +41,12 @@ class _FakeUrlLauncher extends Fake
     with MockPlatformInterfaceMixin
     implements UrlLauncherPlatform {
   final List<String> launchedUrls = [];
+  bool shouldSucceed = true;
 
   @override
   Future<bool> launchUrl(String url, LaunchOptions options) async {
     launchedUrls.add(url);
-    return true;
+    return shouldSucceed;
   }
 }
 
@@ -208,6 +210,86 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text(AppStrings.retry), findsOneWidget);
+    });
+
+    testWidgets('publisherId が null のとき認証アイコンが非表示になる', (tester) async {
+      fakeRepository
+        ..onGetPackageDetail = _detailResponse
+        ..onGetPackagePublisher = (name) async =>
+            PackagePublisherResponse.fromJson(
+              Map<String, dynamic>.from(packagePublisherNullResponseJson),
+            );
+
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.verified_outlined), findsNothing);
+    });
+
+    testWidgets('publisherId がある場合に認証バッジが表示される', (tester) async {
+      stubSuccessResponse();
+
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.verified_outlined), findsOneWidget);
+      expect(find.text('dart.dev'), findsOneWidget);
+    });
+
+    testWidgets('共有ボタンが表示される', (tester) async {
+      stubSuccessResponse();
+
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.share), findsOneWidget);
+    });
+
+    testWidgets('外部リンクオープン失敗時に SnackBar が表示される', (tester) async {
+      final fakeUrlLauncher = _FakeUrlLauncher()..shouldSucceed = false;
+      UrlLauncherPlatform.instance = fakeUrlLauncher;
+
+      stubSuccessResponse();
+
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.open_in_new));
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppStrings.linkOpenFailed), findsOneWidget);
+    });
+
+    testWidgets('バージョンが公開日降順で表示される', (tester) async {
+      stubSuccessResponse();
+
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // 1.6.0 はヒーローヘッダーとバージョンセクションの 2 箇所に存在するため last で取得
+      final version160 = tester.getTopLeft(find.text('1.6.0').last);
+      final version150 = tester.getTopLeft(find.text('1.5.0'));
+
+      expect(version160.dy, lessThan(version150.dy));
+    });
+
+    testWidgets('リフレッシュでデータが再取得される', (tester) async {
+      stubSuccessResponse();
+
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      expect(find.byType(RefreshIndicator), findsOneWidget);
+      expect(fakeRepository.getPackageDetailCallCount, 1);
+
+      final element = tester.element(find.byType(PackageDetailScreen));
+      final container = ProviderScope.containerOf(element);
+      await container
+          .read(packageDetailNotifierProvider('http').notifier)
+          .refresh();
+      await tester.pump();
+
+      expect(fakeRepository.getPackageDetailCallCount, 2);
     });
   });
 }
