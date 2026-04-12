@@ -4,9 +4,6 @@ import 'package:shimmer/shimmer.dart';
 
 import '../design_system/design_system.dart';
 
-/// パッケージ一覧の初期ロード時に表示するスケルトン画面。
-///
-/// PackageListTile と同じレイアウト構造のプレースホルダーを shimmer アニメーションで表示する。
 class SkeletonListView extends StatelessWidget {
   const SkeletonListView({super.key});
 
@@ -21,6 +18,7 @@ class SkeletonListView extends StatelessWidget {
           top: AppSpacing.sm,
           bottom: AppSpacing.lg,
         ),
+        // 一般的な画面サイズでスクロール不要な程度に埋まる数。
         itemCount: 10,
         itemBuilder: (context, index) => const _SkeletonTile(),
       ),
