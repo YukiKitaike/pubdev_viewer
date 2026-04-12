@@ -24,8 +24,7 @@
 
 ### 前提条件
 
-- [Flutter](https://flutter.dev/docs/get-started/install)（[FVM](https://fvm.app) でバージョン管理）
-- [FVM](https://fvm.app/docs/getting_started/installation) がグローバルにインストール済みであること
+- [FVM](https://fvm.app)（Flutter バージョン管理）がインストール済みであること
 
 ### インストール
 
@@ -118,38 +117,12 @@ screens → notifiers → repository → models
 | ログ | [logging](https://pub.dev/packages/logging) |
 | AI 操作 | [marionette_flutter](https://pub.dev/packages/marionette_flutter) + [marionette_logging](https://pub.dev/packages/marionette_logging) |
 
-**コード生成（dev）：**
-
-| ツール | 用途 |
-|---|---|
-| [build_runner](https://pub.dev/packages/build_runner) | コード生成の実行基盤 |
-| [riverpod_generator](https://pub.dev/packages/riverpod_generator) | `@riverpod` アノテーションから Provider を生成（`.g.dart`） |
-| [go_router_builder](https://pub.dev/packages/go_router_builder) | 型安全なルート定義を生成（`.g.dart`） |
-| [freezed](https://pub.dev/packages/freezed) | イミュータブルモデルを生成（`.freezed.dart`） |
-| [json_serializable](https://pub.dev/packages/json_serializable) | `fromJson` / `toJson` を生成（`.g.dart`） |
+**コード生成（dev）：** [build_runner](https://pub.dev/packages/build_runner) + [riverpod_generator](https://pub.dev/packages/riverpod_generator) + [go_router_builder](https://pub.dev/packages/go_router_builder)（freezed / json_serializable は上記参照）
 
 ## テスト
 
 ```bash
 fvm flutter test
-```
-
-### テスト構成
-
-`lib/` の構造を `test/` 配下に鏡像します：
-
-```
-test/
-├── helpers/
-│   ├── fakes.dart      # Fake リポジトリ（Mockito Mock の代わりに使用）
-│   └── fixtures.dart   # const JSON フィクスチャ
-└── features/
-    ├── package_list/
-    │   ├── notifiers/  # Notifier ユニットテスト（ProviderContainer）
-    │   └── repository/ # Repository ユニットテスト
-    └── package_detail/
-        ├── notifiers/
-        └── repository/
 ```
 
 ### テスト方針
@@ -165,7 +138,7 @@ test/
 # 静的解析
 fvm dart analyze
 
-# フォーマット（Edit / Write 後に PostToolUse hook で自動実行済み）
+# フォーマット
 fvm dart format .
 ```
 
@@ -224,10 +197,4 @@ fvm dart format .
 
 ## API
 
-pub.dev の公開 REST API からデータを取得します。OpenAPI スキーマは [docs/openapi.yaml](docs/openapi.yaml) を参照してください。
-
-| エンドポイント | 説明 |
-|---|---|
-| `GET /api/packages` | パッケージ一覧（ページネーション付き） |
-| `GET /api/packages/{name}` | パッケージ詳細とバージョン |
-| `GET /api/packages/{name}/publisher` | パブリッシャー情報 |
+pub.dev の公開 REST API からデータを取得します。エンドポイントの詳細は [docs/openapi.yaml](docs/openapi.yaml) を参照してください。
