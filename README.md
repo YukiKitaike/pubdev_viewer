@@ -50,15 +50,12 @@ fvm dart run build_runner build --delete-conflicting-outputs
 # skills_sync をグローバルインストール
 dart pub global activate skills_sync
 
-# プロジェクトの skills.yaml を skills_sync のグローバル設定として使う
-ln -sf "$(pwd)/skills.yaml" ~/.config/skills_sync/skills.yaml
-
-# skills.yaml に基づきスキルを ~/.agents/skills/ にダウンロード
+# プロジェクトルートで実行（skills.yaml を読み ~/.agents/skills/ に同期）
 skills_sync sync
-```
 
-> [!NOTE]
-> シンボリックリンクにより、`skills.yaml` の変更がリポジトリで管理され、`skills_sync sync` だけで常に最新のスキル構成が反映されます。
+# Claude Code がスキルを認識できるようシンボリックリンクを作成
+ln -sf ~/.agents/skills ~/.claude/skills
+```
 
 ### 実行
 
