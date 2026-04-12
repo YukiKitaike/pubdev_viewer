@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pubdev_viewer/app/theme.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart' show Override;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 /// ウィジェットテスト用の共通ヘルパー。
 ///
