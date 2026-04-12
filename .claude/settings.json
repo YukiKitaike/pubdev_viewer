@@ -44,6 +44,17 @@
     "marionette"
   ],
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -qE '\\.(g|freezed)\\.dart'; then echo 'BLOCK: generated file — run build_runner instead'; exit 1; fi"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
@@ -51,6 +62,10 @@
           {
             "type": "command",
             "command": "fvm dart format ."
+          },
+          {
+            "type": "command",
+            "command": "fvm dart analyze --fatal-infos 2>&1 | tail -5"
           }
         ]
       }
@@ -60,7 +75,8 @@
     "claude-md-management@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true
+    "plugin-dev@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true
   },
   "defaultMode": "plan"
 }
