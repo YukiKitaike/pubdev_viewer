@@ -44,8 +44,9 @@ part '<feature_name>_response.g.dart';
 
 @freezed
 abstract class FeatureNameResponse with _$FeatureNameResponse {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory FeatureNameResponse({
-    @JsonKey(name: 'next_url') String? nextUrl,
+    String? nextUrl,
     required List<FeatureNameItem> items,
   }) = _FeatureNameResponse;
 
@@ -53,6 +54,9 @@ abstract class FeatureNameResponse with _$FeatureNameResponse {
       _$FeatureNameResponseFromJson(json);
 }
 ```
+
+> **snake_case マッピング**: `@JsonKey(name: 'snake_case')` を個別に書くのではなく、
+> ファクトリコンストラクタに `@JsonSerializable(fieldRename: FieldRename.snake)` を付けて一括変換する。
 
 **UI ステートモデル**（`fromJson` なし、`part *.g.dart` なし）:
 ```dart
@@ -198,6 +202,15 @@ class _ItemTile extends StatelessWidget {
 ```
 
 UI トークンの使い方は `/pubdev-ui` スキルを参照。
+
+### 文字列定数
+
+画面に表示するラベル・エラーメッセージ等は `lib/core/strings/app_strings.dart` に定義する。
+別画面で似た文言を重複定義しない（表記揺れ防止）。
+
+- 新しい文言を追加する前に、既存の `AppStrings` に同じ意味の定数がないか確認する
+- 変数名は文言の意味をそのまま使う（例: `retry`, `share`, `networkErrorTitle`）
+  - `label` / `error` / `message` 等のプレフィックスは付けない
 
 ---
 
