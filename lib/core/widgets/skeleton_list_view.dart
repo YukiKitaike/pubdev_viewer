@@ -4,7 +4,18 @@ import 'package:pubdev_viewer/core/design_system/design_system.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SkeletonListView extends StatelessWidget {
-  const SkeletonListView({super.key});
+  const SkeletonListView({
+    super.key,
+    this.itemBuilder,
+    this.itemCount = 10,
+    this.padding,
+  });
+
+  final Widget Function(BuildContext, int)? itemBuilder;
+
+  /// 一般的な画面サイズでスクロール不要な程度に埋まるデフォルト値。
+  final int itemCount;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -13,20 +24,21 @@ class SkeletonListView extends StatelessWidget {
       baseColor: tokens.skeletonBase,
       highlightColor: tokens.skeletonHighlight,
       child: ListView.builder(
-        padding: const EdgeInsets.only(
-          top: AppSpacing.sm,
-          bottom: AppSpacing.lg,
-        ),
-        // 一般的な画面サイズでスクロール不要な程度に埋まる数。
-        itemCount: 10,
-        itemBuilder: (context, index) => const _SkeletonTile(),
+        padding:
+            padding ??
+            const EdgeInsets.only(
+              top: AppSpacing.sm,
+              bottom: AppSpacing.lg,
+            ),
+        itemCount: itemCount,
+        itemBuilder: itemBuilder ?? (_, _) => const SkeletonTile(),
       ),
     );
   }
 }
 
-class _SkeletonTile extends StatelessWidget {
-  const _SkeletonTile();
+class SkeletonTile extends StatelessWidget {
+  const SkeletonTile({super.key});
 
   @override
   Widget build(BuildContext context) {
