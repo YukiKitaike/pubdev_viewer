@@ -3,6 +3,7 @@ name: pubdev-models
 description: >
   pubdev_viewer の Freezed + json_serializable モデルパターン。
   データモデル・APIレスポンスクラス・UIステートクラスを作成・編集する際に使用。
+  「モデルを作って」「Freezed」「fromJson」「State クラス」と言われたときに参照。
   このアプリで使われている具体的な規約とコード例を提供する。
 ---
 

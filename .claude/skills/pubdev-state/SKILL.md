@@ -3,7 +3,8 @@ name: pubdev-state
 description: >
   pubdev_viewer の Riverpod AsyncNotifier パターン。
   状態管理・ページネーション（loadMore）・リフレッシュ・並列 API コール・エラーハンドリングを
-  実装する際に使用。このアプリで実際に使われているパターンを実例付きで提供する。
+  実装する際に使用。「Notifier を書いて」「状態管理」「loadMore」「refresh」
+  「ref.watch」と言われたときに参照。
 ---
 
 # Riverpod 状態管理パターン（pubdev_viewer）

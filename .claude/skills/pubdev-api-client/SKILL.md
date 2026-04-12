@@ -4,7 +4,8 @@ description: >
   pubdev_viewer の API クライアント層とエラーハンドリングパターン。
   Dio ベースの ApiClient 設計、DioException → AppException 変換、
   PubDevApiClient の継承パターン、keepAlive Provider、テスト用 FakeDio を
-  実装・編集する際に使用。新しい API エンドポイントの追加時にも参照。
+  実装・編集する際に使用。「API を追加」「エンドポイント追加」
+  「Dio」「エラーハンドリング」と言われたときに参照。
 ---
 
 # API クライアント層パターン（pubdev_viewer）

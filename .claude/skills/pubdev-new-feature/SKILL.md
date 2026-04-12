@@ -1,18 +1,22 @@
 ---
 name: pubdev-new-feature
 description: >
-  pubdev_viewer に新しい feature を追加する際のステップバイステップガイド。
-  新しいスクリーン・機能・API データを追加する場合に使用。
+  pubdev_viewer に新しい feature を追加するステップバイステップガイド。
+  「新しい画面を作りたい」「feature を追加」「新機能追加」「新しいスクリーン」
+  と言われたときに使用。/pubdev-new-feature <feature名> で呼び出す。
   models → repository → notifier → screen の全レイヤーを網羅する。
+disable-model-invocation: true
 ---
 
 # 新 Feature の追加手順
 
+`$ARGUMENTS` feature を以下の手順で追加する。
+
 Feature-First + Riverpod アーキテクチャ。
-新 feature は `lib/features/<feature_name>/` 配下に構成する。
+新 feature は `lib/features/$ARGUMENTS/` 配下に構成する。
 
 ```
-lib/features/<feature_name>/
+lib/features/$ARGUMENTS/
 ├── models/        # Response（fromJson あり）+ State（fromJson なし）
 ├── repository/    # 具象クラスのみ（No interfaces）
 ├── notifiers/     # @riverpod class AsyncNotifier
@@ -45,7 +49,7 @@ build/loadMore/refresh/エラーハンドリング。コード生成: `fvm dart 
 
 ## Step 6: テスト → `/pubdev-testing`
 
-`test/features/<feature_name>/` に `lib/` と同じ階層でテストを配置。
+`test/features/$ARGUMENTS/` に `lib/` と同じ階層でテストを配置。
 1. `test/helpers/fakes.dart` に Fake クラスを追加
 2. `test/helpers/fixtures.dart` に const JSON + ビルダー関数を追加
 3. Notifier → Repository → Screen の順で作成

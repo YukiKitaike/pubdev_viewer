@@ -3,6 +3,7 @@ name: pubdev-navigation
 description: >
   pubdev_viewer の GoRouter + go_router_builder による型安全ルーティング。
   新しい画面のルート追加・画面遷移の実装時に使用。
+  「ルートを追加」「画面遷移」「ナビゲーション」「GoRoute」と言われたときに参照。
   TypedGoRoute・GoRouteData・パスパラメータ・ネストルートのパターンを提供する。
 ---
 

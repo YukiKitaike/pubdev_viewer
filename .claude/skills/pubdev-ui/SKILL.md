@@ -3,8 +3,8 @@ name: pubdev-ui
 description: >
   pubdev_viewer のデザイントークン・テーマ・Widget パターン。
   スクリーン・カード・リストタイル・スケルトンローダー等の UI コンポーネントを
-  作成・編集する際に使用。AppSpacing/AppRadius/AppThemeTokens/HookConsumerWidget の
-  使い方をこのアプリの実際のコードから提供する。
+  作成・編集する際に使用。「画面を作って」「UI」「デザイントークン」「テーマ」
+  「Widget」と言われたときに参照。AppSpacing/AppRadius/AppThemeTokens の使い方を提供する。
 ---
 
 # UI パターン（pubdev_viewer）
