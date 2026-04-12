@@ -43,6 +43,24 @@ fvm dart run build_runner build --delete-conflicting-outputs
 > [!NOTE]
 > グローバルの `flutter` / `dart` コマンドではなく、必ず `fvm flutter` / `fvm dart` を使用してください。
 
+### Claude Code を使う場合（追加セットアップ）
+
+[skills_sync](https://github.com/mono0926/skills-sync) をインストールし、プロジェクトの `skills.yaml` をグローバル設定にシンボリックリンクして同期します。
+
+```bash
+# skills_sync をグローバルインストール
+dart pub global activate skills_sync
+
+# プロジェクトの skills.yaml をグローバル設定にシンボリックリンク
+ln -sf "$(pwd)/skills.yaml" ~/.config/skills_sync/skills.yaml
+
+# スキルを同期（~/.claude/skills/ に配置される）
+skills_sync sync
+```
+
+> [!NOTE]
+> シンボリックリンクにより、`skills.yaml` の変更がリポジトリで管理され、`skills_sync sync` だけで常に最新のスキル構成が反映されます。
+
 ### 実行
 
 ```bash
@@ -163,33 +181,30 @@ fvm dart format .
 
 ### MCP Marionette
 
-[Marionette](https://pub.dev/packages/marionette_flutter) により、Claude Code がデバッグモードの Flutter アプリを直接操作できます。UI 要素の検査・タップ・テキスト入力・スクリーンショット取得・ログ確認・ホットリロードが Claude Code から行えます。
+[Marionette](https://pub.dev/packages/marionette_flutter)（[MCP サーバー](https://pub.dev/packages/marionette_mcp)）により、Claude Code がデバッグモードの Flutter アプリを直接操作できます。セットアップと使い方は各パッケージの公式ドキュメントを参照してください。
 
-**セットアップ：**
+### Skills Sync
 
-1. [marionette_mcp](https://pub.dev/packages/marionette_mcp) をグローバルインストール
+[skills_sync](https://github.com/mono0926/skills-sync) を使い、GitHub 上の公開スキルリポジトリからプロジェクトに必要なスキルを一括管理しています。`skills.yaml` にソースと取捨選択を宣言し、`skills_sync sync` で `~/.claude/skills/` へグローバル同期します。セットアップ手順は[上記](#claude-code-を使う場合追加セットアップ)を参照してください。
 
-   ```bash
-   dart pub global activate marionette_mcp
-   ```
+**skills.yaml の構成：**
 
-2. アプリをデバッグモードで起動（VM サービス URI が出力される）
+| ソース | 内容 |
+|---|---|
+| `kevmoo/dash_skills` | Dart 言語のベストプラクティス・テスト・CLI・パッケージメンテナンス |
+| `flutter/skills` | Flutter 公式スキル（UI・ナビゲーション・国際化・ネットワーク等） |
+| `VeryGoodOpenSource/very_good_ai_flutter_plugin` | Flutter セキュリティ静的解析 |
+| `juparave/dotfiles` | Riverpod エキスパート |
+| `jeffallan/claude-skills` | Flutter エキスパート |
+| `affaan-m/everything-claude-code` | Flutter/Dart コードレビュー |
+| `madteacher/mad-agents-skills` | Flutter 各種実装パターン（フォーム・アニメーション・状態管理等） |
+| `rodydavis/skills` | Flutter 操作・スクリーンショット |
+| `obra/superpowers` | ブレインストーミング・TDD・検証フロー |
+| `wshobson/agents` | デザインシステム・モバイルデザイン・レスポンシブ |
+| `anthropics/skills` | フロントエンドデザイン・スキル作成・PDF |
+| その他 | UI/UX・プロンプトレビュー・README 作成等 |
 
-   ```bash
-   fvm flutter run
-   # → Connecting to VM Service at ws://127.0.0.1:XXXXX/ws
-   ```
-
-3. Claude Code から接続（`.mcp.json` で `marionette_mcp` サーバーが設定済み）
-
-   ```
-   mcp__marionette__connect で VM サービス URI を指定
-   ```
-
-`main.dart` でデバッグビルド時のみ `MarionetteBinding` を初期化しているため、リリースビルドへの影響はありません。
-
-> [!NOTE]
-> Marionette MCP は主にスクリーンショットの撮影に使用します。UI の動作確認は手動で行ってください。
+プロジェクトのアーキテクチャと重複するスキル（`flutter-architecture`、`flutter-state-management` 等）は `!` プレフィックスで除外し、macOS 環境に不要な Linux/Windows セットアップスキルも除外しています。
 
 ### カスタムスキル
 
