@@ -18,10 +18,6 @@ global:
     - vgv-static-security
   juparave/dotfiles:
     - flutter-riverpod-expert
-  jeffallan/claude-skills:
-    - 'flutter-expert'
-  affaan-m/everything-claude-code:
-    - 'flutter-dart-code-review'
   madteacher/mad-agents-skills:
     - '*'
     - '!flutter-navigation' # flutter-routing-and-navigation を優先するため
