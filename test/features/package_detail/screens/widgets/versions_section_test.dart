@@ -54,4 +54,40 @@ void main() {
       expect(find.byType(Divider), findsOneWidget);
     });
   });
+
+  group('VersionsSection a11y', () {
+    testWidgets('最新バージョンの Semantics label に「最新バージョン」が含まれる', (tester) async {
+      await tester.pumpWidget(createTestWidget(sortedVersions()));
+      await tester.pump();
+
+      expect(
+        find.bySemanticsLabel(
+          RegExp('${AppStrings.latestVersionLabel} 1\\.6\\.0、公開日 2025-11-10'),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('過去バージョンの Semantics label は「バージョン」で読み上げられる', (tester) async {
+      await tester.pumpWidget(createTestWidget(sortedVersions()));
+      await tester.pump();
+
+      expect(
+        find.bySemanticsLabel(
+          RegExp(r'^バージョン 1\.5\.0、公開日 2025-06-01$'),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('タイムラインドット・バージョン番号などの装飾要素はセマンティクスから除外される', (tester) async {
+      await tester.pumpWidget(createTestWidget(sortedVersions()));
+      await tester.pump();
+
+      // 個別のバージョン文字列テキストは ExcludeSemantics で除外され、
+      // 親 Semantics の統合 label としてのみ読み上げられる。
+      expect(find.bySemanticsLabel('1.6.0'), findsNothing);
+      expect(find.bySemanticsLabel('1.5.0'), findsNothing);
+    });
+  });
 }

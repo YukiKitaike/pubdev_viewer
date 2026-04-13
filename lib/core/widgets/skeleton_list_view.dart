@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SkeletonListView extends StatelessWidget {
@@ -20,18 +21,26 @@ class SkeletonListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    return Shimmer.fromColors(
-      baseColor: tokens.skeletonBase,
-      highlightColor: tokens.skeletonHighlight,
-      child: ListView.builder(
-        padding:
-            padding ??
-            const EdgeInsets.only(
-              top: AppSpacing.sm,
-              bottom: AppSpacing.lg,
-            ),
-        itemCount: itemCount,
-        itemBuilder: itemBuilder ?? (_, _) => const SkeletonTile(),
+    // スクリーンリーダーには「読み込み中のプレースホルダー」と 1 度だけ通知し、
+    // 内部のスケルトン矩形が個別に読み上げられるノイズを抑制する。
+    return Semantics(
+      label: AppStrings.skeletonLoading,
+      container: true,
+      child: ExcludeSemantics(
+        child: Shimmer.fromColors(
+          baseColor: tokens.skeletonBase,
+          highlightColor: tokens.skeletonHighlight,
+          child: ListView.builder(
+            padding:
+                padding ??
+                const EdgeInsets.only(
+                  top: AppSpacing.sm,
+                  bottom: AppSpacing.lg,
+                ),
+            itemCount: itemCount,
+            itemBuilder: itemBuilder ?? (_, _) => const SkeletonTile(),
+          ),
+        ),
       ),
     );
   }

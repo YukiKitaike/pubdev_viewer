@@ -149,33 +149,43 @@ class _PackageHeroHeader extends StatelessWidget {
               ),
               if (publisher.publisherId != null) ...[
                 const Gap(AppSpacing.md),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(AppRadius.full),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                      vertical: AppSpacing.xs,
-                    ),
-                    child: Row(
-                      mainAxisSize: .min,
-                      children: [
-                        Icon(
-                          Icons.verified_outlined,
-                          size: _publisherIconSize,
-                          color: theme.colorScheme.onSecondaryContainer,
+                // verified アイコンは単体では「verified outlined」と読み上げられて
+                // しまうため、Row 全体に意味のある label を与えて配下を除外する。
+                Semantics(
+                  label:
+                      '${AppStrings.verifiedPublisher}: '
+                      '${publisher.publisherId!}',
+                  container: true,
+                  child: ExcludeSemantics(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.secondaryContainer,
+                        borderRadius: BorderRadius.circular(AppRadius.full),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.sm,
+                          vertical: AppSpacing.xs,
                         ),
-                        const Gap(AppSpacing.xs),
-                        Text(
-                          publisher.publisherId!,
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: theme.colorScheme.onSecondaryContainer,
-                            fontWeight: .w500,
-                          ),
+                        child: Row(
+                          mainAxisSize: .min,
+                          children: [
+                            Icon(
+                              Icons.verified_outlined,
+                              size: _publisherIconSize,
+                              color: theme.colorScheme.onSecondaryContainer,
+                            ),
+                            const Gap(AppSpacing.xs),
+                            Text(
+                              publisher.publisherId!,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: theme.colorScheme.onSecondaryContainer,
+                                fontWeight: .w500,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

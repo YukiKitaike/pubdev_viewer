@@ -69,100 +69,115 @@ class _VersionTimelineItem extends StatelessWidget {
     final theme = Theme.of(context);
     final primary = theme.colorScheme.primary;
     final lineColor = context.tokens.cardBorder;
+    final formattedDate = formatDate(version.published);
+
+    // 最新判定を色のみに依存させないため、Semantics.label でテキスト化して伝える。
+    final semanticsLabel = isLatest
+        ? '${AppStrings.latestVersionLabel} ${version.version}、'
+              '公開日 $formattedDate'
+        : 'バージョン ${version.version}、公開日 $formattedDate';
 
     // IntrinsicHeight でタイムラインの縦線を隣のコンテンツ高さに合わせる。
     // stretch だけでは子の高さが決まらない。
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: .stretch,
-        children: [
-          // タイムラインのドット & ライン
-          SizedBox(
-            width: _trackWidth,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: _dotTopMargin),
-                  child: SizedBox(
-                    width: _dotSize,
-                    height: _dotSize,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: isLatest ? primary : lineColor,
-                        shape: .circle,
-                        border: isLatest ? null : Border.all(color: lineColor),
-                      ),
-                    ),
-                  ),
-                ),
-                if (!isLast)
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.xxs,
-                      ),
+    return Semantics(
+      label: semanticsLabel,
+      container: true,
+      child: ExcludeSemantics(
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: .stretch,
+            children: [
+              // タイムラインのドット & ライン
+              SizedBox(
+                width: _trackWidth,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: _dotTopMargin),
                       child: SizedBox(
-                        width: _lineWidth,
-                        child: ColoredBox(color: lineColor),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          const Gap(AppSpacing.sm),
-          // バージョン情報
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 0 : AppSpacing.md),
-              child: Row(
-                children: [
-                  Text(
-                    version.version,
-                    style: GoogleFonts.jetBrainsMono(
-                      fontSize: AppTextSize.mono12,
-                      fontWeight: isLatest ? .w600 : .w400,
-                      color: isLatest
-                          ? theme.colorScheme.onSurface
-                          : theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  if (isLatest) ...[
-                    const Gap(AppSpacing.sm),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: primary),
-                        borderRadius: BorderRadius.circular(AppRadius.full),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.sm,
-                          vertical: AppSpacing.xxs,
-                        ),
-                        child: Text(
-                          AppStrings.latestBadge,
-                          style: GoogleFonts.jetBrainsMono(
-                            fontSize: AppTextSize.mono10,
-                            fontWeight: .w700,
-                            color: primary,
+                        width: _dotSize,
+                        height: _dotSize,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: isLatest ? primary : lineColor,
+                            shape: .circle,
+                            border: isLatest
+                                ? null
+                                : Border.all(color: lineColor),
                           ),
                         ),
                       ),
                     ),
+                    if (!isLast)
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppSpacing.xxs,
+                          ),
+                          child: SizedBox(
+                            width: _lineWidth,
+                            child: ColoredBox(color: lineColor),
+                          ),
+                        ),
+                      ),
                   ],
-                  const Spacer(),
-                  Text(
-                    formatDate(version.published),
-                    style: GoogleFonts.jetBrainsMono(
-                      fontSize: AppTextSize.mono12,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              const Gap(AppSpacing.sm),
+              // バージョン情報
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: isLast ? 0 : AppSpacing.md),
+                  child: Row(
+                    children: [
+                      Text(
+                        version.version,
+                        style: GoogleFonts.jetBrainsMono(
+                          fontSize: AppTextSize.mono12,
+                          fontWeight: isLatest ? .w600 : .w400,
+                          color: isLatest
+                              ? theme.colorScheme.onSurface
+                              : theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      if (isLatest) ...[
+                        const Gap(AppSpacing.sm),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: primary),
+                            borderRadius: BorderRadius.circular(AppRadius.full),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.sm,
+                              vertical: AppSpacing.xxs,
+                            ),
+                            child: Text(
+                              AppStrings.latestBadge,
+                              style: GoogleFonts.jetBrainsMono(
+                                fontSize: AppTextSize.mono10,
+                                fontWeight: .w700,
+                                color: primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                      const Spacer(),
+                      Text(
+                        formattedDate,
+                        style: GoogleFonts.jetBrainsMono(
+                          fontSize: AppTextSize.mono12,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

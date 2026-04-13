@@ -116,10 +116,15 @@ class PackageListScreen extends HookConsumerWidget {
             itemCount: state.packages.length + (state.isLoadingMore ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == state.packages.length) {
-                return const Padding(
-                  padding: EdgeInsets.all(AppSpacing.lg),
+                return Padding(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Center(
-                    child: CircularProgressIndicator.adaptive(),
+                    // ページネーション時の追加ロード中であることを読み上げる。
+                    child: Semantics(
+                      label: AppStrings.loadingMore,
+                      container: true,
+                      child: const CircularProgressIndicator.adaptive(),
+                    ),
                   ),
                 );
               }

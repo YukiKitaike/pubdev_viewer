@@ -75,4 +75,30 @@ void main() {
       expect(find.byIcon(Icons.cloud_off_rounded), findsOneWidget);
     });
   });
+
+  group('ErrorView a11y', () {
+    testWidgets('装飾アイコンはセマンティクスから除外される', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        buildSubject(error: const NetworkException(), onRetry: () {}),
+      );
+
+      // cloud_off_rounded アイコン自体は描画されているが、ExcludeSemantics
+      // により Semantics ラベルとしては露出しない。タイトル・メッセージ・
+      // リトライボタンでエラー状況は伝達される。
+      expect(find.bySemanticsLabel('cloud off rounded'), findsNothing);
+      handle.dispose();
+    });
+
+    testWidgets('リトライボタンが labeled タップターゲットガイドラインに適合する', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        buildSubject(error: const NetworkException(), onRetry: () {}),
+      );
+
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+  });
 }

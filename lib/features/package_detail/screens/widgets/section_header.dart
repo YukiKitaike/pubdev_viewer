@@ -19,22 +19,28 @@ class SectionHeader extends StatelessWidget {
 
     return Row(
       children: [
-        SizedBox(
-          width: _accentWidth,
-          height: _accentHeight,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: primary,
-              borderRadius: BorderRadius.circular(AppRadius.sectionAccent),
+        // アクセントバーは純粋な視覚装飾のためスクリーンリーダーから除外する。
+        ExcludeSemantics(
+          child: SizedBox(
+            width: _accentWidth,
+            height: _accentHeight,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: primary,
+                borderRadius: BorderRadius.circular(AppRadius.sectionAccent),
+              ),
             ),
           ),
         ),
         const Gap(AppSpacing.sm),
-        Text(
-          label,
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: .w700,
-            letterSpacing: _letterSpacing,
+        Semantics(
+          header: true,
+          child: Text(
+            label,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: .w700,
+              letterSpacing: _letterSpacing,
+            ),
           ),
         ),
       ],

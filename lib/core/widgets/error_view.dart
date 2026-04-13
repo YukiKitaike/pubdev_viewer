@@ -42,18 +42,22 @@ class ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: .min,
           children: [
-            SizedBox(
-              width: _iconContainerSize,
-              height: _iconContainerSize,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest,
-                  shape: .circle,
-                ),
-                child: Icon(
-                  Icons.cloud_off_rounded,
-                  size: _errorIconSize,
-                  color: theme.colorScheme.onSurfaceVariant,
+            // エラー内容はタイトル・メッセージ・リトライボタンで伝達されるため、
+            // 装飾アイコンはスクリーンリーダーから除外する。
+            ExcludeSemantics(
+              child: SizedBox(
+                width: _iconContainerSize,
+                height: _iconContainerSize,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    shape: .circle,
+                  ),
+                  child: Icon(
+                    Icons.cloud_off_rounded,
+                    size: _errorIconSize,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
             ),
