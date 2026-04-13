@@ -22,33 +22,33 @@ void main() {
     });
   });
 
-  group('isHttpUrl', () {
+  group('isHttpsUrl', () {
     test('null の場合 false を返す', () {
-      check(isHttpUrl(null)).isFalse();
+      check(isHttpsUrl(null)).isFalse();
     });
 
     test('空文字列の場合 false を返す', () {
-      check(isHttpUrl('')).isFalse();
+      check(isHttpsUrl('')).isFalse();
     });
 
     test('https URL の場合 true を返す', () {
-      check(isHttpUrl('https://example.com')).isTrue();
+      check(isHttpsUrl('https://example.com')).isTrue();
     });
 
-    test('http URL の場合 true を返す', () {
-      check(isHttpUrl('http://example.com')).isTrue();
+    test('http URL の場合 false を返す', () {
+      check(isHttpsUrl('http://example.com')).isFalse();
     });
 
     test('ftp URL の場合 false を返す', () {
-      check(isHttpUrl('ftp://example.com')).isFalse();
+      check(isHttpsUrl('ftp://example.com')).isFalse();
     });
 
     test('スキームなしの文字列の場合 false を返す', () {
-      check(isHttpUrl('example.com')).isFalse();
+      check(isHttpsUrl('example.com')).isFalse();
     });
 
     test('不正な URL の場合 false を返す', () {
-      check(isHttpUrl('not a url')).isFalse();
+      check(isHttpsUrl('not a url')).isFalse();
     });
   });
 }

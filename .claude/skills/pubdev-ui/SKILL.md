@@ -159,6 +159,11 @@ color: Theme.of(context).brightness == Brightness.light
 Text('LATEST')              // AppStrings.latestBadge を使う
 SectionHeader(label: 'Overview')  // AppStrings.sectionOverview を使う
 // → UI 表示ラベル・メッセージは lib/core/strings/app_strings.dart に定義
+
+// ❌ 補間・プレフィックス付き文字列をウィジェット側で組み立てる
+Text('v$version')           // AppStrings.versionLabel(version) を使う
+// → 定数で表現できない動的文字列は AppStrings の static メソッドとして定義する
+//   例: static String versionLabel(String version) => 'v$version';
 ```
 
 ---

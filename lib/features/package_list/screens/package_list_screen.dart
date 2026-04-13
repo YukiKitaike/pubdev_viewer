@@ -105,30 +105,36 @@ class PackageListScreen extends HookConsumerWidget {
           error: error,
           onRetry: () => ref.read(packageListProvider.notifier).refresh(),
         ),
-        data: (state) => RefreshIndicator(
-          onRefresh: () => ref.read(packageListProvider.notifier).refresh(),
-          child: ListView.builder(
-            controller: scrollController,
-            padding: EdgeInsets.only(
-              top: AppSpacing.sm,
-              bottom: AppSpacing.lg + MediaQuery.paddingOf(context).bottom,
-            ),
-            itemCount: state.packages.length + (state.isLoadingMore ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index == state.packages.length) {
-                return const Padding(
-                  padding: EdgeInsets.all(AppSpacing.lg),
-                  child: Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
+        data: (state) {
+          final packages = state.packages;
+          return RefreshIndicator(
+            onRefresh: () => ref.read(packageListProvider.notifier).refresh(),
+            child: ListView.builder(
+              controller: scrollController,
+              padding: EdgeInsets.only(
+                top: AppSpacing.sm,
+                bottom: AppSpacing.lg + MediaQuery.paddingOf(context).bottom,
+              ),
+              itemCount: packages.length + (state.isLoadingMore ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == packages.length) {
+                  return const Padding(
+                    key: ValueKey('package_list_load_more_indicator'),
+                    padding: EdgeInsets.all(AppSpacing.lg),
+                    child: Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  );
+                }
+                final package = packages[index];
+                return PackageListTile(
+                  key: ValueKey('package_tile_${package.name}'),
+                  package: package,
                 );
-              }
-              return PackageListTile(
-                package: state.packages[index],
-              );
-            },
-          ),
-        ),
+              },
+            ),
+          );
+        },
       ),
     );
   }

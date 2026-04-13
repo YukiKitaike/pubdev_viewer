@@ -162,9 +162,11 @@ fvm dart format .
 
 | エージェント | 用途 |
 |---|---|
-| `code-reviewer` | CLAUDE.md の Critical Rules に基づくコードレビュー |
-| `pattern-reviewer` | Riverpod・Freezed・テストのパターン準拠をスキル参照でレビュー |
-| `test-reviewer` | `/pubdev-testing` スキルに基づくテストコード専用レビュー |
+| `code-reviewer` | CLAUDE.md の Critical Rules + Dart 言語スタイル/コード品質（Tip 1-14）のレビュー |
+| `pattern-reviewer` | Riverpod・Freezed・Routing・API・Widget パターン準拠をスキル参照でレビュー |
+| `test-reviewer` | `/pubdev-testing` スキル + アサーション品質（Tip 20-21）に基づくテストレビュー |
+| `accessibility-reviewer` | Semantics/Tooltip/label 付与漏れなど a11y 対応のレビュー |
+| `comment-quality-reviewer` | WHAT コメント排除・WHY の妥当性・doc comment 形式の検査 |
 
 ### Hooks
 

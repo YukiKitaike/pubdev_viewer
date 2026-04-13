@@ -12,7 +12,6 @@ import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_publisher_response.dart';
 import 'package:pubdev_viewer/features/package_detail/notifiers/package_detail_notifier.dart';
-import 'package:pubdev_viewer/features/package_detail/providers/current_package_name_provider.dart';
 import 'package:pubdev_viewer/features/package_detail/repository/package_detail_repository.dart';
 import 'package:pubdev_viewer/features/package_detail/screens/package_detail_screen.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
@@ -43,9 +42,8 @@ void main() {
 
   Widget createTestWidget({String packageName = 'http'}) {
     return createTestApp(
-      home: const PackageDetailScreen(),
+      home: PackageDetailScreen(packageName: packageName),
       overrides: [
-        currentPackageNameProvider.overrideWithValue(packageName),
         packageDetailRepositoryProvider.overrideWithValue(fakeRepository),
       ],
     );
@@ -264,7 +262,10 @@ void main() {
       expect(find.byType(RefreshIndicator), findsOneWidget);
       check(fakeRepository.getPackageDetailCallCount).equals(1);
 
-      await tester.container().read(packageDetailProvider.notifier).refresh();
+      await tester
+          .container()
+          .read(packageDetailProvider('http').notifier)
+          .refresh();
       await tester.pump();
 
       check(fakeRepository.getPackageDetailCallCount).equals(2);

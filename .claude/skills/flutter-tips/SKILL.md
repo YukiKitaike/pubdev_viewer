@@ -3,7 +3,8 @@ name: flutter-tips
 description: >
   Flutter/Dart 実践 Tips とコーディング規約。Dart 3.10+ dot shorthand・
   switch パターンマッチング・専用ウィジェット・マジックナンバー排除・
-  宣言的リスト・テスト品質・lint 設定など 21 項目。
+  宣言的リスト・テスト品質・lint 設定・型プロモーションのためのローカル変数化・
+  String index アクセス回避など 23 項目。
   コード追加・レビュー・リファクタリング時に参照。
 ---
 
@@ -240,7 +241,65 @@ return switch (status) {
 };
 ```
 
-### 14. Lint 設定
+### 14. 型プロモーションのためのローカル変数化
+
+`widget.xxx.yyy` や `this.field` のような **getter 経由のアクセスは Dart の flow analysis で型プロモーションされない**。繰り返し書くと getter が毎回呼ばれ、nullable フィールドでは `!` アンラップが必須になる。冒頭で `final` 変数に束縛すれば以降の null チェックで非 null にプロモートされ、`!` が不要になる。
+
+```dart
+// NG: widget.xxx / this.xxx のまま使うと型プロモーションされず ! が必要
+if (publisher.publisherId != null) {
+  Text(publisher.publisherId!, ...); // ← ! 強制アンラップ
+}
+
+final url = this.url;  // NG: こう書かない
+if (!isHttpsUrl(this.url)) return ...;
+Uri.parse(this.url!);  // ← ! 強制アンラップ
+
+// OK: ローカル変数化して null チェック → 型プロモーション
+final publisherId = publisher.publisherId;
+if (publisherId != null) {
+  Text(publisherId, ...); // ← ! 不要
+}
+
+final url = this.url;
+if (url == null || !isHttpsUrl(url)) return const SizedBox.shrink();
+Uri.parse(url); // ← ! 不要（非 null に型プロモーション済み）
+```
+
+**このプロジェクトでの適用例:**
+
+```dart
+// package_list_tile.dart: build 冒頭で deep chain を分解
+final package = widget.package;
+final name = package.name;
+final latest = package.latest;
+final version = latest.version;
+final description = latest.pubspec.description;
+// 以降 name / version / description を直接参照
+```
+
+**適用が特に重要な箇所:**
+- `widget.xxx.yyy.zzz` が同一 build 内で 2 回以上出る場合
+- nullable フィールドの null チェック後に使用する場合（`!` を消せる）
+- `asyncState.value` / `asyncState.requireValue.xxx` を繰り返す場合
+- `final x = this.x;` で外部 getter を stable なローカルに束縛したい場合
+
+**注意:** 通常関数の戻り値（例: `isHttpsUrl(url)`）は flow analysis の対象外。`x == null` のような **言語が解釈できる null 比較** を明示する必要がある。
+
+### 15. 文字列への整数 index アクセスを避ける
+
+`String[0]` は空文字列で `RangeError`、Unicode 合字・絵文字では壊れた表示になる。`core/utils/string_utils.dart` の `firstGrapheme()` ヘルパーを使う。
+
+```dart
+// NG: 空文字・合字・絵文字で壊れる
+widget.package.name[0].toUpperCase()
+
+// OK: 空文字はフォールバック、絵文字は合字単位で 1 グラフィム
+import 'package:pubdev_viewer/core/utils/string_utils.dart';
+firstGrapheme(name).toUpperCase()
+```
+
+### 16. Lint 設定
 
 ```yaml
 # analysis_options.yaml
@@ -258,7 +317,7 @@ dev_dependencies:
 
 ## Flutter / Widget
 
-### 15. 専用ウィジェットを使う
+### 17. 専用ウィジェットを使う
 
 `Container` の代わりに目的に合ったウィジェットを選ぶ。
 
@@ -281,19 +340,19 @@ Container(width: w, height: h, decoration: d)
 
 **例外:** `decoration` + `padding` + `width` の複合使用は `Container` 維持も可。
 
-### 16. Sliver プレフィックス
+### 18. Sliver プレフィックス
 
 Sliver を返すウィジェットには `Sliver` プレフィックスを付ける。
 
-### 17. Widget クラス分離
+### 19. Widget クラス分離
 
 ウィジェットを返すメソッド (`buildXxx()`) ではなく専用クラスに切り出す。
 
-### 18. build() 内で重い計算をしない
+### 20. build() 内で重い計算をしない
 
 `initState` / `didUpdateWidget` / notifier で事前計算する。
 
-### 19. `compute()` で重い処理を別 Isolate に逃がす
+### 21. `compute()` で重い処理を別 Isolate に逃がす
 
 UI フリーズ防止。
 
@@ -301,7 +360,7 @@ UI フリーズ防止。
 
 ## テスト
 
-### 20. マッチャーを活用
+### 22. マッチャーを活用
 
 ```dart
 // NG → OK
@@ -316,7 +375,7 @@ check(state.packages).length.equals(2);
 check(state.packages[0].name).equals('http');
 ```
 
-### 21. テストで不要な依存を排除
+### 23. テストで不要な依存を排除
 
 テスト対象以外のアプリ固有ウィジェットは使わない。
 

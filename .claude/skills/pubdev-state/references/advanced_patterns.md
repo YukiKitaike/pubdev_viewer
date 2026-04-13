@@ -1,12 +1,8 @@
 # Riverpod 詳細パターン（pubdev_viewer）
 
-## パラメータ付き Notifier — 2 つの手法
+## パラメータ付き Notifier — Family provider
 
-ルートパラメータ（パッケージ名など）を Notifier に渡す方法は 2 つある。
-
-### 手法 1: Family provider（build 引数）
-
-`build()` に引数を追加すると Family provider になる。引数ごとにキャッシュされる。
+ルートパラメータ（パッケージ名など）を Notifier に渡すには `build()` に引数を追加して Family provider にする。引数ごとに自動キャッシュされ、コンパイル時に引数の受け渡しが強制される。
 
 ```dart
 @riverpod
@@ -14,50 +10,19 @@ class PackageDetailNotifier extends _$PackageDetailNotifier {
   @override
   Future<PackageDetailState> build(String packageName) async {
     final repository = ref.watch(packageDetailRepositoryProvider);
-    // ...
+    final (detail, publisher) = await (
+      repository.getPackageDetail(packageName),
+      repository.getPackagePublisher(packageName),
+    ).wait;
+    return PackageDetailState(detail: detail, publisher: publisher);
   }
 }
 
 // 使用側: ref.watch(packageDetailProvider('riverpod'))
+// テスト: container.read(packageDetailProvider('http').future)
 ```
 
-### 手法 2: ProviderScope override（このアプリの採用パターン）
-
-スコープ付きプロバイダを作り、ルート側で `ProviderScope.overrides` に値を注入する。
-Notifier は `dependencies` でスコープ追従を宣言し、`ref.watch` で値を取得する。
-
-```dart
-// lib/features/package_detail/providers/current_package_name_provider.dart
-@riverpod
-String currentPackageName(Ref ref) =>
-    throw UnimplementedError('must be overridden');
-
-// lib/features/package_detail/notifiers/package_detail_notifier.dart
-// dependencies で currentPackageName のスコープに追従する。
-@Riverpod(dependencies: [currentPackageName])
-class PackageDetailNotifier extends _$PackageDetailNotifier {
-  @override
-  Future<PackageDetailState> build() async {
-    final packageName = ref.watch(currentPackageNameProvider);
-    final repository = ref.watch(packageDetailRepositoryProvider);
-    // ...
-  }
-}
-
-// 使用側: ref.watch(packageDetailProvider) — 引数不要
-```
-
-ルート側で `ProviderScope` をネストして override する（詳細は `/pubdev-navigation` 参照）。
-
-### 使い分け基準
-
-| 基準 | Family | ProviderScope override |
-|------|--------|------------------------|
-| 同じパラメータを使う provider が **1 つ** | シンプル | 過剰 |
-| 同じパラメータを **複数の provider** が共有 | 全 provider に引数を渡す必要あり | 1 つの override で全体に伝播 |
-| 安全性 | コンパイル時に引数が強制される | override 忘れは実行時エラー |
-| キャッシュ | 引数ごとに自動キャッシュ | スコープ単位（画面遷移で破棄） |
-| テスト | `provider('name').future` で直接テスト | `currentPackageNameProvider.overrideWithValue(...)` を overrides に追加 |
+ルート側からパラメータを渡す方法は `/pubdev-navigation` 参照（Screen コンストラクタ経由で受け取り、`ref.watch(packageDetailProvider(name))` に渡す）。
 
 ---
 
@@ -68,8 +33,7 @@ class PackageDetailNotifier extends _$PackageDetailNotifier {
 ```dart
 // lib/features/package_detail/notifiers/package_detail_notifier.dart
 @override
-Future<PackageDetailState> build() async {
-  final packageName = ref.watch(currentPackageNameProvider);
+Future<PackageDetailState> build(String packageName) async {
   final repository = ref.watch(packageDetailRepositoryProvider);
   final (detail, publisher) = await (          // ← 同時に発火
     repository.getPackageDetail(packageName),
