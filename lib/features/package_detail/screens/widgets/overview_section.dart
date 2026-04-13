@@ -22,6 +22,7 @@ class OverviewSection extends StatelessWidget {
     final theme = Theme.of(context);
     final cardTheme =
         Theme.of(context).extension<AppCardTheme>() ?? defaultCardTheme;
+    final description = detail.latest.pubspec.description;
 
     return Card(
       margin: cardTheme.margin.copyWith(top: AppSpacing.lg, bottom: 0),
@@ -33,7 +34,7 @@ class OverviewSection extends StatelessWidget {
             const SectionHeader(label: AppStrings.sectionOverview),
             const Divider(height: _dividerHeight),
             Text(
-              detail.latest.pubspec.description,
+              description,
               style: theme.textTheme.bodyMedium?.copyWith(
                 height: _descriptionLineHeight,
               ),

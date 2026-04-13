@@ -23,17 +23,17 @@ class PackageDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncState = ref.watch(packageDetailProvider(packageName));
+    final detail = asyncState.value?.detail;
+    final pubspec = detail?.latest.pubspec;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(packageName),
         actions: [
-          if (asyncState.value != null) ...[
-            _ShareButton(packageName: asyncState.requireValue.detail.name),
+          if (detail != null && pubspec != null) ...[
+            _ShareButton(packageName: detail.name),
             _ExternalLinkButton(
-              url:
-                  asyncState.requireValue.detail.latest.pubspec.homepage ??
-                  asyncState.requireValue.detail.latest.pubspec.repository,
+              url: pubspec.homepage ?? pubspec.repository,
             ),
           ],
         ],
@@ -104,6 +104,10 @@ class _PackageHeroHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final primary = theme.colorScheme.primary;
     final tokens = context.tokens;
+    final name = detail.name;
+    final version = detail.latest.version;
+    // ローカル化すると if ブロック内で非 null に型プロモーションされ、以降 ! 不要。
+    final publisherId = publisher.publisherId;
 
     return SizedBox(
       width: double.infinity,
@@ -132,7 +136,7 @@ class _PackageHeroHeader extends StatelessWidget {
             crossAxisAlignment: .start,
             children: [
               Text(
-                detail.name,
+                name,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: .w700,
                   letterSpacing: _titleLetterSpacing,
@@ -140,14 +144,14 @@ class _PackageHeroHeader extends StatelessWidget {
               ),
               const Gap(AppSpacing.sm),
               Text(
-                detail.latest.version,
+                version,
                 style: GoogleFonts.jetBrainsMono(
                   fontSize: AppTextSize.mono14,
                   fontWeight: .w500,
                   color: primary,
                 ),
               ),
-              if (publisher.publisherId != null) ...[
+              if (publisherId != null) ...[
                 const Gap(AppSpacing.md),
                 DecoratedBox(
                   decoration: BoxDecoration(
@@ -169,7 +173,7 @@ class _PackageHeroHeader extends StatelessWidget {
                         ),
                         const Gap(AppSpacing.xs),
                         Text(
-                          publisher.publisherId!,
+                          publisherId,
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: theme.colorScheme.onSecondaryContainer,
                             fontWeight: .w500,
@@ -214,7 +218,10 @@ class _ExternalLinkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!isHttpsUrl(url)) {
+    // ローカル変数化 + null 判定の明示で、以降 url を非 null に型プロモーションする。
+    // isHttpsUrl は通常関数のため単体では flow analysis が効かず、明示的な null 比較が必要。
+    final url = this.url;
+    if (url == null || !isHttpsUrl(url)) {
       return const SizedBox.shrink();
     }
     return IconButton(
@@ -222,7 +229,7 @@ class _ExternalLinkButton extends StatelessWidget {
       tooltip: AppStrings.openExternal,
       onPressed: () async {
         final success = await launchUrl(
-          Uri.parse(url!),
+          Uri.parse(url),
           mode: .externalApplication,
         );
         if (!success && context.mounted) {

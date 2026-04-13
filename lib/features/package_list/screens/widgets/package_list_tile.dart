@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pubdev_viewer/app/router.dart';
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
 import 'package:pubdev_viewer/core/utils/gradient_selector.dart';
+import 'package:pubdev_viewer/core/utils/string_utils.dart';
 import 'package:pubdev_viewer/features/package_list/models/package_list_item.dart';
 
 class PackageListTile extends StatefulWidget {
@@ -35,15 +36,18 @@ class _PackageListTileState extends State<PackageListTile> {
   @override
   void initState() {
     super.initState();
-    _gradient = selectGradientByName(widget.package.name);
+    final name = widget.package.name;
+    _gradient = selectGradientByName(name);
   }
 
   // ListView のリサイクルで別パッケージが割り当てられた場合にグラデーションを再計算する。
   @override
   void didUpdateWidget(PackageListTile oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.package.name != widget.package.name) {
-      _gradient = selectGradientByName(widget.package.name);
+    final oldName = oldWidget.package.name;
+    final newName = widget.package.name;
+    if (oldName != newName) {
+      _gradient = selectGradientByName(newName);
     }
   }
 
@@ -51,6 +55,11 @@ class _PackageListTileState extends State<PackageListTile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final tokens = context.tokens;
+    final package = widget.package;
+    final name = package.name;
+    final latest = package.latest;
+    final version = latest.version;
+    final description = latest.pubspec.description;
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -79,7 +88,7 @@ class _PackageListTileState extends State<PackageListTile> {
               onTap: () {
                 // 画面遷移という重要な操作に触覚フィードバックで応答性を伝える。
                 HapticFeedback.lightImpact();
-                PackageDetailRoute(name: widget.package.name).go(context);
+                PackageDetailRoute(name: name).go(context);
               },
               onHighlightChanged: (highlighted) =>
                   setState(() => _pressed = highlighted),
@@ -102,7 +111,7 @@ class _PackageListTileState extends State<PackageListTile> {
                         ),
                         child: Center(
                           child: Text(
-                            widget.package.name[0].toUpperCase(),
+                            firstGrapheme(name).toUpperCase(),
                             style: theme.textTheme.titleMedium?.copyWith(
                               color: AppColors.avatarText,
                               fontWeight: .w700,
@@ -120,7 +129,7 @@ class _PackageListTileState extends State<PackageListTile> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  widget.package.name,
+                                  name,
                                   style: theme.textTheme.titleSmall?.copyWith(
                                     fontWeight: .w600,
                                   ),
@@ -146,7 +155,7 @@ class _PackageListTileState extends State<PackageListTile> {
                                     vertical: AppSpacing.xxs,
                                   ),
                                   child: Text(
-                                    'v${widget.package.latest.version}',
+                                    'v$version',
                                     style: GoogleFonts.jetBrainsMono(
                                       fontSize: AppTextSize.mono10,
                                       fontWeight: .w600,
@@ -159,7 +168,7 @@ class _PackageListTileState extends State<PackageListTile> {
                           ),
                           const Gap(AppSpacing.xs),
                           Text(
-                            widget.package.latest.pubspec.description,
+                            description,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                               height: _descriptionLineHeight,
