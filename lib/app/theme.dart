@@ -73,6 +73,12 @@ ThemeData _buildTheme(Brightness brightness) {
       color: tokens.border,
       thickness: 1,
     ),
+    // Android 14+ の戻るジェスチャーでプレビュー表示を有効化する。
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+      },
+    ),
     extensions: [defaultCardTheme, tokens],
   );
 }
