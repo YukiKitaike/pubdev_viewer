@@ -30,4 +30,6 @@ class AppStrings {
   static const String openExternal = '外部サイトで開く';
   static const String lightMode = 'ライトモード';
   static const String darkMode = 'ダークモード';
+
+  static String versionLabel(String version) => 'v$version';
 }

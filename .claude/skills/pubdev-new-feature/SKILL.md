@@ -40,7 +40,8 @@ build/loadMore/refresh/エラーハンドリング。コード生成: `fvm dart 
 
 ## Step 4: Screen → `/pubdev-ui`
 
-`HookConsumerWidget` + `asyncState.when`。文字列は `AppStrings` に定義（既存の重複確認を先に行う）。
+`HookConsumerWidget` + `asyncState.when`。UI 表示文字列は `AppStrings` に定義（既存の重複確認を先に行う）。
+補間・プレフィックス付き文字列（`'v$version'` 等）も `AppStrings` の static メソッド（例: `versionLabel(String v)`）として定義し、ウィジェット側で組み立てない。
 `lib/core/utils/` の既存ユーティリティを確認し、同等処理を再実装しない。
 
 ## Step 5: ルート登録 → `/pubdev-navigation`

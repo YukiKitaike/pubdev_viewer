@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:pubdev_viewer/app/router.dart';
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:pubdev_viewer/core/utils/gradient_selector.dart';
 import 'package:pubdev_viewer/core/utils/string_utils.dart';
 import 'package:pubdev_viewer/features/package_list/models/package_list_item.dart';
@@ -155,7 +156,7 @@ class _PackageListTileState extends State<PackageListTile> {
                                     vertical: AppSpacing.xxs,
                                   ),
                                   child: Text(
-                                    'v$version',
+                                    AppStrings.versionLabel(version),
                                     style: GoogleFonts.jetBrainsMono(
                                       fontSize: AppTextSize.mono10,
                                       fontWeight: .w600,
