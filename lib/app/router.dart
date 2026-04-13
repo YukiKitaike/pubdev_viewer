@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:pubdev_viewer/features/package_detail/providers/current_package_name_provider.dart';
 import 'package:pubdev_viewer/features/package_detail/screens/package_detail_screen.dart';
 import 'package:pubdev_viewer/features/package_list/screens/package_list_screen.dart';
 
@@ -34,12 +32,7 @@ class PackageDetailRoute extends GoRouteData with $PackageDetailRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return ProviderScope(
-      overrides: [
-        currentPackageNameProvider.overrideWithValue(name),
-      ],
-      child: const PackageDetailScreen(),
-    );
+    return PackageDetailScreen(packageName: name);
   }
 }
 
