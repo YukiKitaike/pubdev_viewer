@@ -45,6 +45,7 @@ tools: Read, Grep, Glob, Skill
 - **build() 内の重い計算** — ソート・フィルタ等の処理が build() 内にないか。notifier/initState で事前計算すべき
 - **デザイントークン使用** — `AppSpacing` / `AppRadius` / `context.tokens` を使っているか（ハードコード値禁止）
 - **HookConsumerWidget パターン** — Riverpod を使う Widget で適切な基底クラスを使っているか
+- **ListView.builder の ValueKey** — `ListView.builder` / `SliverList.builder` で生成する各アイテムに `ValueKey('<用途>_${一意な値}')` が付いているか。loadMore 等の状態インジケータにも識別可能な `ValueKey` が付いているか。`index` のみの key は NG（リサイクルで別データに同じ key が振られるため）
 
 ## 出力形式
 
