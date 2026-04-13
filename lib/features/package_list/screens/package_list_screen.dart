@@ -119,14 +119,17 @@ class PackageListScreen extends HookConsumerWidget {
               itemBuilder: (context, index) {
                 if (index == packages.length) {
                   return const Padding(
+                    key: ValueKey('package_list_load_more_indicator'),
                     padding: EdgeInsets.all(AppSpacing.lg),
                     child: Center(
                       child: CircularProgressIndicator.adaptive(),
                     ),
                   );
                 }
+                final package = packages[index];
                 return PackageListTile(
-                  package: packages[index],
+                  key: ValueKey('package_tile_${package.name}'),
+                  package: package,
                 );
               },
             ),
