@@ -108,9 +108,9 @@ Text(formatDate(version.published))  // → '2026-04-12'
 // アバターグラデーション（文字列ハッシュで決定的に選択）
 final gradient = selectGradientByName(packageName);
 
-// pub.dev URL 構築・バリデーション
+// pub.dev URL 構築・HTTPS バリデーション
 final uri = pubDevPackageUrl(packageName);
-if (isHttpUrl(url)) { ... }
+if (isHttpsUrl(url)) { ... }
 ```
 
 feature 内に private ヘルパー (`_computeGradient`, `_formatDate` 等) を作らず、core の util を使う。

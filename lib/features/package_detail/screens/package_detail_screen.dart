@@ -214,7 +214,7 @@ class _ExternalLinkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!isHttpUrl(url)) {
+    if (!isHttpsUrl(url)) {
       return const SizedBox.shrink();
     }
     return IconButton(
