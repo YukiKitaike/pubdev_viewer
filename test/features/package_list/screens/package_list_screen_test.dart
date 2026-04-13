@@ -266,4 +266,76 @@ void main() {
       check(fakeRepository.getPackagesCallCount).equals(2);
     });
   });
+
+  group('PackageListScreen a11y', () {
+    testWidgets('AppBar タイトルの Semantics label が AppStrings.appTitle に統合されている', (
+      tester,
+    ) async {
+      fakeRepository.onGetPackages = ({String? pageUrl}) async =>
+          PackageListResponse.fromJson(
+            Map<String, dynamic>.from(packageListResponseJson),
+          );
+
+      await tester.pumpWidget(createTestWidget());
+      await tester.pump();
+
+      expect(find.bySemanticsLabel(AppStrings.appTitle), findsOneWidget);
+    });
+
+    testWidgets(
+      'AppBar タイトルの TextSpan 単体 (pub / .dev / Viewer) は独立ノードとして露出しない',
+      (
+        tester,
+      ) async {
+        fakeRepository.onGetPackages = ({String? pageUrl}) async =>
+            PackageListResponse.fromJson(
+              Map<String, dynamic>.from(packageListResponseJson),
+            );
+
+        await tester.pumpWidget(createTestWidget());
+        await tester.pump();
+
+        // ExcludeSemantics 配下のため、個別の TextSpan はセマンティクスツリーに
+        // 露出せず、統合 label としてのみ読み上げられる。
+        expect(find.bySemanticsLabel('pub'), findsNothing);
+        expect(find.bySemanticsLabel('.dev'), findsNothing);
+      },
+    );
+
+    testWidgets('追加読み込みインジケータに「追加データを読み込み中」ラベルが付与される', (tester) async {
+      // 1 ページ目は即応答、2 ページ目は未完 Completer でロード中状態に固定する。
+      final secondPage = Completer<PackageListResponse>();
+      var callCount = 0;
+      fakeRepository.onGetPackages = ({String? pageUrl}) {
+        callCount++;
+        if (callCount == 1) {
+          return Future.value(
+            PackageListResponse.fromJson(
+              Map<String, dynamic>.from(packageListResponseJson),
+            ),
+          );
+        }
+        return secondPage.future;
+      };
+
+      await tester.pumpWidget(createTestWidget());
+      await tester.pump();
+      await tester.pump();
+
+      // notifier 経由で loadMore を起動しロード中状態に遷移させる。
+      unawaited(
+        tester.container().read(packageListProvider.notifier).loadMore(),
+      );
+      await tester.pump();
+
+      expect(find.bySemanticsLabel(AppStrings.loadingMore), findsOneWidget);
+
+      secondPage.complete(
+        PackageListResponse.fromJson(
+          Map<String, dynamic>.from(packageListResponseLastPageJson),
+        ),
+      );
+      await tester.pumpAndSettle();
+    });
+  });
 }

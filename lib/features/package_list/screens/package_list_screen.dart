@@ -58,29 +58,37 @@ class PackageListScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: RichText(
-          text: TextSpan(
-            style: theme.textTheme.titleLarge,
-            children: [
-              TextSpan(
-                text: AppStrings.appTitlePub,
-                style: TextStyle(
-                  color: theme.colorScheme.primary,
-                  fontWeight: .w700,
-                ),
+        // RichText は TextSpan 単位で読み上げられるため、統合した label を親に
+        // 与え、配下のスパンはセマンティクスから除外する。
+        title: Semantics(
+          label: AppStrings.appTitle,
+          header: true,
+          child: ExcludeSemantics(
+            child: RichText(
+              text: TextSpan(
+                style: theme.textTheme.titleLarge,
+                children: [
+                  TextSpan(
+                    text: AppStrings.appTitlePub,
+                    style: TextStyle(
+                      color: theme.colorScheme.primary,
+                      fontWeight: .w700,
+                    ),
+                  ),
+                  const TextSpan(
+                    text: AppStrings.appTitleDotDev,
+                    style: TextStyle(fontWeight: .w700),
+                  ),
+                  TextSpan(
+                    text: AppStrings.appTitleViewer,
+                    style: TextStyle(
+                      fontWeight: .w400,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
               ),
-              const TextSpan(
-                text: AppStrings.appTitleDotDev,
-                style: TextStyle(fontWeight: .w700),
-              ),
-              TextSpan(
-                text: AppStrings.appTitleViewer,
-                style: TextStyle(
-                  fontWeight: .w400,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
         actions: [
