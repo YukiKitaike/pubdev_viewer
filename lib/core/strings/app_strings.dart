@@ -30,4 +30,12 @@ class AppStrings {
   static const String openExternal = '外部サイトで開く';
   static const String lightMode = 'ライトモード';
   static const String darkMode = 'ダークモード';
+
+  // セマンティクスラベル（スクリーンリーダー向け）
+  static const String loading = '読み込み中';
+  static const String loadingMore = '追加データを読み込み中';
+  static const String skeletonLoading = '読み込み中のプレースホルダー';
+  static const String verifiedPublisher = '認証済みパブリッシャー';
+  static const String latestVersionLabel = '最新バージョン';
+  static const String packageListItemHint = 'パッケージ詳細を表示';
 }

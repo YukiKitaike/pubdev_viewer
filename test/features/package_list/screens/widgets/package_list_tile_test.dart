@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pubdev_viewer/app/theme.dart';
+import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:pubdev_viewer/features/package_list/models/package_list_item.dart';
 import 'package:pubdev_viewer/features/package_list/screens/widgets/package_list_tile.dart';
 
@@ -147,6 +148,70 @@ void main() {
       await tester.pumpAndSettle();
 
       check(navigatedName).equals('http');
+    });
+  });
+
+  group('PackageListTile a11y', () {
+    testWidgets('Semantics label にパッケージ名・バージョン・説明文が含まれる', (tester) async {
+      await tester.pumpWidget(createTestWidget(httpPackageItem()));
+      await tester.pump();
+
+      expect(
+        find.bySemanticsLabel(
+          RegExp(
+            r'http, バージョン 1\.6\.0。A composable API for HTTP requests\.',
+          ),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Semantics hint に遷移ヒントが設定されている', (tester) async {
+      await tester.pumpWidget(createTestWidget(httpPackageItem()));
+      await tester.pump();
+
+      final semantics = tester.getSemantics(
+        find.bySemanticsLabel(RegExp(r'^http,')),
+      );
+      check(semantics.hint).equals(AppStrings.packageListItemHint);
+      check(semantics.flagsCollection.isButton).isTrue();
+    });
+
+    testWidgets('装飾要素 (chevron / アバターイニシャル / バージョンバッジ) はセマンティクスから除外される', (
+      tester,
+    ) async {
+      await tester.pumpWidget(createTestWidget(httpPackageItem()));
+      await tester.pump();
+
+      expect(find.bySemanticsLabel('H'), findsNothing);
+      expect(find.bySemanticsLabel('v1.6.0'), findsNothing);
+    });
+
+    testWidgets('Android タップターゲットガイドラインに適合する', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(createTestWidget(httpPackageItem()));
+      await tester.pump();
+
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+
+    testWidgets('labeled タップターゲットガイドラインに適合する', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(createTestWidget(httpPackageItem()));
+      await tester.pump();
+
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      handle.dispose();
+    });
+
+    testWidgets('テキストコントラストガイドラインに適合する', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(createTestWidget(httpPackageItem()));
+      await tester.pumpAndSettle();
+
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      handle.dispose();
     });
   });
 }
