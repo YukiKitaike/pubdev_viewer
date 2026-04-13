@@ -154,7 +154,7 @@ fvm dart format .
 
 ### プラグイン
 
-`.claude/settings.json` の `enabledPlugins` を参照。
+[`.claude/settings.json`](.claude/settings.json) の `enabledPlugins` を参照。
 
 ### サブエージェント
 
