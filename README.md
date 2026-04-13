@@ -133,6 +133,10 @@ fvm dart format .
 
 このプロジェクトは [Claude Code](https://claude.ai/code) での開発を前提としており、`.claude/` ディレクトリにプロジェクト固有の設定・カスタムスキルが含まれています。
 
+### グローバルスキル
+
+[skills_sync](https://github.com/mono0926/skills-sync) を使い、GitHub 上の公開スキルリポジトリからプロジェクトに必要なスキルを一括管理しています。`skills.yaml` にソースと取捨選択を宣言し、`skills_sync sync` で `~/.agents/skills/` へグローバル同期します。セットアップ手順は[上記](#claude-code-を使う場合追加セットアップ)を参照してください。詳細は [skills.yaml](skills.yaml) を参照。
+
 ### カスタムスキル
 
 上記のグローバルスキルとは別に、`.claude/skills/` にプロジェクト固有のスキルが定義されています：
@@ -174,7 +178,3 @@ fvm dart format .
 ### MCP Marionette
 
 [Marionette](https://pub.dev/packages/marionette_flutter)（[MCP サーバー](https://pub.dev/packages/marionette_mcp)）により、Claude Code がデバッグモードの Flutter アプリを直接操作できます。セットアップと使い方は各パッケージの公式ドキュメントを参照してください。
-
-### Skills Sync
-
-[skills_sync](https://github.com/mono0926/skills-sync) を使い、GitHub 上の公開スキルリポジトリからプロジェクトに必要なスキルを一括管理しています。`skills.yaml` にソースと取捨選択を宣言し、`skills_sync sync` で `~/.agents/skills/` へグローバル同期します。セットアップ手順は[上記](#claude-code-を使う場合追加セットアップ)を参照してください。詳細は [skills.yaml](skills.yaml) を参照。
