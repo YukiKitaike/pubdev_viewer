@@ -13,140 +13,84 @@ description: >
 
 | 種別 | 用途 | fromJson | `*.g.dart` |
 |------|------|----------|------------|
-| **API Response モデル** | API レスポンスを Dart クラスにマッピング | ✅ あり | ✅ あり |
-| **State モデル** | UI の状態を表現（ページネーション情報など） | ❌ なし | ❌ なし |
+| **API Response モデル** | API レスポンスを Dart クラスにマッピング | あり | あり |
+| **State モデル** | UI の状態を表現（ページネーション情報など） | なし | なし |
 
 Entity クラスや Domain クラスを別に作らない。API の形状と UI の必要が実際に異なる場合のみ変換クラスを作る。
 
 ---
 
-## API Response モデル
+## API Response モデル テンプレート
 
-`part *.g.dart` を含む。`fromJson` ファクトリを定義する。
 snake_case → camelCase の一括変換には `@JsonSerializable(fieldRename: FieldRename.snake)` を使う。
 
 ```dart
-// lib/features/package_list/models/package_list_response.dart
+// lib/features/<feature>/models/<name>_response.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package_list_item.dart';
-
-part 'package_list_response.freezed.dart';
-part 'package_list_response.g.dart';  // ← json_serializable が生成
+part '<name>_response.freezed.dart';
+part '<name>_response.g.dart';
 
 @freezed
-abstract class PackageListResponse with _$PackageListResponse {
-  @JsonSerializable(fieldRename: FieldRename.snake) // snake_case 一括変換
-  const factory PackageListResponse({
-    String? nextUrl,                          // next_url → nextUrl に自動変換
-    required List<PackageListItem> packages,
-  }) = _PackageListResponse;
+abstract class NameResponse with _$NameResponse {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory NameResponse({
+    required String fieldName,     // field_name → fieldName に自動変換
+    String? optionalField,
+  }) = _NameResponse;
 
-  factory PackageListResponse.fromJson(Map<String, dynamic> json) =>
-      _$PackageListResponseFromJson(json);
+  factory NameResponse.fromJson(
+    Map<String, dynamic> json,
+  ) => _$NameResponseFromJson(json);
 }
 ```
 
-実際のファイル: [lib/features/package_list/models/package_list_response.dart](lib/features/package_list/models/package_list_response.dart)
+実例: [package_list_response.dart](lib/features/package_list/models/package_list_response.dart), [package_detail_version.dart](lib/features/package_detail/models/package_detail_version.dart)
 
 ---
 
-## State モデル
+## State モデル テンプレート
 
 `part *.g.dart` は不要。`fromJson` は書かない。
 
 ```dart
-// lib/features/package_list/models/package_list_state.dart
+// lib/features/<feature>/models/<name>_state.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../core/error/app_exception.dart';
-import 'package_list_item.dart';
+import 'package:pubdev_viewer/core/error/app_exception.dart';
 
-part 'package_list_state.freezed.dart';  // ← .g.dart は不要
+part '<name>_state.freezed.dart';
 
 @freezed
-abstract class PackageListState with _$PackageListState {
-  const factory PackageListState({
-    @Default([]) List<PackageListItem> packages,
-    String? nextUrl,
+abstract class NameState with _$NameState {
+  const factory NameState({
+    @Default([]) List<Item> items,
     @Default(false) bool isLoadingMore,
     AppException? loadMoreError,
-  }) = _PackageListState;
-  // fromJson は書かない
+  }) = _NameState;
 }
 ```
 
-実際のファイル: [lib/features/package_list/models/package_list_state.dart](lib/features/package_list/models/package_list_state.dart)
+実例: [package_list_state.dart](lib/features/package_list/models/package_list_state.dart), [package_detail_state.dart](lib/features/package_detail/models/package_detail_state.dart)
 
 ---
 
-## snake_case マッピング
+## `@JsonKey` の使い方
 
-API が返す snake_case キーを camelCase フィールドに変換するには、
-ファクトリコンストラクタに `@JsonSerializable(fieldRename: FieldRename.snake)` を付けて一括変換する。
-
-```dart
-@freezed
-abstract class PackageListVersion with _$PackageListVersion {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory PackageListVersion({
-    required String version,
-    String? archiveUrl,    // archive_url → archiveUrl に自動変換
-  }) = _PackageListVersion;
-
-  factory PackageListVersion.fromJson(Map<String, dynamic> json) =>
-      _$PackageListVersionFromJson(json);
-}
-```
-
-## `@JsonKey` の使い方（例外ケースのみ）
-
-`fieldRename: FieldRename.snake` で対応できない場合にのみ `@JsonKey` を使う:
+`fieldRename: FieldRename.snake` で対応できない例外ケースのみ `@JsonKey` を使う:
 
 ```dart
-// ✅ fieldRename では変換できない特殊なキー名
-@JsonKey(name: 'pub_sub_topic') String? pubSubTopic,
-
-// ✅ DateTime の変換（共有コンバーターを使う）
-@JsonKey(fromJson: dateTimeFromIso8601, toJson: dateTimeToIso8601)
-required DateTime published,
-
-// ✅ API がフィールドを省略する可能性がある場合のデフォルト値
-@JsonKey(defaultValue: <String>[]) List<String> topics,
-```
-
-### DateTime フィールドの JSON 変換
-
-pub.dev API は DateTime を ISO 8601 文字列で返す。`core/utils/json_converters.dart` の共有コンバーターを使う:
-
-```dart
+// DateTime の変換（共有コンバーターを使う）
 import 'package:pubdev_viewer/core/utils/json_converters.dart';
 
 @JsonKey(fromJson: dateTimeFromIso8601, toJson: dateTimeToIso8601)
 required DateTime published,
+
+// API がフィールドを省略する可能性がある場合のデフォルト値
+@JsonKey(defaultValue: <String>[]) List<String> topics,
 ```
 
-feature 内に private コンバーター (`_publishedFromJson` 等) を作らない。
-
----
-
-## ネストしたモデル
-
-ネストしたオブジェクトも同様に `@freezed` で定義する。
-
-```dart
-// lib/features/package_list/models/package_list_item.dart
-@freezed
-abstract class PackageListItem with _$PackageListItem {
-  const factory PackageListItem({
-    required String name,
-    required PackageListVersion latest,  // ネストした freezed クラス
-  }) = _PackageListItem;
-
-  factory PackageListItem.fromJson(Map<String, dynamic> json) =>
-      _$PackageListItemFromJson(json);
-}
-```
+DateTime コンバーターは [lib/core/utils/json_converters.dart](lib/core/utils/json_converters.dart) に定義済み。feature 内に private コンバーター (`_publishedFromJson` 等) を作らない。
 
 ---
 
@@ -154,11 +98,11 @@ abstract class PackageListItem with _$PackageListItem {
 
 - feature 固有モデルは最初から `core/models/` に置かない
 - **2 つ以上の feature で共有される時点で昇格させる**
-- 例: `Pubspec` → `lib/core/models/pubspec.dart`（package_list と package_detail の両方で使用）
+- 例: `Pubspec` → [lib/core/models/pubspec.dart](lib/core/models/pubspec.dart)（package_list と package_detail の両方で使用）
 
 ---
 
-## コード生成コマンド
+## コード生成
 
 モデルを作成・変更したら必ず実行:
 
@@ -166,28 +110,22 @@ abstract class PackageListItem with _$PackageListItem {
 fvm dart run build_runner build -d
 ```
 
-生成されるファイル（手動編集禁止）:
-- `<model>.freezed.dart` — `copyWith`・`==`・`toString` 等
-- `<model>.g.dart` — `fromJson`・`toJson`（Response モデルのみ）
-
 ---
 
 ## よくある間違い
 
 ```dart
-// ❌ State モデルに fromJson を書く
+// ❌ State モデルに fromJson を書く（不要）
 factory PackageListState.fromJson(Map<String, dynamic> json) => ...
 
 // ❌ @JsonKey(name: 'next_url') を個別に書く（fieldRename で一括変換する）
 @JsonKey(name: 'next_url') String? nextUrl,
 
-// ❌ 不要な toJson を定義する（ローカル保存などで実際に必要になるまで書かない）
+// ❌ 相対 import を使う
+import '../../../core/error/app_exception.dart';
+// ✅ 絶対 import を使う
+import 'package:pubdev_viewer/core/error/app_exception.dart';
+
+// ❌ 不要な toJson を定義する（実際に必要になるまで書かない）
 Map<String, dynamic> toJson() => _$MyModelToJson(this);
 ```
-
----
-
-### WHY コメントの典型例
-
-- カスタム `@JsonKey(fromJson: ...)` を使う理由（API の返却形式が想定と異なる等）
-- `@JsonSerializable(fieldRename: FieldRename.snake)` を選んだ理由
