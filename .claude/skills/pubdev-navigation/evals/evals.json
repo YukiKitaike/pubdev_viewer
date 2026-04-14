@@ -1,0 +1,31 @@
+{
+  "skill_name": "pubdev-navigation",
+  "evals": [
+    {
+      "id": 0,
+      "name": "add-route",
+      "prompt": "設定画面用のルートを追加して。/settings パスで SettingsScreen を表示する",
+      "expected_output": "@TypedGoRoute + GoRouteData + with $SettingsRoute mixin + router.dart への追加指示",
+      "files": [],
+      "assertions": [
+        {"text": "@TypedGoRoute アノテーションを使用"},
+        {"text": "GoRouteData を extends + with $RouteName mixin"},
+        {"text": "build_runner コマンドを案内"},
+        {"text": "型安全遷移 (SettingsRoute().go(context)) を案内"}
+      ]
+    },
+    {
+      "id": 1,
+      "name": "nav-test",
+      "prompt": "パッケージ詳細画面へのナビゲーションをテストしたい。タップしたら正しい画面に遷移するか検証するウィジェットテストを書いて",
+      "expected_output": "テスト用 GoRouter + onNavigate コールバック + パスパラメータ検証",
+      "files": [],
+      "assertions": [
+        {"text": "テスト用 GoRouter を作成"},
+        {"text": "onNavigate でパスパラメータを検証"},
+        {"text": "@Tags(['widget']) を付与"},
+        {"text": "テスト名が日本語"}
+      ]
+    }
+  ]
+}
