@@ -1,0 +1,31 @@
+{
+  "skill_name": "pubdev-ui",
+  "evals": [
+    {
+      "id": 0,
+      "name": "screen",
+      "prompt": "検索結果を表示する画面を作って。HookConsumerWidget で asyncState.when を使って、ローディング・エラー・データ表示を切り替える",
+      "expected_output": "HookConsumerWidget + asyncState.when + SkeletonListView/ErrorView + デザイントークン使用",
+      "files": [],
+      "assertions": [
+        {"text": "HookConsumerWidget を使用"},
+        {"text": "asyncState.when でローディング/エラー/データを切り替え"},
+        {"text": "AppSpacing / AppRadius デザイントークンを使用"},
+        {"text": "ハードコード値なし（色・余白・文字列）"}
+      ]
+    },
+    {
+      "id": 1,
+      "name": "design-tokens",
+      "prompt": "パッケージのスコアカードを作って。カード内にスコア値とプログレスバーを表示する。ライト/ダークモード対応で",
+      "expected_output": "context.tokens でセマンティックカラー + AppCardTheme + cardElevatedShadow",
+      "files": [],
+      "assertions": [
+        {"text": "context.tokens でセマンティックカラーを使用"},
+        {"text": "AppSpacing でパディング/マージン"},
+        {"text": "AppRadius でボーダーラジアス"},
+        {"text": "ハードコードカラー (Colors.xxx / Color(0xFF...)) なし"}
+      ]
+    }
+  ]
+}

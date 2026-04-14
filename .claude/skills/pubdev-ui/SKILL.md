@@ -134,8 +134,12 @@ final cardTheme = Theme.of(context).extension<AppCardTheme>() ?? defaultCardThem
 
 ## Widget パターン
 
-HookConsumerWidget・プライベート Widget クラス・Safe Area・フォント・Core Utils の
-実装例は [widget_patterns.md](references/widget_patterns.md) を参照。
+**新しい画面を作るとき**のみ [widget_patterns.md](references/widget_patterns.md) を参照（HookConsumerWidget、ScrollController、ValueKey、Safe Area、Core Utils）。カードやコンポーネントの作成ではデザイントークン情報（上記セクション）で十分なので読まなくてよい。
+
+基本ルール:
+- スクリーンは `HookConsumerWidget` を継承（実例: [package_list_screen.dart](lib/features/package_list/screens/package_list_screen.dart)）
+- Widget は**ヘルパーメソッドではなくプライベートクラス**に分割（`class _MyCard extends StatelessWidget`）
+- `lib/core/utils/` の既存ユーティリティを確認し、同等処理を再実装しない
 
 ---
 
@@ -166,11 +170,3 @@ Text('v$version')           // AppStrings.versionLabel(version) を使う
 //   例: static String versionLabel(String version) => 'v$version';
 ```
 
----
-
-### WHY コメントの典型例
-
-- マジックナンバー（スクロール閾値・itemCount 等）の根拠
-- プラットフォーム固有の処理を分岐する理由
-- HapticFeedback を入れる理由
-- IntrinsicHeight 等のレイアウトトリックが必要な理由
