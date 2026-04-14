@@ -12,209 +12,53 @@ description: >
 
 # API クライアント層パターン（pubdev_viewer）
 
-## アーキテクチャ概要
+## アーキテクチャフロー
 
 ```
-PubDevApiClient extends ApiClient
-       ↓ DI
-    Dio（HTTP クライアント）
+PubDevApiClient extends ApiClient ← Dio (DI, keepAlive)
+       ↓ Map<String, dynamic>
+Repository ← fromJson でパース（ApiClient にパース処理を書かない）
+       ↓ モデル
+Notifier → ErrorView（sealed AppException の switch で出し分け）
 
 例外の流れ:
-DioException → ApiClient が AppException に変換 → Repository → Notifier → ErrorView
+DioException → ApiClient が AppException に変換 → そのまま伝播 → ErrorView
 ```
 
----
+## 主要ファイル
 
-## sealed class AppException
-
-エラーをネットワーク系とサーバー系に分類する。sealed class なので switch 式で網羅チェックが効く。
-
-```dart
-// lib/core/error/app_exception.dart
-// sealed class として定義し、網羅的な switch 文を可能にしている。
-sealed class AppException implements Exception {
-  const AppException(this.message);
-  final String message;
-
-  @override
-  String toString() => message;
-}
-
-final class NetworkException extends AppException {
-  const NetworkException([
-    super.message = 'Network error occurred',
-  ]);
-}
-
-final class ServerException extends AppException {
-  const ServerException(
-    this.statusCode, [
-    super.message = 'Server error',
-  ]);
-
-  final int statusCode;
-}
-```
-
-実際のファイル: [lib/core/error/app_exception.dart](lib/core/error/app_exception.dart)
+| ファイル | 役割 | 読むタイミング |
+|---|---|---|
+| [lib/core/api/api_client.dart](lib/core/api/api_client.dart) | DioException → AppException 変換の実装 | エラーハンドリングの詳細を確認したいとき |
+| [lib/core/api/pub_dev_api_client.dart](lib/core/api/pub_dev_api_client.dart) | pub.dev エンドポイント定義 + Provider | メソッド追加時にパターンを確認 |
+| [lib/core/error/app_exception.dart](lib/core/error/app_exception.dart) | sealed AppException 定義 | 例外型を追加・変更するとき |
+| [lib/core/widgets/error_view.dart](lib/core/widgets/error_view.dart) | sealed switch でメッセージ出し分け | エラー表示の挙動を確認したいとき |
+| [test/helpers/fakes.dart](test/helpers/fakes.dart) | FakeDio / FakePubDevApiClient | テスト Fake のパターンを確認 |
 
 ---
 
-## ApiClient 基底クラス
+## エンドポイント追加手順
 
-Dio を DI で受け取り、DioException → AppException 変換を一元化する。
+新しい pub.dev API エンドポイントを追加する場合、この順序で実装する:
 
-```dart
-// lib/core/api/api_client.dart
-class ApiClient {
-  ApiClient(Dio dio) : _dio = dio;
-
-  final Dio _dio;
-  final _logger = Logger('ApiClient');
-
-  Future<Map<String, dynamic>> get(String url) async {
-    _logger.info('GET $url');
-    try {
-      final response = await _dio.get<Map<String, dynamic>>(url);
-      _logger.info(
-        'GET $url -> ${response.statusCode}',
-      );
-      final data = response.data;
-      if (data == null) {
-        throw const ServerException(500, 'Empty response body');
-      }
-      return data;
-    } on DioException catch (e) {
-      // DioException を AppException に変換。ErrorView がユーザー向けメッセージを
-      // 出し分けるためにネットワーク系とサーバー系を分類する。
-      _logger.severe('GET $url failed', e);
-      switch (e.type) {
-        case .connectionError:
-        case .connectionTimeout:
-        case .receiveTimeout:
-        case .sendTimeout:
-          throw const NetworkException();
-        case .badResponse:
-          throw ServerException(
-            e.response?.statusCode ?? 500,
-            'Server returned ${e.response?.statusCode}',
-          );
-        case .cancel:
-        case .badCertificate:
-        case .unknown:
-          throw const NetworkException();
-      }
-    }
-  }
-}
-```
-
-実際のファイル: [lib/core/api/api_client.dart](lib/core/api/api_client.dart)
+1. **PubDevApiClient にメソッド追加** — 返り値は `Map<String, dynamic>`。パースしない
+2. **FakePubDevApiClient にコールバック + 呼び出し履歴を追加** — `test/helpers/fakes.dart`
+3. **URL 検証テストを追加** — `test/core/api/pub_dev_api_client_test.dart`
+4. **Repository で `fromJson` パースする** — `/pubdev-models` 参照
+5. **Notifier から Repository を呼ぶ** — `/pubdev-state` 参照
 
 ---
 
-## PubDevApiClient（pub.dev 特化）
+## Repository テンプレート
 
-ApiClient を継承し、pub.dev API 固有のエンドポイントを定義する。
-メソッドは全て `Map<String, dynamic>` を返す（Repository が `fromJson` でパースする）。
-
-```dart
-// lib/core/api/pub_dev_api_client.dart
-import 'package:dio/dio.dart';
-import 'package:pubdev_viewer/core/api/api_client.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'pub_dev_api_client.g.dart';
-
-const _timeoutSeconds = 10;
-
-class PubDevApiClient extends ApiClient {
-  PubDevApiClient(super.dio);
-
-  static const _baseUrl = 'https://pub.dev';
-
-  Future<Map<String, dynamic>> getPackages({
-    String? pageUrl,
-  }) {
-    final url = pageUrl ?? '$_baseUrl/api/packages';
-    return get(url);
-  }
-
-  Future<Map<String, dynamic>> getPackageDetail(
-    String name,
-  ) {
-    return get('$_baseUrl/api/packages/$name');
-  }
-
-  Future<Map<String, dynamic>> getPackagePublisher(
-    String name,
-  ) {
-    return get('$_baseUrl/api/packages/$name/publisher');
-  }
-}
-```
-
-実際のファイル: [lib/core/api/pub_dev_api_client.dart](lib/core/api/pub_dev_api_client.dart)
-
----
-
-## Provider 定義（keepAlive）
-
-`PubDevApiClient` と同じファイル（`pub_dev_api_client.dart`）の末尾に定義。
-
-```dart
-// Dio を keepAlive でアプリ存続中保持する。
-// リクエストごとに生成すると HTTP コネクションプールが再利用されず遅延が増す。
-@Riverpod(keepAlive: true)
-PubDevApiClient pubDevApiClient(Ref ref) {
-  final dio = Dio(
-    BaseOptions(
-      // pub.dev API は通常 1〜2 秒で応答する。
-      // 10 秒は余裕を持ちつつ無応答時にユーザーを長く待たせない妥協値。
-      connectTimeout: const Duration(seconds: _timeoutSeconds),
-      receiveTimeout: const Duration(seconds: _timeoutSeconds),
-    ),
-  );
-  return PubDevApiClient(dio);
-}
-```
-
----
-
-## ErrorView でのエラー出し分け
-
-sealed class の網羅性を活かした switch 式でユーザー向けメッセージを分岐する:
-
-```dart
-// lib/core/widgets/error_view.dart
-String get _title => switch (error) {
-  NetworkException() => AppStrings.networkErrorTitle,
-  ServerException() => AppStrings.serverErrorTitle,
-  _ => AppStrings.unexpectedErrorTitle,
-};
-```
-
-Notifier 層でのエラーハンドリングは `/pubdev-state` を参照。
-
----
-
-## テスト例
-
-FakeDio の定義と API クライアントのテストコードは [test_examples.md](references/test_examples.md) を参照。
-
----
-
-## Repository 層パターン
-
-Repository は `PubDevApiClient` を DI で受け取り、`fromJson` でパースする薄いレイヤー。
-具象クラスのみ（No interfaces ルール）。Provider はファイル末尾に `@riverpod` 関数で定義。
+新しい feature の Repository はこの形に従う。具象クラスのみ（No interfaces）、Provider はファイル末尾。
 
 ```dart
 // lib/features/<feature_name>/repository/<feature_name>_repository.dart
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:pubdev_viewer/core/api/pub_dev_api_client.dart';
-import '../models/<feature_name>_response.dart';
+import 'package:pubdev_viewer/features/<feature_name>/models/<response_name>.dart';
 
 part '<feature_name>_repository.g.dart';
 
@@ -222,9 +66,9 @@ class FeatureNameRepository {
   FeatureNameRepository(this._apiClient);
   final PubDevApiClient _apiClient;
 
-  Future<FeatureNameResponse> getFeature({String? pageUrl}) async {
-    final json = await _apiClient.getFeature(pageUrl: pageUrl);
-    return FeatureNameResponse.fromJson(json);
+  Future<ResponseName> getFeature(String name) async {
+    final json = await _apiClient.getFeature(name);
+    return ResponseName.fromJson(json);
   }
 }
 
@@ -235,18 +79,6 @@ FeatureNameRepository featureNameRepository(Ref ref) {
 ```
 
 コード生成: `fvm dart run build_runner build -d`
-
----
-
-## エンドポイント追加手順
-
-新しい pub.dev API エンドポイントを追加する場合:
-
-1. `PubDevApiClient` にメソッドを追加（返り値は `Map<String, dynamic>`）
-2. `test/helpers/fakes.dart` の `FakePubDevApiClient` にコールバック + 呼び出し履歴を追加
-3. `test/core/api/pub_dev_api_client_test.dart` に URL 検証テストを追加
-4. Repository で `fromJson` パースする（`/pubdev-models` 参照）
-5. Notifier から Repository を呼ぶ（`/pubdev-state` 参照）
 
 ---
 
@@ -273,9 +105,6 @@ PubDevApiClient pubDevApiClient(Ref ref) {
 
 ---
 
-### WHY コメントの典型例
+## テスト例
 
-- `keepAlive: true` の理由（コネクションプール再利用）
-- タイムアウト値（10 秒）の根拠
-- DioException を AppException に変換する理由（ErrorView が分類するため）
-- null response body を ServerException(500) にする理由
+FakeDio / FakePubDevApiClient の定義とテストコードは [test_examples.md](references/test_examples.md) を参照。
