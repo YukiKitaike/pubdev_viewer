@@ -20,36 +20,30 @@ description: >
 ## ルート定義パターン
 
 `@TypedGoRoute` アノテーションと `GoRouteData` サブクラスで型安全ルートを定義する。
+実際のルート定義は [lib/app/router.dart](lib/app/router.dart) を参照。
+
+**テンプレート:**
 
 ```dart
-// lib/app/router.dart
-part 'router.g.dart';
-
-// ネストルートは routes パラメータで親子関係を表現
-@TypedGoRoute<PackageListRoute>(
-  path: '/',
-  routes: [
-    TypedGoRoute<PackageDetailRoute>(
-      path: 'packages/:name',
-    ),
-  ],
-)
+@TypedGoRoute<MyRoute>(path: '/my-path')
 @immutable
-class PackageListRoute extends GoRouteData with $PackageListRoute {
-  const PackageListRoute();
+class MyRoute extends GoRouteData with $MyRoute {
+  const MyRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const PackageListScreen();
+    return const MyScreen();
   }
 }
+```
 
-// パスパラメータは Screen のコンストラクタで受け取り、
-// Screen 内部で Family provider `packageDetailProvider(packageName)` に渡す。
+**パスパラメータ付き:**
+
+```dart
+// path: 'packages/:name' → final String name; でフィールド名を一致させる
 @immutable
 class PackageDetailRoute extends GoRouteData with $PackageDetailRoute {
   const PackageDetailRoute({required this.name});
-
   final String name;
 
   @override
@@ -57,11 +51,6 @@ class PackageDetailRoute extends GoRouteData with $PackageDetailRoute {
     return PackageDetailScreen(packageName: name);
   }
 }
-
-final router = GoRouter(
-  initialLocation: '/',
-  routes: $appRoutes,
-);
 ```
 
 コード生成: `fvm dart run build_runner build -d`

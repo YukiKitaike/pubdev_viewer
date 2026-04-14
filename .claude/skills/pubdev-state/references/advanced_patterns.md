@@ -10,11 +10,19 @@ class PackageDetailNotifier extends _$PackageDetailNotifier {
   @override
   Future<PackageDetailState> build(String packageName) async {
     final repository = ref.watch(packageDetailRepositoryProvider);
+    // detail と publisher は独立した API。Records + .wait で並列取得し応答時間を短縮する。
     final (detail, publisher) = await (
       repository.getPackageDetail(packageName),
       repository.getPackagePublisher(packageName),
     ).wait;
-    return PackageDetailState(detail: detail, publisher: publisher);
+    // バージョンを build() 内で一度だけソート。リビルドごとの再計算を避けるため state に保持する。
+    final sortedVersions = [...detail.versions]
+      ..sort((a, b) => b.published.compareTo(a.published));
+    return PackageDetailState(
+      detail: detail,
+      publisher: publisher,
+      sortedVersions: sortedVersions,
+    );
   }
 }
 
@@ -35,11 +43,19 @@ class PackageDetailNotifier extends _$PackageDetailNotifier {
 @override
 Future<PackageDetailState> build(String packageName) async {
   final repository = ref.watch(packageDetailRepositoryProvider);
-  final (detail, publisher) = await (          // ← 同時に発火
+  // detail と publisher は独立した API。Records + .wait で並列取得し応答時間を短縮する。
+  final (detail, publisher) = await (
     repository.getPackageDetail(packageName),
     repository.getPackagePublisher(packageName),
   ).wait;
-  return PackageDetailState(detail: detail, publisher: publisher);
+  // バージョンを build() 内で一度だけソート。リビルドごとの再計算を避けるため state に保持する。
+  final sortedVersions = [...detail.versions]
+    ..sort((a, b) => b.published.compareTo(a.published));
+  return PackageDetailState(
+    detail: detail,
+    publisher: publisher,
+    sortedVersions: sortedVersions,
+  );
 }
 ```
 

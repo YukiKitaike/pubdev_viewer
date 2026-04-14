@@ -1,0 +1,43 @@
+{
+  "skill_name": "pubdev-models",
+  "evals": [
+    {
+      "id": 0,
+      "name": "response-model",
+      "prompt": "パッケージスコア用の Freezed モデルを作って。grantedPoints, maxPoints, likeCount, popularityScore, tags を持つ API レスポンスモデル",
+      "expected_output": "@freezed + @JsonSerializable(fieldRename: FieldRename.snake) + fromJson + part *.g.dart を含む Response モデル",
+      "files": [],
+      "assertions": [
+        {"text": "@JsonSerializable(fieldRename: FieldRename.snake) を使用"},
+        {"text": "part *.g.dart を含む"},
+        {"text": "fromJson ファクトリを定義"},
+        {"text": "絶対 import (package:pubdev_viewer/...) のみ"}
+      ]
+    },
+    {
+      "id": 1,
+      "name": "state-model",
+      "prompt": "検索機能の State モデルを作って。検索結果のリスト、検索クエリ、ローディング状態、エラーを保持する",
+      "expected_output": "@freezed + @Default + AppException? + fromJson なし + part *.g.dart なし",
+      "files": [],
+      "assertions": [
+        {"text": "fromJson を含まない"},
+        {"text": "part *.g.dart を含まない"},
+        {"text": "@Default を使用"},
+        {"text": "AppException? をエラー型に使用"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "datetime-field",
+      "prompt": "API が ISO 8601 文字列で返す published フィールドを持つモデルを追加したい。既存のコンバーターがあれば使いたい",
+      "expected_output": "@JsonKey(fromJson: dateTimeFromIso8601, toJson: dateTimeToIso8601) + core/utils/json_converters.dart の import",
+      "files": [],
+      "assertions": [
+        {"text": "dateTimeFromIso8601 / dateTimeToIso8601 を使用"},
+        {"text": "core/utils/json_converters.dart を import"},
+        {"text": "private コンバーターを新規作成していない"}
+      ]
+    }
+  ]
+}

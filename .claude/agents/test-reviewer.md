@@ -1,6 +1,6 @@
 ---
 name: test-reviewer
-description: pubdev_viewer のテストコードを `/pubdev-testing` スキルに基づいてレビューする。テスト追加・修正後のパターン準拠チェックに使用。
+description: pubdev_viewer のテストコードを `/pubdev-testing` スキルに基づいてレビューする。テスト追加・修正後のパターン準拠チェックおよび Test Doubles 選定の妥当性確認に使用。
 tools: Read, Grep, Glob, Skill
 ---
 
@@ -34,11 +34,22 @@ tools: Read, Grep, Glob, Skill
 - [ ] マッチャー活用 — `expect(x, [])` → `expect(x, isEmpty)` 等、意味のあるマッチャーを使っているか
 - [ ] 不要な依存 — テストで不必要にアプリ固有ウィジェットを使っていないか（最小限の依存でテスト対象を分離）
 
-### Fake パターン
+### Fake パターン（Mock 禁止）
 
-- [ ] `@GenerateMocks` / mockito の Mock を使っていないか（Fake 優先）
+- [ ] `@GenerateMocks` / mockito の `Mock` クラス / `when()` / `verify()` を使っていないか
 - [ ] 新しい Fake が `test/helpers/fakes.dart` に定義されているか（インライン定義でないか）
-- [ ] Fake のコールバックプロパティで挙動を設定しているか
+- [ ] Fake が統一パターンに従っているか: コールバックプロパティ（`onXxx`）+ 呼び出し記録（`xxxCalls` / `xxxCallCount`）+ 必要に応じて `Completer`
+- [ ] `Fake` 基底クラスは `package:mockito` から import しているか（`MockPlatformInterfaceMixin` 依存のため維持）
+
+### Test Doubles 判断基準
+
+- [ ] 「何が起きるか」（状態・戻り値）を検証 → Fake/Stub を使用しているか
+- [ ] 「どう呼ばれるか」（呼び出し回数・引数・順序）を検証 → Fake の呼び出し記録（`xxxCallCount` / `xxxCalls`）で対応しているか
+- [ ] Mock を使う場合、以下のいずれかに該当するか確認:
+  - Analytics / ログ送信の副作用検証
+  - 外部 API への送信内容の検証
+  - Fake 化が困難なサードパーティ SDK（Firebase 等）
+- [ ] Fake の Spy 機能（呼び出し記録）で `verify()` を代替できる場面で Mock を使っていないか
 
 ### フィクスチャ
 
@@ -49,9 +60,10 @@ tools: Read, Grep, Glob, Skill
 
 ### ProviderContainer ライフサイクル
 
-- [ ] Notifier テストで `setUp` に `ProviderContainer` 生成があるか
-- [ ] `tearDown` で `container.dispose()` を呼んでいるか
+- [ ] Notifier テストで `setUp` に `ProviderContainer.test()` を使っているか（`ProviderContainer()` 直接使用は NG — `.test()` は自動 dispose のため `tearDown` 不要）
+- [ ] `ProviderContainer()` を直接使い `tearDown` で `container.dispose()` を手動管理していないか（`ProviderContainer.test()` に置き換える）
 - [ ] provider override が `overrideWithValue` でセットされているか
+- [ ] Riverpod v3 の自動リトライを無効化しているか（`retry: (_, __) => null` — エラー系テストの安定性のため）
 
 ### ウィジェットテスト
 
