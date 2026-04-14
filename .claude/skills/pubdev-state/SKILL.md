@@ -14,46 +14,47 @@ description: >
 
 ---
 
-## 基本パターン: AsyncNotifier
+## 基本パターン: AsyncNotifier テンプレート
 
 `build()` が非同期初期ロードを担う。Riverpod が自動で `AsyncValue<T>` にラップする。
 
 ```dart
-// lib/features/package_list/notifiers/package_list_notifier.dart
+// lib/features/<feature>/notifiers/<feature>_notifier.dart
+import 'package:pubdev_viewer/features/<feature>/models/<feature>_state.dart';
+import 'package:pubdev_viewer/features/<feature>/repository/<feature>_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../models/package_list_state.dart';
-import '../repository/package_list_repository.dart';
-
-part 'package_list_notifier.g.dart';
+part '<feature>_notifier.g.dart';
 
 @riverpod
-class PackageListNotifier extends _$PackageListNotifier {
+class FeatureNotifier extends _$FeatureNotifier {
   @override
-  Future<PackageListState> build() async {
-    final repository = ref.watch(packageListRepositoryProvider); // build() 内は watch
-    final response = await repository.getPackages();
-    return PackageListState(
-      packages: response.packages,
-      nextUrl: response.nextUrl,
-    );
+  Future<FeatureState> build() async {
+    final repository = ref.watch(featureRepositoryProvider); // build() 内は watch
+    final response = await repository.getData();
+    return FeatureState(items: response.items);
+  }
+
+  Future<void> refresh() async {
+    ref.invalidateSelf();
+    await future;
   }
 }
 ```
 
-実際のファイル: [lib/features/package_list/notifiers/package_list_notifier.dart](lib/features/package_list/notifiers/package_list_notifier.dart)
+実例: [package_list_notifier.dart](lib/features/package_list/notifiers/package_list_notifier.dart), [package_detail_notifier.dart](lib/features/package_detail/notifiers/package_detail_notifier.dart)
 
 ---
 
 ## 詳細パターン
 
-以下の詳細な実装例は [advanced_patterns.md](references/advanced_patterns.md) を参照:
+以下の実装例は [advanced_patterns.md](references/advanced_patterns.md) を参照:
 
-- パラメータ付き Notifier（Family vs ProviderScope override）
-- 並列 API コール（`.wait` パターン）
-- ページネーション（loadMore パターン）
+- パラメータ付き Notifier（Family provider）
+- 並列 API コール（Records + `.wait`）
+- ページネーション（loadMore + Guard + `ref.mounted`）
 - リフレッシュ / エラーのクリア
-- Screen 側のパターン（ref.watch / ref.listen）
+- Screen 側のパターン（`asyncState.when` / `ref.listen`）
 
 ---
 
@@ -64,8 +65,8 @@ class PackageListNotifier extends _$PackageListNotifier {
 | `build()` 内で依存取得 | `ref.watch(...)` |
 | `build()` 以外のメソッド | `ref.read(...)` |
 | 副作用（Snackbar 等） | `ref.listen(...)` |
-| 全リフレッシュ | `ref.invalidateSelf()` / `ref.invalidate(provider)` |
-| 別 provider の強制再ロード | `ref.invalidate(otherProvider)` |
+| 全リフレッシュ | `ref.invalidateSelf()` + `await future` |
+| async gap 後のガード | `if (!ref.mounted) return` |
 
 ---
 
@@ -74,21 +75,15 @@ class PackageListNotifier extends _$PackageListNotifier {
 ```dart
 // ❌ メソッド内で ref.watch（build() 以外での watch は禁止）
 Future<void> loadMore() async {
-  final repo = ref.watch(repositoryProvider); // NG
+  final repo = ref.watch(repositoryProvider); // NG: ref.read を使う
 }
 
 // ❌ 順次 await（独立した呼び出しを直列化しない）
 final detail = await repository.getDetail(name);
-final publisher = await repository.getPublisher(name); // 並列にすべき
+final publisher = await repository.getPublisher(name); // Records + .wait で並列にすべき
 
-// ❌ Either<Failure, T> パターン（例外を使う）
-// ❌ StateNotifier や ChangeNotifier の使用
+// ❌ AsyncError でエラーを表現（既存データが消える）
+state = AsyncError(e, stackTrace); // NG: AsyncData 内にエラーを保持する
+
+// ❌ Either<Failure, T> パターン / StateNotifier / ChangeNotifier
 ```
-
----
-
-### WHY コメントの典型例
-
-- `ref.read` vs `ref.watch` の使い分け理由
-- エラーを `AsyncData` 内に保持する理由（`AsyncError` にしない理由）
-- `keepAlive: true` の理由

@@ -1,0 +1,44 @@
+{
+  "skill_name": "pubdev-state",
+  "evals": [
+    {
+      "id": 0,
+      "name": "basic-notifier",
+      "prompt": "検索機能用の AsyncNotifier を作って。SearchRepository から結果を取得して SearchState に入れる基本的なやつ",
+      "expected_output": "@riverpod AsyncNotifier + build() で ref.watch + refresh() で invalidateSelf + await future",
+      "files": [],
+      "assertions": [
+        {"text": "build() 内で ref.watch を使用"},
+        {"text": "refresh() が ref.invalidateSelf() + await future"},
+        {"text": "絶対 import (package:pubdev_viewer/...) のみ"},
+        {"text": "@riverpod + part '*.g.dart'"}
+      ]
+    },
+    {
+      "id": 1,
+      "name": "loadmore",
+      "prompt": "パッケージ一覧の loadMore メソッドを新しい feature 用に書いて。ページネーション付きで、ローディング中フラグとエラーハンドリングを含めて",
+      "expected_output": "Guard 条件 + ref.read + ref.mounted チェック + on AppException catch + clearLoadMoreError",
+      "files": [],
+      "assertions": [
+        {"text": "Guard 条件（null / isLoadingMore / nextUrl == null）"},
+        {"text": "ref.read（build() 以外）"},
+        {"text": "if (!ref.mounted) return チェック"},
+        {"text": "on AppException catch (e) で既存データ保持"},
+        {"text": "clearLoadMoreError() メソッド"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "parallel-api",
+      "prompt": "2つの API を並列で呼ぶ Notifier を作って。パッケージ名をパラメータで受け取って、詳細とスコアを同時に取得する Family provider",
+      "expected_output": "build(String packageName) Family パターン + Records + .wait で並列実行",
+      "files": [],
+      "assertions": [
+        {"text": "build(String packageName) Family パターン"},
+        {"text": "Records + .wait で並列実行"},
+        {"text": "順次 await を使っていない"}
+      ]
+    }
+  ]
+}
