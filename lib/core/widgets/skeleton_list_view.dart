@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
 import 'package:shimmer/shimmer.dart';
 
+/// Shimmer 効果付きのスケルトンリスト。データ読み込み中のプレースホルダーとして使用する。
 class SkeletonListView extends StatelessWidget {
   const SkeletonListView({
     super.key,
@@ -37,6 +38,7 @@ class SkeletonListView extends StatelessWidget {
   }
 }
 
+/// SkeletonListView のデフォルトリストアイテム。パッケージ一覧タイルの骨格を模す。
 class SkeletonTile extends StatelessWidget {
   const SkeletonTile({super.key});
 

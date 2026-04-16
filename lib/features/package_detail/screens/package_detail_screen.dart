@@ -92,6 +92,7 @@ class _PackageHeroHeader extends StatelessWidget {
     required this.publisher,
   });
 
+  // WHY: 見出しの文字間を詰めて密度を上げ、ヒーローらしい重量感を演出する。
   static const _titleLetterSpacing = -0.5;
   static const _publisherIconSize = 13.0;
   static const _gradientStartAlpha = 0.08;

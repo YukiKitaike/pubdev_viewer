@@ -5,7 +5,8 @@ import 'package:pubdev_viewer/core/strings/app_strings.dart';
 import 'package:pubdev_viewer/features/package_detail/models/package_detail_response.dart';
 import 'package:pubdev_viewer/features/package_detail/screens/widgets/section_header.dart';
 
-// パブリッシャー情報はヒーローヘッダーに表示するためここでは省略。
+/// パッケージの説明文を表示するセクション。
+/// パブリッシャー情報はヒーローヘッダーに表示するためここでは省略する。
 class OverviewSection extends StatelessWidget {
   const OverviewSection({
     required this.detail,

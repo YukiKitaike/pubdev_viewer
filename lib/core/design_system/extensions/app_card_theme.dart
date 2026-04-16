@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pubdev_viewer/core/design_system/tokens/app_radius.dart';
 import 'package:pubdev_viewer/core/design_system/tokens/app_spacing.dart';
 
+/// カードの borderRadius / padding / margin を統一するための ThemeExtension。
 class AppCardTheme extends ThemeExtension<AppCardTheme> {
   const AppCardTheme({
     required this.borderRadius,

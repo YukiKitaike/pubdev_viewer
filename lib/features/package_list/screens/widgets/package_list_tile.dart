@@ -24,6 +24,7 @@ class PackageListTile extends StatefulWidget {
 
 class _PackageListTileState extends State<PackageListTile> {
   static const _pressedScale = 0.97;
+  // WHY: Material Design のマイクロインタラクション推奨値に準拠。
   static const _animationDuration = Duration(milliseconds: 150);
   static const _avatarSize = 44.0;
   static const _descriptionLineHeight = 1.5;

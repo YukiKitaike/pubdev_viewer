@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 
 import 'package:pubdev_viewer/core/error/app_exception.dart';
 
+/// Dio をラップし、DioException を AppException に変換する共通 HTTP クライアント。
 class ApiClient {
   ApiClient(Dio dio) : _dio = dio;
 

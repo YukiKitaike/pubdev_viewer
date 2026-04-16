@@ -6,6 +6,7 @@ import 'package:pubdev_viewer/core/design_system/design_system.dart';
 import 'package:pubdev_viewer/core/error/app_exception.dart';
 import 'package:pubdev_viewer/core/strings/app_strings.dart';
 
+/// AppException の種別に応じてエラータイトル・メッセージとリトライボタンを表示する共通ウィジェット。
 class ErrorView extends StatelessWidget {
   const ErrorView({
     required this.error,

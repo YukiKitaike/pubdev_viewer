@@ -4,8 +4,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'pub_dev_api_client.g.dart';
 
+// WHY: pub.dev API は通常 1〜2 秒で応答する。
+// 10 秒は余裕を持ちつつ無応答時にユーザーを長く待たせない妥協値。
 const _timeoutSeconds = 10;
 
+/// pub.dev API のエンドポイントを定義する API クライアント。
 class PubDevApiClient extends ApiClient {
   PubDevApiClient(super.dio);
 
@@ -37,8 +40,6 @@ class PubDevApiClient extends ApiClient {
 PubDevApiClient pubDevApiClient(Ref ref) {
   final dio = Dio(
     BaseOptions(
-      // pub.dev API は通常 1〜2 秒で応答する。
-      // 10 秒は余裕を持ちつつ無応答時にユーザーを長く待たせない妥協値。
       connectTimeout: const Duration(seconds: _timeoutSeconds),
       receiveTimeout: const Duration(seconds: _timeoutSeconds),
     ),

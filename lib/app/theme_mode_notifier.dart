@@ -5,7 +5,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme_mode_notifier.g.dart';
 
-// keepAlive: テーマ設定はアプリ全体で共有するため autoDispose しない。
+/// アプリ全体のテーマモード（ライト/ダーク/システム）を保持する Notifier。
+/// keepAlive: テーマ設定はアプリ全体で共有するため autoDispose しない。
 @Riverpod(keepAlive: true)
 class ThemeModeNotifier extends _$ThemeModeNotifier {
   @override

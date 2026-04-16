@@ -13,6 +13,8 @@ import 'package:pubdev_viewer/features/package_list/screens/widgets/package_list
 class PackageListScreen extends HookConsumerWidget {
   const PackageListScreen({super.key});
 
+  // WHY: 底辺 200px 手前で発火させ、スクロール慣性で底に達する前にロード開始する。
+  // ユーザーに待ち時間を感じさせないバッファとして経験的に妥当な値。
   static const _loadMoreThreshold = 200.0;
 
   @override
@@ -23,7 +25,6 @@ class PackageListScreen extends HookConsumerWidget {
     useEffect(
       () {
         void onScroll() {
-          // 底辺 200px 手前で発火。スクロール慣性で底に達する前にロード開始し待ち時間を感じさせない。
           if (scrollController.position.pixels >=
               scrollController.position.maxScrollExtent - _loadMoreThreshold) {
             ref.read(packageListProvider.notifier).loadMore();

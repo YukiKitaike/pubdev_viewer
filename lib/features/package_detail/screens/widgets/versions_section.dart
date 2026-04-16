@@ -76,7 +76,6 @@ class _VersionTimelineItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: .stretch,
         children: [
-          // タイムラインのドット & ライン
           SizedBox(
             width: _trackWidth,
             child: Column(
@@ -111,7 +110,6 @@ class _VersionTimelineItem extends StatelessWidget {
             ),
           ),
           const Gap(AppSpacing.sm),
-          // バージョン情報
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(bottom: isLast ? 0 : AppSpacing.md),

@@ -13,6 +13,7 @@ final bool _ansiSupported = stdout.supportsAnsiEscapes;
 
 String _ansi(String code) => _ansiSupported ? code : '';
 
+/// Logger.root のリスナーを設定し、指定フォーマットでログを出力する。
 void setupLogging({LogFormat format = LogFormat.pretty}) {
   Logger.root.level = Level.INFO;
   Logger.root.onRecord.listen((record) {

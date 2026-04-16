@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 
+/// Riverpod の状態変更とエラーを Logger 経由でデバッグ出力する ProviderObserver。
 final class ProviderLogger extends ProviderObserver {
   ProviderLogger() : _logger = Logger('Riverpod');
 

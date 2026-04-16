@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:pubdev_viewer/core/design_system/tokens/app_colors.dart';
 
-// コンポーネント内での `isLight ? Color(0xFF...) : Color(0xFF...)` パターンを排除する。
+/// ライト/ダーク共通のセマンティックカラートークン。
+/// コンポーネント内での `isLight ? Color(0xFF...) : Color(0xFF...)` パターンを排除する。
 class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
   const AppThemeTokens({
     required this.background,
@@ -16,10 +17,10 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
   final Color background;
   final Color surface;
 
-  // 区切り線用。ダークモードでは cardBorder より暗くし、カードと区別する。
+  /// 区切り線用。ダークモードでは cardBorder より暗くし、カードと区別する。
   final Color border;
 
-  // カード外枠用。ダークモードでは border より少し明るくし輪郭を視認しやすくする。
+  /// カード外枠用。ダークモードでは border より少し明るくし輪郭を視認しやすくする。
   final Color cardBorder;
 
   final Color skeletonBase;
@@ -81,6 +82,7 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
   }
 }
 
+/// BuildContext から AppThemeTokens を取得するための拡張。
 extension AppThemeTokensX on BuildContext {
   AppThemeTokens get tokens {
     return Theme.of(this).extension<AppThemeTokens>() ?? AppThemeTokens.light;
