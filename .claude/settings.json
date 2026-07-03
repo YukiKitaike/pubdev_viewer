@@ -8,7 +8,6 @@
       "Bash(fvm flutter *)",
       "Bash(fvm list:*)",
       "WebFetch(domain:pub.dev)",
-      "Bash(echo \"Flutter app starting in background, PID: $!\")",
       "mcp__marionette__connect",
       "mcp__marionette__take_screenshots",
       "mcp__marionette__get_interactive_elements",
@@ -19,17 +18,18 @@
       "mcp__marionette__hot_reload",
       "mcp__marionette__get_logs",
       "Bash(marionette --uri *)",
-      "Edit(/.claude/skills/pubdev-new-feature/**)",
-      "Edit(/.claude/skills/pubdev-state/**)",
-      "Edit(/.claude/skills/pubdev-models/**)",
-      "Edit(/.claude/skills/pubdev-ui/**)",
-      "Edit(/.claude/skills/pubdev-api-client/**)",
-      "Edit(/.claude/skills/pubdev-api-client-workspace/**)"
+      "Edit(/.claude/skills/**)",
+      "Edit(/.claude/agents/**)",
+      "Edit(/.claude/rules/**)"
     ],
     "deny": [
       "Bash(git push:*)",
       "Bash(git reset:*)",
-      "Bash(git rebase:*)"
+      "Bash(git rebase:*)",
+      "Bash(dart *)",
+      "Bash(flutter *)",
+      "Edit(**/*.g.dart)",
+      "Edit(**/*.freezed.dart)"
     ]
   },
   "enableAllProjectMcpServers": true,
@@ -39,15 +39,12 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "Edit|Write|MultiEdit",
+        "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "fvm dart format ."
-          },
-          {
-            "type": "command",
-            "command": "fvm dart analyze --fatal-infos 2>&1 | tail -5"
+            "timeout": 120,
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in *.freezed.dart|*.g.dart) exit 0;; *.dart) cd \"$CLAUDE_PROJECT_DIR\" && fvm dart format \"$f\" >/dev/null 2>&1; out=$(fvm dart analyze --fatal-infos 2>&1) || { printf '%s\\n' \"$out\" | tail -20 >&2; exit 2; };; esac"
           }
         ]
       }
