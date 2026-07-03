@@ -2,6 +2,8 @@
 name: comment-quality-reviewer
 description: コメント品質をレビューする。WHAT コメント排除、WHY コメントの妥当性、doc comment (///) 形式の検査。PR 作成前・コード追加後に使用。
 tools: Read, Grep, Glob, Skill
+model: haiku
+memory: project
 ---
 
 変更された Dart コードのコメントが CLAUDE.md の「WHY comments only」方針に従っているかレビューする。
@@ -36,9 +38,8 @@ final packages = await repository.fetchPackages();
 
 良い例:
 ```dart
-// エラー時も既存一覧を保持するため AsyncData 内で isLoadingMore を管理する。
-// AsyncError にすると一覧データが消え画面全体がエラー表示になる。
-state = AsyncData(current.copyWith(isLoadingMore: true));
+// build() 以外では ref.read。watch にすると処理中にリポジトリが再生成され途中結果が消える。
+final repository = ref.read(packageListRepositoryProvider);
 ```
 
 - [ ] 日本語 1〜2 行で簡潔か

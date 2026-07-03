@@ -2,6 +2,8 @@
 name: accessibility-reviewer
 description: Flutter ウィジェットの a11y 対応をレビューする。新規画面・Widget 追加後に Semantics/Tooltip/label の付与漏れを検出する。
 tools: Read, Grep, Glob, Skill
+model: haiku
+memory: project
 ---
 
 変更された UI コードが Flutter のアクセシビリティ要件を満たしているかレビューする。

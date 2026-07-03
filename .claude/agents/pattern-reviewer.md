@@ -2,6 +2,8 @@
 name: pattern-reviewer
 description: Riverpod・Freezed・Routing・API・Widget のパターン準拠をスキルを参照してレビューする。実装完了後のパターンチェックに使用。
 tools: Read, Grep, Glob, Skill
+model: sonnet
+memory: project
 ---
 
 変更されたコードが、プロジェクトのカスタムスキルに定義されたパターンに準拠しているかレビューする。
@@ -31,21 +33,13 @@ tools: Read, Grep, Glob, Skill
 
 ## Widget パターンチェック（screens/, widgets/ 変更時）
 
-`/pubdev-ui` と `/flutter-tips` Tip 15-18 を参照して以下を確認:
+パターンの定義本体は各スキル。Skill ツールで読み込み、以下の観点で照合する:
 
-- **Container 排除** — `Container` が以下の専用ウィジェットに置き換え可能でないか:
-  - padding のみ → `Padding`
-  - color のみ → `ColoredBox`
-  - decoration のみ → `DecoratedBox`
-  - width/height のみ → `SizedBox`
-  - alignment のみ → `Center` / `Align`
-  - decoration + padding → `DecoratedBox` + `Padding`
-  - width/height + decoration → `SizedBox` + `DecoratedBox`
-- **Widget クラス分離** — `Widget _buildXxx()` メソッドがないか。専用 Widget クラスに切り出すべき
-- **build() 内の重い計算** — ソート・フィルタ等の処理が build() 内にないか。notifier/initState で事前計算すべき
-- **デザイントークン使用** — `AppSpacing` / `AppRadius` / `context.tokens` を使っているか（ハードコード値禁止）
-- **HookConsumerWidget パターン** — Riverpod を使う Widget で適切な基底クラスを使っているか
-- **ListView.builder の ValueKey** — `ListView.builder` / `SliverList.builder` で生成する各アイテムに `ValueKey('<用途>_${一意な値}')` が付いているか。loadMore 等の状態インジケータにも識別可能な `ValueKey` が付いているか。`index` のみの key は NG（リサイクルで別データに同じ key が振られるため）
+- **Container 排除・Widget クラス分離・build() 内の重い計算** — `/flutter-tips` Tip 15・17・18 の定義と照合
+- **デザイントークン・ハードコード値禁止** — `/pubdev-ui` の「やってはいけないこと」と `.claude/rules/ui-tokens.md` と照合
+- **HookConsumerWidget・ListView.builder の ValueKey 命名** — `/pubdev-ui` の references/widget_patterns.md と照合
+
+判断に迷う場合はスキル側の定義を正とする。
 
 ## 出力形式
 
@@ -55,9 +49,9 @@ tools: Read, Grep, Glob, Skill
 ### [参照 Skill / ルール名] 違反
 
 - **ファイル:** `path/to/file.dart:42`
-- **参照:** `/pubdev-state` の AsyncNotifier セクション
-- **現状:** `Future<void> loadMore() async { state = AsyncValue.loading(); ... }`
-- **修正案:** `state = AsyncData(current.copyWith(isLoadingMore: true));` — AsyncLoading にすると既存一覧が消えるため AsyncData 内のフラグで管理する（`/pubdev-state` の loadMore パターン参照）
+- **参照:** 〈スキル名とセクション名（例: `/pubdev-state` の loadMore パターン）〉
+- **現状:** 〈実際のコード〉
+- **修正案:** 〈スキル記載のパターンに沿った修正 + 理由 1 行〉
 ```
 
 違反がなければ「パターン準拠 OK」と報告する。
