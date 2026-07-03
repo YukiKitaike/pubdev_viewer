@@ -37,29 +37,9 @@ class PackageDetailNotifier extends _$PackageDetailNotifier {
 ## 並列 API コール（`.wait` パターン）
 
 独立した API 呼び出しは**順次 await せず**、Records + `.wait` で並列実行する。
+コード例は上記「パラメータ付き Notifier」の `build()` 内 `(detail, publisher)` 取得部を参照。
 
-```dart
-// lib/features/package_detail/notifiers/package_detail_notifier.dart
-@override
-Future<PackageDetailState> build(String packageName) async {
-  final repository = ref.watch(packageDetailRepositoryProvider);
-  // detail と publisher は独立した API。Records + .wait で並列取得し応答時間を短縮する。
-  final (detail, publisher) = await (
-    repository.getPackageDetail(packageName),
-    repository.getPackagePublisher(packageName),
-  ).wait;
-  // バージョンを build() 内で一度だけソート。リビルドごとの再計算を避けるため state に保持する。
-  final sortedVersions = [...detail.versions]
-    ..sort((a, b) => b.published.compareTo(a.published));
-  return PackageDetailState(
-    detail: detail,
-    publisher: publisher,
-    sortedVersions: sortedVersions,
-  );
-}
-```
-
-実際のファイル: [lib/features/package_detail/notifiers/package_detail_notifier.dart](lib/features/package_detail/notifiers/package_detail_notifier.dart)
+実際のファイル: `lib/features/package_detail/notifiers/package_detail_notifier.dart`
 
 ---
 
@@ -100,15 +80,9 @@ Future<void> loadMore() async {
 
 ## リフレッシュパターン
 
-`ref.invalidateSelf()` で provider をリセットし `build()` を再実行。
-`await future` で呼び出し元が完了を await できるようにする。
-
-```dart
-Future<void> refresh() async {
-  ref.invalidateSelf();
-  await future;
-}
-```
+コードは [SKILL.md](../SKILL.md) の基本テンプレート `refresh()` を参照。
+`ref.invalidateSelf()` で provider をリセットし `build()` を再実行、
+`await future` で呼び出し元（RefreshIndicator 等）が完了を await できるようにする。
 
 ---
 
@@ -140,7 +114,7 @@ class PackageListScreen extends HookConsumerWidget {
       final error = next.value?.loadMoreError;
       if (error != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('追加読み込みに失敗しました')),
+          const SnackBar(content: Text(AppStrings.loadMoreFailed)),
         );
         // エラーを即座にクリアする。クリアしないと state が変わるたびに
         // ref.listen が再発火し、同じ Snackbar が繰り返し表示される。

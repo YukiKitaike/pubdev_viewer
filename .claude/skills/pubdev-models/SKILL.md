@@ -1,10 +1,11 @@
 ---
 name: pubdev-models
 description: >
-  pubdev_viewer の Freezed + json_serializable モデルパターン。
-  データモデル・APIレスポンスクラス・UIステートクラスを作成・編集する際に使用。
-  「モデルを作って」「Freezed」「fromJson」「State クラス」と言われたときに参照。
-  このアプリで使われている具体的な規約とコード例を提供する。
+  pubdev_viewer の Freezed + json_serializable モデル定義パターンを提供する。
+  API Response モデル（fromJson あり）と State モデル（fromJson なし）の
+  クラス構造・@JsonKey・DateTime コンバーター・core/models/ 昇格基準を扱う。
+  「モデルを作って」「Freezed」「fromJson」「JsonKey」と言われたときに参照。
+  State を扱う Notifier 側の実装（loadMore 等）は /pubdev-state が扱う。
 ---
 
 # Model パターン（pubdev_viewer）
@@ -45,7 +46,7 @@ abstract class NameResponse with _$NameResponse {
 }
 ```
 
-実例: [package_list_response.dart](lib/features/package_list/models/package_list_response.dart), [package_detail_version.dart](lib/features/package_detail/models/package_detail_version.dart)
+実例: `lib/features/package_list/models/package_list_response.dart`, `lib/features/package_detail/models/package_detail_version.dart`
 
 ---
 
@@ -71,7 +72,7 @@ abstract class NameState with _$NameState {
 }
 ```
 
-実例: [package_list_state.dart](lib/features/package_list/models/package_list_state.dart), [package_detail_state.dart](lib/features/package_detail/models/package_detail_state.dart)
+実例: `lib/features/package_list/models/package_list_state.dart`, `lib/features/package_detail/models/package_detail_state.dart`
 
 ---
 
@@ -90,7 +91,7 @@ required DateTime published,
 @JsonKey(defaultValue: <String>[]) List<String> topics,
 ```
 
-DateTime コンバーターは [lib/core/utils/json_converters.dart](lib/core/utils/json_converters.dart) に定義済み。feature 内に private コンバーター (`_publishedFromJson` 等) を作らない。
+DateTime コンバーターは `lib/core/utils/json_converters.dart` に定義済み。feature 内に private コンバーター (`_publishedFromJson` 等) を作らない。
 
 ---
 
@@ -98,17 +99,7 @@ DateTime コンバーターは [lib/core/utils/json_converters.dart](lib/core/ut
 
 - feature 固有モデルは最初から `core/models/` に置かない
 - **2 つ以上の feature で共有される時点で昇格させる**
-- 例: `Pubspec` → [lib/core/models/pubspec.dart](lib/core/models/pubspec.dart)（package_list と package_detail の両方で使用）
-
----
-
-## コード生成
-
-モデルを作成・変更したら必ず実行:
-
-```bash
-fvm dart run build_runner build -d
-```
+- 例: `Pubspec` → `lib/core/models/pubspec.dart`（package_list と package_detail の両方で使用）
 
 ---
 

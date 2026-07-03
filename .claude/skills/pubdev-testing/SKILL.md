@@ -1,20 +1,21 @@
 ---
 name: pubdev-testing
 description: >
-  pubdev_viewer のテストパターン。ユニットテスト（notifier・repository）・
-  ウィジェットテストを書く際に使用。「テストを書いて」「テスト追加」
+  pubdev_viewer のテストパターンを提供する。ユニットテスト（notifier・repository）・
+  ウィジェットテストの作成・修正時に使用。「テストを書いて」「テスト追加」「TDD」
   「Fake」「ProviderContainer」「check()」と言われたときに参照。
-  Fake パターン・フィクスチャビルダー・Completer・package:checks・テストタグを提供する。
+  Fake 統一パターン・フィクスチャビルダー・Completer・package:checks・
+  Test Doubles 選定基準を提供する。
 ---
 
 # テストパターン（pubdev_viewer）
 
 ## 基本ルール
 
-- **Mock 禁止** — `Fake implements XxxRepository` パターンを使う。理由は [Test Doubles ガイド](references/test_doubles_guide.md) 参照
-- **`check()` 優先** — 値検証は `package:checks`。finder 系（`find.*`）のみ `expect`
-- **テスト名は日本語** — `test('build が初期パッケージを取得する', ...)`。`group()` はクラス名のまま英語
-- **`@Tags` 必須** — `@Tags(['unit'])` or `@Tags(['widget'])` をファイル先頭に付与
+必須制約（Mock 禁止・@Tags・check() 優先・TDD 等）の一覧は
+`.claude/rules/testing.md` が唯一の定義。本スキルはその実装パターンと
+テンプレートを提供する。Mock を禁止する理由は
+[Test Doubles ガイド](references/test_doubles_guide.md) 参照。
 
 ---
 
@@ -24,21 +25,23 @@ description: >
 class FakeXxxRepository extends Fake implements XxxRepository {
   // 1. コールバック — テストごとに挙動を差し替え
   Future<XxxResponse> Function(String name)? onGetXxx;
-  // 2. 呼び出し記録 — Spy 機能（verify 不要）
+  // 2. 呼び出し記録 — Spy 機能（verify 不要）。引数検証が必要なら List も持つ
   int getXxxCallCount = 0;
+  final List<String> getXxxCalls = [];
   // 3. Completer（任意）— ローディング状態テスト用
   Completer<XxxResponse>? getXxxCompleter;
 
   @override
   Future<XxxResponse> getXxx(String name) {
     getXxxCallCount++;
+    getXxxCalls.add(name);
     if (getXxxCompleter != null) return getXxxCompleter!.future;
     return onGetXxx!(name);
   }
 }
 ```
 
-既存 Fake: [test/helpers/fakes.dart](test/helpers/fakes.dart)
+既存 Fake: `test/helpers/fakes.dart`
 
 ---
 
@@ -83,21 +86,18 @@ fakeRepository.onGetPackages = ({String? pageUrl}) async =>
 
 | ファイル | 役割 |
 |---|---|
-| [test/helpers/fakes.dart](test/helpers/fakes.dart) | Fake クラス群 |
-| [test/helpers/fixtures.dart](test/helpers/fixtures.dart) | const JSON + ビルダー関数 |
-| [test/helpers/pump_app.dart](test/helpers/pump_app.dart) | `createTestApp()` ウィジェットヘルパー |
+| `test/helpers/fakes.dart` | Fake クラス群 |
+| `test/helpers/fixtures.dart` | const JSON + ビルダー関数 |
+| `test/helpers/pump_app.dart` | `createTestApp()` ウィジェットヘルパー |
 
 ---
 
 ## よくある間違い
 
+制約違反（Mock 禁止・@Tags・インライン JSON・check() 優先等）は `.claude/rules/testing.md` 参照。それ以外:
+
 ```dart
-// ❌ @GenerateMocks（Fake で対応）
-// ❌ ProviderContainer() 直接使用（ProviderContainer.test() を使う）
-// ❌ テスト内にインライン JSON（fixtures のビルダーを使う）
-// ❌ @Tags を書かない
-// ❌ 値検証に expect（check() を使う）
-// ❌ ローカル createTestWidget（createTestApp を使う）
+// ❌ ローカルで MaterialApp + ProviderScope を直接組み立てる（createTestApp をラップする）
 // ❌ mockito の when/verify（Fake の呼び出し記録で代替）
 // ❌ Fake に呼び出し記録なし（xxxCallCount / xxxCalls を必ず追加）
 ```

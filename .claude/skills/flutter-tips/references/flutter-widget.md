@@ -31,6 +31,20 @@ Sliver を返すウィジェットには `Sliver` プレフィックスを付け
 
 ウィジェットを返すメソッド (`buildXxx()`) ではなく専用クラスに切り出す。
 
+```dart
+// OK: クラスで分割
+class _PackageCard extends StatelessWidget {
+  const _PackageCard({required this.package});
+  final PackageListItem package;
+
+  @override
+  Widget build(BuildContext context) { ... }
+}
+
+// NG: ヘルパーメソッドで分割
+Widget _buildPackageCard(PackageListItem package) { ... }
+```
+
 ## 18. build() 内で重い計算をしない
 
 `initState` / `didUpdateWidget` / notifier で事前計算する。

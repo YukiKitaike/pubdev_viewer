@@ -1,10 +1,12 @@
 ---
 name: pubdev-ui
 description: >
-  pubdev_viewer のデザイントークン・テーマ・Widget パターン。
-  スクリーン・カード・リストタイル・スケルトンローダー等の UI コンポーネントを
-  作成・編集する際に使用。「画面を作って」「UI」「デザイントークン」「テーマ」
-  「Widget」と言われたときに参照。AppSpacing/AppRadius/AppThemeTokens の使い方を提供する。
+  pubdev_viewer のデザイントークン・テーマ・Widget パターンを提供する。
+  既存 feature 内のスクリーン・カード・リストタイル・スケルトンローダー等の
+  UI コンポーネントを作成・編集するときに使用。「画面を作って」「UI」
+  「デザイントークン」「テーマ」「Widget」「AppStrings」と言われたときに参照。
+  AppSpacing/AppRadius/AppTextSize/AppThemeTokens の使い方を提供する。
+  新 feature の縦切り追加（全レイヤー）は /pubdev-new-feature を明示呼び出しする。
 ---
 
 # UI パターン（pubdev_viewer）
@@ -23,7 +25,10 @@ import 'package:pubdev_viewer/core/design_system/design_system.dart';
 
 ## スペーシングトークン（4dp グリッド）
 
+> トークン値の実定義は `lib/core/design_system/tokens/` 配下。値を変更したら本スキルも更新する。
+
 ```dart
+AppSpacing.xxs  // 2
 AppSpacing.xs   // 4
 AppSpacing.sm   // 8
 AppSpacing.md   // 12
@@ -131,7 +136,7 @@ final cardTheme = Theme.of(context).extension<AppCardTheme>() ?? defaultCardThem
 // cardTheme.margin       → EdgeInsets.symmetric(horizontal: AppSpacing.lg) (16)
 ```
 
-実際のファイル: [lib/features/package_detail/screens/widgets/overview_section.dart](lib/features/package_detail/screens/widgets/overview_section.dart)
+実際のファイル: `lib/features/package_detail/screens/widgets/overview_section.dart`
 
 ---
 
@@ -150,8 +155,8 @@ final cardTheme = Theme.of(context).extension<AppCardTheme>() ?? defaultCardThem
 **新しい画面を作るとき**のみ [widget_patterns.md](references/widget_patterns.md) を参照（HookConsumerWidget、ScrollController、ValueKey、Safe Area、Core Utils）。カードやコンポーネントの作成ではデザイントークン情報（上記セクション）で十分なので読まなくてよい。
 
 基本ルール:
-- スクリーンは `HookConsumerWidget` を継承（実例: [package_list_screen.dart](lib/features/package_list/screens/package_list_screen.dart)）
-- Widget は**ヘルパーメソッドではなくプライベートクラス**に分割（`class _MyCard extends StatelessWidget`）
+- スクリーンは `HookConsumerWidget` を継承（実例: `lib/features/package_list/screens/package_list_screen.dart`）
+- Widget は**ヘルパーメソッドではなくプライベートクラス**に分割（`/flutter-tips` Tip 17）
 - `lib/core/utils/` の既存ユーティリティを確認し、同等処理を再実装しない
 
 ---

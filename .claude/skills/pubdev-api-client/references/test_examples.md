@@ -1,78 +1,14 @@
 # API クライアント テスト例（pubdev_viewer）
 
-## テスト用 FakeDio
+## テスト用 Fake（FakeDio / FakePubDevApiClient）
 
-ジェネリクス型パラメータ付きの `onGet` コールバックで GET リクエストの挙動を設定する。
-`getCalls` で呼び出し URL を検証可能。
+定義は `test/helpers/fakes.dart` を Read で参照する
+（ドキュメントに複製すると実装とドリフトするため、実ファイルが唯一の定義）。
 
-```dart
-// test/helpers/fakes.dart
+- `FakeDio` — ジェネリクス型パラメータ付き `onGet` コールバックで GET の挙動を設定。呼び出し URL は `getCalls` で検証
+- `FakePubDevApiClient` — Repository テスト用。`onGetPackages` 等のコールバック + `getPackagesCalls` 等の呼び出し履歴
 
-/// [Dio] の Fake 実装。
-///
-/// [onGet] に GET リクエストの挙動を設定する。
-/// 呼び出し URL は [getCalls] で検証可能。
-class FakeDio extends Fake implements Dio {
-  Future<Response<T>> Function<T>(String url)? onGet;
-  final List<String> getCalls = [];
-
-  @override
-  Future<Response<T>> get<T>(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-    Object? data,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onReceiveProgress,
-  }) {
-    getCalls.add(path);
-    return onGet!<T>(path);
-  }
-}
-```
-
----
-
-## テスト用 FakePubDevApiClient
-
-Repository テストで使用する。各メソッドの挙動をコールバックで設定し、
-呼び出し履歴で正しい引数が渡されたか検証する。
-
-```dart
-// test/helpers/fakes.dart
-
-/// [PubDevApiClient] の Fake 実装。
-///
-/// 各メソッドの挙動を [onGetPackages] 等のコールバックで設定する。
-/// 呼び出し履歴は [getPackagesCalls] 等で確認可能。
-class FakePubDevApiClient extends Fake implements PubDevApiClient {
-  Future<Map<String, dynamic>> Function({String? pageUrl})? onGetPackages;
-  Future<Map<String, dynamic>> Function(String name)? onGetPackageDetail;
-  Future<Map<String, dynamic>> Function(String name)? onGetPackagePublisher;
-
-  final List<String?> getPackagesCalls = [];
-  final List<String> getPackageDetailCalls = [];
-  final List<String> getPackagePublisherCalls = [];
-
-  @override
-  Future<Map<String, dynamic>> getPackages({String? pageUrl}) {
-    getPackagesCalls.add(pageUrl);
-    return onGetPackages!(pageUrl: pageUrl);
-  }
-
-  @override
-  Future<Map<String, dynamic>> getPackageDetail(String name) {
-    getPackageDetailCalls.add(name);
-    return onGetPackageDetail!(name);
-  }
-
-  @override
-  Future<Map<String, dynamic>> getPackagePublisher(String name) {
-    getPackagePublisherCalls.add(name);
-    return onGetPackagePublisher!(name);
-  }
-}
-```
+Fake の 3 要素構造は `/pubdev-testing` の「新しい Fake の統一パターン」参照。
 
 ---
 
@@ -124,4 +60,4 @@ test('接続エラー時に NetworkException をスローする', () {
 });
 ```
 
-実際のファイル: [test/core/api/pub_dev_api_client_test.dart](test/core/api/pub_dev_api_client_test.dart)
+実際のファイル: `test/core/api/pub_dev_api_client_test.dart`

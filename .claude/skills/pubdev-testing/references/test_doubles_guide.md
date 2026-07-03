@@ -34,31 +34,8 @@
 
 ## Fake パターンの構造
 
-新しい Fake を追加する場合は以下の 3 要素を備える:
-
-```dart
-class FakeXxxRepository extends Fake implements XxxRepository {
-  // 1. コールバック: テストごとに挙動を差し替え
-  Future<Response> Function(String arg)? onGetSomething;
-
-  // 2. 呼び出し記録: Spy 機能
-  int getSomethingCallCount = 0;           // 回数のみ
-  final List<String> getSomethingCalls = []; // 引数も記録
-
-  // 3. Completer: 非同期制御（オプション）
-  Completer<Response>? getSomethingCompleter;
-
-  @override
-  Future<Response> getSomething(String arg) {
-    getSomethingCallCount++;
-    getSomethingCalls.add(arg);
-    if (getSomethingCompleter != null) {
-      return getSomethingCompleter!.future;
-    }
-    return onGetSomething!(arg);
-  }
-}
-```
+3 要素（コールバック・呼び出し記録・Completer）のテンプレートは
+[SKILL.md](../SKILL.md) の「新しい Fake の統一パターン」を参照。
 
 ---
 

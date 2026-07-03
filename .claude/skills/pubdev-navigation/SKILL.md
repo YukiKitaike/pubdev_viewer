@@ -20,7 +20,7 @@ description: >
 ## ルート定義パターン
 
 `@TypedGoRoute` アノテーションと `GoRouteData` サブクラスで型安全ルートを定義する。
-実際のルート定義は [lib/app/router.dart](lib/app/router.dart) を参照。
+実際のルート定義は `lib/app/router.dart` を参照。
 
 **テンプレート:**
 
@@ -53,15 +53,13 @@ class PackageDetailRoute extends GoRouteData with $PackageDetailRoute {
 }
 ```
 
-コード生成: `fvm dart run build_runner build -d`
-
 ---
 
 ## 新しいルートを追加する手順
 
 1. `router.dart` に `GoRouteData` サブクラスを追加
 2. 親ルートの `@TypedGoRoute` の `routes` リストにネスト定義を追加（トップレベルなら新しい `@TypedGoRoute` を追加）
-3. `fvm dart run build_runner build -d` で `router.g.dart` を再生成
+3. コード生成を実行し `router.g.dart` を再生成（コマンドは CLAUDE.md の Commands）
 4. `with $RouteName` mixin が自動生成される
 
 ```dart

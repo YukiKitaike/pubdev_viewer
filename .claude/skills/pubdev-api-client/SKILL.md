@@ -3,11 +3,11 @@ name: pubdev-api-client
 description: >
   pubdev_viewer の API クライアント層・エラーハンドリング・Repository パターン。
   Dio ベースの ApiClient 設計、DioException → sealed AppException 変換、
-  PubDevApiClient の継承パターン、keepAlive Provider、Repository の fromJson パース、
-  テスト用 FakeDio / FakePubDevApiClient を実装・編集する際に使用。
-  「API を追加」「エンドポイント追加」「Dio」「エラーハンドリング」
+  PubDevApiClient の継承パターン、keepAlive Provider、Repository の fromJson パースを
+  実装・編集する際に使用。「API を追加」「エンドポイント追加」「Dio」「エラーハンドリング」
   「Repository を作って」「AppException」「ネットワークエラー」と言われたときに参照。
   新しい feature の API 接続・例外処理を書く場面では必ずこのスキルを確認すること。
+  Fake の統一パターン自体は /pubdev-testing が扱う。
 ---
 
 # API クライアント層パターン（pubdev_viewer）
@@ -29,11 +29,11 @@ DioException → ApiClient が AppException に変換 → そのまま伝播 →
 
 | ファイル | 役割 | 読むタイミング |
 |---|---|---|
-| [lib/core/api/api_client.dart](lib/core/api/api_client.dart) | DioException → AppException 変換の実装 | エラーハンドリングの詳細を確認したいとき |
-| [lib/core/api/pub_dev_api_client.dart](lib/core/api/pub_dev_api_client.dart) | pub.dev エンドポイント定義 + Provider | メソッド追加時にパターンを確認 |
-| [lib/core/error/app_exception.dart](lib/core/error/app_exception.dart) | sealed AppException 定義 | 例外型を追加・変更するとき |
-| [lib/core/widgets/error_view.dart](lib/core/widgets/error_view.dart) | sealed switch でメッセージ出し分け | エラー表示の挙動を確認したいとき |
-| [test/helpers/fakes.dart](test/helpers/fakes.dart) | FakeDio / FakePubDevApiClient | テスト Fake のパターンを確認 |
+| `lib/core/api/api_client.dart` | DioException → AppException 変換の実装 | エラーハンドリングの詳細を確認したいとき |
+| `lib/core/api/pub_dev_api_client.dart` | pub.dev エンドポイント定義 + Provider | メソッド追加時にパターンを確認 |
+| `lib/core/error/app_exception.dart` | sealed AppException 定義 | 例外型を追加・変更するとき |
+| `lib/core/widgets/error_view.dart` | sealed switch でメッセージ出し分け | エラー表示の挙動を確認したいとき |
+| `test/helpers/fakes.dart` | FakeDio / FakePubDevApiClient | テスト Fake のパターンを確認 |
 
 ---
 
@@ -77,8 +77,6 @@ FeatureNameRepository featureNameRepository(Ref ref) {
   return FeatureNameRepository(ref.watch(pubDevApiClientProvider));
 }
 ```
-
-コード生成: `fvm dart run build_runner build -d`
 
 ---
 

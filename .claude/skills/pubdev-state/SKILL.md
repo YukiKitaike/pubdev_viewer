@@ -1,10 +1,11 @@
 ---
 name: pubdev-state
 description: >
-  pubdev_viewer の Riverpod AsyncNotifier パターン。
-  状態管理・ページネーション（loadMore）・リフレッシュ・並列 API コール・エラーハンドリングを
-  実装する際に使用。「Notifier を書いて」「状態管理」「loadMore」「refresh」
-  「ref.watch」と言われたときに参照。
+  pubdev_viewer の Riverpod AsyncNotifier による状態管理パターンを提供する。
+  Notifier の新規作成・ページネーション（loadMore）・リフレッシュ・並列 API コール・
+  エラーハンドリング・ref.watch/read/listen の使い分けを実装するときに使用。
+  「Notifier を書いて」「状態管理」「loadMore」「refresh」「ref.watch」
+  と言われたときに参照。State クラスの Freezed 定義方法は /pubdev-models が扱う。
 ---
 
 # Riverpod 状態管理パターン（pubdev_viewer）
@@ -42,7 +43,7 @@ class FeatureNotifier extends _$FeatureNotifier {
 }
 ```
 
-実例: [package_list_notifier.dart](lib/features/package_list/notifiers/package_list_notifier.dart), [package_detail_notifier.dart](lib/features/package_detail/notifiers/package_detail_notifier.dart)
+実例: `lib/features/package_list/notifiers/package_list_notifier.dart`, `lib/features/package_detail/notifiers/package_detail_notifier.dart`
 
 ---
 

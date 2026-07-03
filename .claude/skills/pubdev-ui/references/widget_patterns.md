@@ -40,21 +40,10 @@ ref.listen の副作用パターン（Snackbar 表示・エラークリア等）
 
 ---
 
-## プライベート Widget クラス（ヘルパーメソッドではなくクラス）
+## プライベート Widget クラス
 
-```dart
-// クラスで分割
-class _PackageCard extends StatelessWidget {
-  const _PackageCard({required this.package});
-  final PackageListItem package;
-
-  @override
-  Widget build(BuildContext context) { ... }
-}
-
-// NG: ヘルパーメソッドで分割（避ける）
-Widget _buildPackageCard(PackageListItem package) { ... }
-```
+ヘルパーメソッド（`Widget _buildXxx()`）ではなくプライベートクラスに分割する。
+ルールとコード例は `/flutter-tips` Tip 17 を参照。
 
 ---
 
@@ -82,10 +71,10 @@ ListView.builder(
 import 'package:google_fonts/google_fonts.dart';
 
 Text(
-  'v1.6.0',
+  AppStrings.versionLabel(version),
   style: GoogleFonts.jetBrainsMono(
-    fontSize: 11,
-    fontWeight: FontWeight.w600,
+    fontSize: AppTextSize.mono12,
+    fontWeight: .w600,
     color: theme.colorScheme.primary,
   ),
 )
@@ -136,7 +125,7 @@ if (index == packages.length) {
 - 状態系インジケータは `_indicator` / `_placeholder` サフィックス
 - `index` だけで作るのは NG（リサイクル時に同じ key が別データに振られる）
 
-**適用例:** [lib/features/package_list/screens/package_list_screen.dart](lib/features/package_list/screens/package_list_screen.dart)
+**適用例:** `lib/features/package_list/screens/package_list_screen.dart`
 
 ---
 

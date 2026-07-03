@@ -1,10 +1,11 @@
 ---
 name: pubdev-new-feature
 description: >
-  pubdev_viewer に新しい feature を追加するステップバイステップガイド。
-  「新しい画面を作りたい」「feature を追加」「新機能追加」「新しいスクリーン」
-  と言われたときに使用。/pubdev-new-feature <feature名> で呼び出す。
-  models → repository → notifier → screen の全レイヤーを網羅する。
+  pubdev_viewer に新しい feature を縦切りで追加するステップバイステップガイド。
+  models → repository → notifier → screen → route → test の全レイヤーを網羅する。
+  /pubdev-new-feature <feature名> で明示的に呼び出して使用する。
+  単一レイヤーのみの作業（既存画面の UI 修正・モデル追加等）は
+  各ドメインスキル（/pubdev-ui, /pubdev-models 等）を直接使用する。
 disable-model-invocation: true
 ---
 
@@ -25,28 +26,29 @@ lib/features/$ARGUMENTS/
 
 ---
 
+> Step 1〜3, 5 の後はコード生成を実行する（コマンドは CLAUDE.md の Commands）。
+
 ## Step 1: モデル → `/pubdev-models`
 
-Response + State モデルを作成。コード生成: `fvm dart run build_runner build -d`
+Response + State モデルを作成。
 
 ## Step 2: Repository → `/pubdev-api-client`
 
-具象クラス + `@riverpod` Provider。テンプレートは `/pubdev-api-client` の「Repository 層パターン」参照。
-コード生成: `fvm dart run build_runner build -d`
+具象クラス + `@riverpod` Provider。テンプレートは `/pubdev-api-client` の「Repository テンプレート」参照。
 
 ## Step 3: Notifier → `/pubdev-state`
 
-build/loadMore/refresh/エラーハンドリング。コード生成: `fvm dart run build_runner build -d`
+build/loadMore/refresh/エラーハンドリング。
 
 ## Step 4: Screen → `/pubdev-ui`
 
-`HookConsumerWidget` + `asyncState.when`。UI 表示文字列は `AppStrings` に定義（既存の重複確認を先に行う）。
-補間・プレフィックス付き文字列（`'v$version'` 等）も `AppStrings` の static メソッド（例: `versionLabel(String v)`）として定義し、ウィジェット側で組み立てない。
-`lib/core/utils/` の既存ユーティリティを確認し、同等処理を再実装しない。
+`HookConsumerWidget` + `asyncState.when`。
+文字列・トークンの規約（AppStrings 集約・補間文字列の static メソッド化）と
+`lib/core/utils/` の既存ユーティリティ確認は `/pubdev-ui` の「やってはいけないこと」参照。
 
 ## Step 5: ルート登録 → `/pubdev-navigation`
 
-`lib/app/router.dart` に TypedGoRoute を追加。コード生成: `fvm dart run build_runner build -d`
+`lib/app/router.dart` に TypedGoRoute を追加。
 
 ## Step 6: テスト → `/pubdev-testing`
 
@@ -59,10 +61,8 @@ build/loadMore/refresh/エラーハンドリング。コード生成: `fvm dart 
 
 ## やってはいけないこと
 
-- feature 固有モデルを最初から `core/models/` に置く（2 feature 共有後に昇格）
-- Repository にインターフェースを定義する（具象クラスのみ）
-- UseCase 中間クラスを挟む（Notifier → Repository 直接）
-- Screen が Repository を直接参照する（依存方向違反）
+- CLAUDE.md の Critical Rules 違反（No interfaces / No UseCase / No premature core promotion 等）
+- Screen が Repository を直接参照する（`screens/` → `notifiers/` → `repository/` の依存方向違反）
 
 ---
 
@@ -74,6 +74,4 @@ build/loadMore/refresh/エラーハンドリング。コード生成: `fvm dart 
 - [ ] screens/（`/pubdev-ui`）
 - [ ] router.dart（`/pubdev-navigation`）
 - [ ] テスト（`/pubdev-testing`）
-- [ ] `fvm dart run build_runner build -d`
-- [ ] `fvm dart analyze` エラー 0 件
-- [ ] `fvm flutter test` PASS
+- [ ] コード生成・analyze エラー 0 件・全テスト PASS（コマンドは CLAUDE.md の Commands）
