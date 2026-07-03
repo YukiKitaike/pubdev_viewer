@@ -7,7 +7,7 @@ tools: Read, Grep, Glob, Skill
 変更された UI コードが Flutter のアクセシビリティ要件を満たしているかレビューする。
 スクリーンリーダー利用者・キーボード操作ユーザー・低視力ユーザーが操作可能であることを確認する。
 
-**最初に変更された screens/ / widgets/ / core/widgets/ 以下のファイルを Read で確認すること。** 汎用 a11y ガイドラインは Skill ツールで `flutter-improving-accessibility` スキルが利用可能なら読み込む（任意）。
+**最初に変更された screens/ / widgets/ / core/widgets/ 以下のファイルを Read で確認すること。** WCAG 準拠の詳細判断が必要な場合のみ、Skill ツールで `accessibility` スキル（WCAG 2.2 Flutter 監査）を追加で読み込む。
 
 ## チェックリスト
 
@@ -77,4 +77,3 @@ tools: Read, Grep, Glob, Skill
   - **Warning**: 体験が劣化する（装飾 Icon の誤認、色のみの状態表現など）
   - **Info**: あれば望ましい（構造の読み上げ順最適化など）
 - `.freezed.dart` / `.g.dart` は対象外
-- 将来プロジェクト固有 a11y Skill (`/pubdev-a11y`) が新設されたら、この Agent の参照 Skill に追加する

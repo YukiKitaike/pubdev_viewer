@@ -1,6 +1,6 @@
 # コード品質 Tips
 
-## 9. 冗長な async/await を排除
+## 7. 冗長な async/await を排除
 
 単に Future を返すだけなら async/await は不要。
 
@@ -14,7 +14,7 @@ Future<User> getUser() async {
 Future<User> getUser() => repository.getUserDetails();
 ```
 
-## 10. ignore コメントには理由を添える
+## 8. ignore コメントには理由を添える
 
 ```dart
 // NG
@@ -25,7 +25,7 @@ Future<User> getUser() => repository.getUserDetails();
 // ignore: cascade_invocations
 ```
 
-## 11. Logger の構造化パラメータ
+## 9. Logger の構造化パラメータ
 
 エラーは文字列補間ではなく専用パラメータに渡す。
 
@@ -37,7 +37,7 @@ logger.severe('GET $url failed: $e');
 logger.severe('GET $url failed', e);
 ```
 
-## 12. マジックナンバーを名前付き定数に
+## 10. マジックナンバーを名前付き定数に
 
 ```dart
 // NG
@@ -52,7 +52,7 @@ scale: _pressed ? _pressedScale : 1.0,
 duration: _animationDuration,
 ```
 
-## 13. ネスト三項演算子を switch 式に
+## 11. ネスト三項演算子を switch 式に
 
 ```dart
 // NG
@@ -71,7 +71,7 @@ return switch (status) {
 };
 ```
 
-## 14. 型プロモーションのためのローカル変数化
+## 12. 型プロモーションのためのローカル変数化
 
 `widget.xxx.yyy` や `this.field` のような **getter 経由のアクセスは Dart の flow analysis で型プロモーションされない**。冒頭で `final` 変数に束縛すれば `!` が不要になる。
 
@@ -104,7 +104,7 @@ final description = latest.pubspec.description;
 - nullable フィールドの null チェック後に使用する場合（`!` を消せる）
 - `asyncState.value` / `asyncState.requireValue.xxx` を繰り返す場合
 
-## 15. 文字列への整数 index アクセスを避ける
+## 13. 文字列への整数 index アクセスを避ける
 
 `String[0]` は空文字列で `RangeError`、Unicode 合字・絵文字では壊れた表示になる。`core/utils/string_utils.dart` の `firstGrapheme()` ヘルパーを使う。
 
@@ -117,7 +117,7 @@ import 'package:pubdev_viewer/core/utils/string_utils.dart';
 firstGrapheme(name).toUpperCase()
 ```
 
-## 16. Lint 設定
+## 14. Lint 設定
 
 ```yaml
 # analysis_options.yaml

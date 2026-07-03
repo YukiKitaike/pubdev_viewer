@@ -36,8 +36,9 @@ final packages = await repository.fetchPackages();
 
 良い例:
 ```dart
-// WHY: 前のページの結果を保持したまま次ページの loading 状態を示すため copyWithPrevious を使用
-state = AsyncValue<XxxState>.loading().copyWithPrevious(state);
+// エラー時も既存一覧を保持するため AsyncData 内で isLoadingMore を管理する。
+// AsyncError にすると一覧データが消え画面全体がエラー表示になる。
+state = AsyncData(current.copyWith(isLoadingMore: true));
 ```
 
 - [ ] 日本語 1〜2 行で簡潔か

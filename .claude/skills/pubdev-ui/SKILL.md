@@ -15,7 +15,7 @@ description: >
 
 ```dart
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
-// AppSpacing, AppRadius, AppColors, AppThemeTokens,
+// AppSpacing, AppRadius, AppTextSize, AppColors, AppThemeTokens,
 // AppCardTheme, defaultCardTheme, cardElevatedShadow が使用可能
 ```
 
@@ -56,6 +56,19 @@ AppRadius.avatar         // 11 — パッケージアバターの文字バッジ
 AppRadius.button         // 12 — FilledButton 等
 AppRadius.card           // 16 — カード・セクションコンテナ
 AppRadius.full           // 100 — ピル型バッジ・チップ・バージョンタグ
+```
+
+---
+
+## 等幅フォントサイズトークン（AppTextSize）
+
+通常の本文・見出しは `TextTheme` を使う。`AppTextSize` は JetBrains Mono
+等幅フォント（バージョン番号・日付・バッジ等）専用:
+
+```dart
+AppTextSize.mono10  // 小バッジ
+AppTextSize.mono12  // 本文相当
+AppTextSize.mono14  // 強調
 ```
 
 ---

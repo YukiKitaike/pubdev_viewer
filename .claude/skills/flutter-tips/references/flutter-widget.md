@@ -1,6 +1,6 @@
 # Flutter / Widget Tips
 
-## 17. 専用ウィジェットを使う
+## 15. 専用ウィジェットを使う
 
 `Container` の代わりに目的に合ったウィジェットを選ぶ。
 
@@ -23,18 +23,18 @@ Container(width: w, height: h, decoration: d)
 
 **例外:** `decoration` + `padding` + `width` の複合使用は `Container` 維持も可。
 
-## 18. Sliver プレフィックス
+## 16. Sliver プレフィックス
 
 Sliver を返すウィジェットには `Sliver` プレフィックスを付ける。
 
-## 19. Widget クラス分離
+## 17. Widget クラス分離
 
 ウィジェットを返すメソッド (`buildXxx()`) ではなく専用クラスに切り出す。
 
-## 20. build() 内で重い計算をしない
+## 18. build() 内で重い計算をしない
 
 `initState` / `didUpdateWidget` / notifier で事前計算する。
 
-## 21. `compute()` で重い処理を別 Isolate に逃がす
+## 19. `compute()` で重い処理を別 Isolate に逃がす
 
 UI フリーズ防止。

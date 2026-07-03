@@ -15,7 +15,7 @@ tools: Read, Grep, Glob, Skill
 | `notifiers/*.dart`                  | `/pubdev-state`                           |
 | `repository/*.dart`                 | `/pubdev-api-client`                      |
 | `models/*.dart`, `*_state.dart`     | `/pubdev-models`                          |
-| `screens/*.dart`, `widgets/*.dart`  | `/pubdev-ui` + `/flutter-tips` (Tip 15-19) |
+| `screens/*.dart`, `widgets/*.dart`  | `/pubdev-ui` + `/flutter-tips` (Tip 15-18) |
 | `app/router.dart`, `*_route.dart`   | `/pubdev-navigation`                      |
 | `core/api/*.dart`                   | `/pubdev-api-client`                      |
 
@@ -31,7 +31,7 @@ tools: Read, Grep, Glob, Skill
 
 ## Widget パターンチェック（screens/, widgets/ 変更時）
 
-`/pubdev-ui` と `/flutter-tips` Tip 15-19 を参照して以下を確認:
+`/pubdev-ui` と `/flutter-tips` Tip 15-18 を参照して以下を確認:
 
 - **Container 排除** — `Container` が以下の専用ウィジェットに置き換え可能でないか:
   - padding のみ → `Padding`
@@ -57,7 +57,7 @@ tools: Read, Grep, Glob, Skill
 - **ファイル:** `path/to/file.dart:42`
 - **参照:** `/pubdev-state` の AsyncNotifier セクション
 - **現状:** `Future<void> loadMore() async { state = AsyncValue.loading(); ... }`
-- **修正案:** `state = AsyncValue<XxxState>.loading().copyWithPrevious(state);` で前値保持
+- **修正案:** `state = AsyncData(current.copyWith(isLoadingMore: true));` — AsyncLoading にすると既存一覧が消えるため AsyncData 内のフラグで管理する（`/pubdev-state` の loadMore パターン参照）
 ```
 
 違反がなければ「パターン準拠 OK」と報告する。
