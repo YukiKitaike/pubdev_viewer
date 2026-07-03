@@ -46,7 +46,7 @@ feature 間の直接依存禁止。共通処理は `core/`。新規は `/pubdev-
 ```dart
 import 'package:pubdev_viewer/core/design_system/design_system.dart';
 // AppSpacing.xs/sm/md/lg/xl/xxl/xxxl (4dp grid)
-// AppRadius.skeleton/avatar/button/card/full
+// AppRadius.sectionAccent/skeleton/avatar/button/card/full
 // context.tokens → AppThemeTokens (light/dark semantic colors)
 ```
 
