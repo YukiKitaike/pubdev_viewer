@@ -43,8 +43,8 @@ build/loadMore/refresh/エラーハンドリング。
 ## Step 4: Screen → `/pubdev-ui`
 
 `HookConsumerWidget` + `asyncState.when`。
-文字列・トークンの規約（AppStrings 集約・補間文字列の static メソッド化）と
-`lib/core/utils/` の既存ユーティリティ確認は `/pubdev-ui` の「やってはいけないこと」参照。
+文字列・トークンの規約は `/pubdev-ui` の「やってはいけないこと」、
+`lib/core/utils/` の既存ユーティリティ確認は同スキルの「Widget パターン」基本ルール参照。
 
 ## Step 5: ルート登録 → `/pubdev-navigation`
 

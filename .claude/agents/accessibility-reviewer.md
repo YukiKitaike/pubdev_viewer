@@ -67,7 +67,7 @@ memory: project
 - **ファイル:** `path/to/file.dart:42`
 - **ルール:** IconButton の tooltip 欠落
 - **現状:** `IconButton(icon: Icon(Icons.refresh), onPressed: _reload)`
-- **修正案:** `IconButton(tooltip: AppStrings.refresh, icon: Icon(Icons.refresh), onPressed: _reload)`
+- **修正案:** `IconButton(tooltip: AppStrings.retry, icon: Icon(Icons.refresh), onPressed: _reload)`（tooltip 文字列は `AppStrings` の実在定数を使う）
 ```
 
 違反がなければ「a11y チェック完了: 違反なし」と報告する。

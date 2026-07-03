@@ -20,7 +20,7 @@ memory: project
 
 ### 制約準拠（定義本体: `.claude/rules/testing.md`）
 
-- [ ] rules/testing.md の全制約（Mock 禁止・`@Tags`・`check()` 優先・`ProviderContainer.test()`・共有フィクスチャ・日本語テスト名）に違反していないか
+- [ ] `.claude/rules/testing.md` の全制約に違反していないか（列挙はせず必ずファイルを Read して照合する）
 
 ### パターン準拠（定義本体: `/pubdev-testing` とその references）
 
@@ -33,7 +33,7 @@ memory: project
 - [ ] `library;` 宣言が `@Tags` の直後にあるか
 - [ ] テストファイルが `lib/` の構造を鏡像した `test/` 配下に配置されているか
 - [ ] `Fake` 基底クラスを `package:mockito` から import しているか（`MockPlatformInterfaceMixin` 依存のため維持）
-- [ ] Riverpod v3 の自動リトライを無効化しているか（`retry: (_, __) => null` — エラー系テストの安定性のため）
+- [ ] Riverpod v3 の自動リトライを無効化しているか（`retry: (_, _) => null` — エラー系テストの安定性のため。実例: `test/helpers/pump_app.dart`）
 - [ ] `expect(x, [])` → `expect(x, isEmpty)` 等、意味のあるマッチャーを使っているか
 - [ ] テストで不必要にアプリ固有ウィジェットに依存していないか（最小限の依存でテスト対象を分離）
 - [ ] ダブル `pump()` 等の非自明なパターンに WHY コメント（日本語）があるか

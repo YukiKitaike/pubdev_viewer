@@ -44,7 +44,7 @@
           {
             "type": "command",
             "timeout": 120,
-            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in *.freezed.dart|*.g.dart) exit 0;; *.dart) cd \"$CLAUDE_PROJECT_DIR\" && fvm dart format \"$f\" >/dev/null 2>&1; out=$(fvm dart analyze --fatal-infos 2>&1) || { printf '%s\\n' \"$out\" | tail -20 >&2; exit 2; };; esac"
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); [ -n \"$CLAUDE_PROJECT_DIR\" ] || exit 0; run_analyze() { out=$(fvm dart analyze --fatal-infos 2>&1) || { printf '%s' \"$out\" | grep -q \"hasn't been generated\" && exit 0; printf '%s\\n' \"$out\" | tail -20 >&2; exit 2; }; }; case \"$f\" in *.freezed.dart|*.g.dart) exit 0;; \"$CLAUDE_PROJECT_DIR\"/*.dart) cd \"$CLAUDE_PROJECT_DIR\" || exit 0; fvm dart format \"$f\" >/dev/null 2>&1; run_analyze;; \"$CLAUDE_PROJECT_DIR\"/pubspec.yaml|\"$CLAUDE_PROJECT_DIR\"/analysis_options.yaml) cd \"$CLAUDE_PROJECT_DIR\" || exit 0; run_analyze;; esac"
           }
         ]
       }

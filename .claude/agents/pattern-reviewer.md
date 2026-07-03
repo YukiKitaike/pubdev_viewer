@@ -17,7 +17,7 @@ memory: project
 | `notifiers/*.dart`                  | `/pubdev-state`                           |
 | `repository/*.dart`                 | `/pubdev-api-client`                      |
 | `models/*.dart`, `*_state.dart`     | `/pubdev-models`                          |
-| `screens/*.dart`, `widgets/*.dart`  | `/pubdev-ui` + `/flutter-tips` (Tip 15-18) |
+| `screens/*.dart`, `widgets/*.dart`  | `/pubdev-ui` + `/flutter-tips` (Tip 15-19) |
 | `app/router.dart`, `*_route.dart`   | `/pubdev-navigation`                      |
 | `core/api/*.dart`                   | `/pubdev-api-client`                      |
 
@@ -35,7 +35,7 @@ memory: project
 
 パターンの定義本体は各スキル。Skill ツールで読み込み、以下の観点で照合する:
 
-- **Container 排除・Widget クラス分離・build() 内の重い計算** — `/flutter-tips` Tip 15・17・18 の定義と照合
+- **Container 排除・Widget クラス分離・build() 内の重い計算・compute() での Isolate 退避** — `/flutter-tips` Tip 15・17・18・19 の定義と照合
 - **デザイントークン・ハードコード値禁止** — `/pubdev-ui` の「やってはいけないこと」と `.claude/rules/ui-tokens.md` と照合
 - **HookConsumerWidget・ListView.builder の ValueKey 命名** — `/pubdev-ui` の references/widget_patterns.md と照合
 

@@ -3,9 +3,9 @@ name: flutter-tips
 description: >
   Flutter/Dart 実践 Tips とコーディング規約。Dart 3.10+ dot shorthand・
   switch パターンマッチング・専用ウィジェット・マジックナンバー排除・
-  宣言的リスト・テスト品質・lint 設定・型プロモーションのためのローカル変数化・
+  宣言的リスト・lint 設定・型プロモーションのためのローカル変数化・
   String index アクセス回避など 19 項目。
-  コード追加・レビュー・リファクタリング時に参照。
+  コード追加・レビュー・リファクタリング時に参照。テストの規約は /pubdev-testing が扱う。
 ---
 
 # Flutter / Dart 実践 Tips
